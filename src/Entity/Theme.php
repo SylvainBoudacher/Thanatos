@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ThemeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +38,21 @@ class Theme
      * @ORM\Column(type="float")
      */
     private $price;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="themes")
+     */
+    private $media;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Preparation::class, mappedBy="theme")
+     */
+    private $preparations;
+
+    public function __construct()
+    {
+        $this->preparations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +103,48 @@ class Theme
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?Media $media): self
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Preparation[]
+     */
+    public function getPreparations(): Collection
+    {
+        return $this->preparations;
+    }
+
+    public function addPreparation(Preparation $preparation): self
+    {
+        if (!$this->preparations->contains($preparation)) {
+            $this->preparations[] = $preparation;
+            $preparation->setTheme($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreparation(Preparation $preparation): self
+    {
+        if ($this->preparations->removeElement($preparation)) {
+            // set the owning side to null (unless already changed)
+            if ($preparation->getTheme() === $this) {
+                $preparation->setTheme(null);
+            }
+        }
 
         return $this;
     }

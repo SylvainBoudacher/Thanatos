@@ -57,6 +57,21 @@ class Corpse
      */
     private $height;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="corpses")
+     */
+    private $command;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="corpses")
+     */
+    private $media;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Warehouse::class, inversedBy="corpses")
+     */
+    private $warehouse;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +169,42 @@ class Corpse
     public function setHeight(?float $height): self
     {
         $this->height = $height;
+
+        return $this;
+    }
+
+    public function getCommand(): ?Order
+    {
+        return $this->command;
+    }
+
+    public function setCommand(?Order $command): self
+    {
+        $this->command = $command;
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?Media $media): self
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+
+    public function getWarehouse(): ?Warehouse
+    {
+        return $this->warehouse;
+    }
+
+    public function setWarehouse(?Warehouse $warehouse): self
+    {
+        $this->warehouse = $warehouse;
 
         return $this;
     }

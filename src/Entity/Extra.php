@@ -39,9 +39,20 @@ class Extra
      */
     private $companyExtras;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="extras")
+     */
+    private $media;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ModelExtra::class, mappedBy="extra")
+     */
+    private $modelExtras;
+
     public function __construct()
     {
         $this->companyExtras = new ArrayCollection();
+        $this->modelExtras = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,6 +120,48 @@ class Extra
             // set the owning side to null (unless already changed)
             if ($companyExtra->getExtra() === $this) {
                 $companyExtra->setExtra(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?Media $media): self
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ModelExtra[]
+     */
+    public function getModelExtras(): Collection
+    {
+        return $this->modelExtras;
+    }
+
+    public function addModelExtra(ModelExtra $modelExtra): self
+    {
+        if (!$this->modelExtras->contains($modelExtra)) {
+            $this->modelExtras[] = $modelExtra;
+            $modelExtra->setExtra($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModelExtra(ModelExtra $modelExtra): self
+    {
+        if ($this->modelExtras->removeElement($modelExtra)) {
+            // set the owning side to null (unless already changed)
+            if ($modelExtra->getExtra() === $this) {
+                $modelExtra->setExtra(null);
             }
         }
 

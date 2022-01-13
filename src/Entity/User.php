@@ -73,9 +73,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $media;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="possessor")
+     */
+    private $orders;
+
     public function __construct()
     {
         $this->creditCards = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -265,6 +271,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMedia(?Media $media): self
     {
         $this->media = $media;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Order[]
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setPossessor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getPossessor() === $this) {
+                $order->setPossessor(null);
+            }
+        }
 
         return $this;
     }

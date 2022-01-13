@@ -79,11 +79,29 @@ class Company
      */
     private $companyPaintings;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CompanyTheme::class, mappedBy="company")
+     */
+    private $companyThemes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Model::class, mappedBy="company")
+     */
+    private $models;
+
+    /**
+     * @ORM\OneToMany(targetEntity=DriverOrder::class, mappedBy="driver")
+     */
+    private $driverOrders;
+
     public function __construct()
     {
         $this->companyMaterials = new ArrayCollection();
         $this->companyExtras = new ArrayCollection();
         $this->companyPaintings = new ArrayCollection();
+        $this->companyThemes = new ArrayCollection();
+        $this->models = new ArrayCollection();
+        $this->driverOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -283,6 +301,96 @@ class Company
             // set the owning side to null (unless already changed)
             if ($companyPainting->getCompany() === $this) {
                 $companyPainting->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompanyTheme[]
+     */
+    public function getCompanyThemes(): Collection
+    {
+        return $this->companyThemes;
+    }
+
+    public function addCompanyTheme(CompanyTheme $companyTheme): self
+    {
+        if (!$this->companyThemes->contains($companyTheme)) {
+            $this->companyThemes[] = $companyTheme;
+            $companyTheme->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyTheme(CompanyTheme $companyTheme): self
+    {
+        if ($this->companyThemes->removeElement($companyTheme)) {
+            // set the owning side to null (unless already changed)
+            if ($companyTheme->getCompany() === $this) {
+                $companyTheme->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Model[]
+     */
+    public function getModels(): Collection
+    {
+        return $this->models;
+    }
+
+    public function addModel(Model $model): self
+    {
+        if (!$this->models->contains($model)) {
+            $this->models[] = $model;
+            $model->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModel(Model $model): self
+    {
+        if ($this->models->removeElement($model)) {
+            // set the owning side to null (unless already changed)
+            if ($model->getCompany() === $this) {
+                $model->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DriverOrder[]
+     */
+    public function getDriverOrders(): Collection
+    {
+        return $this->driverOrders;
+    }
+
+    public function addDriverOrder(DriverOrder $driverOrder): self
+    {
+        if (!$this->driverOrders->contains($driverOrder)) {
+            $this->driverOrders[] = $driverOrder;
+            $driverOrder->setDriver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDriverOrder(DriverOrder $driverOrder): self
+    {
+        if ($this->driverOrders->removeElement($driverOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($driverOrder->getDriver() === $this) {
+                $driverOrder->setDriver(null);
             }
         }
 

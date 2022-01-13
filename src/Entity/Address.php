@@ -49,10 +49,22 @@ class Address
      */
     private $companies;
 
+    /**
+     * @ORM\OneToMany(targetEntity=AddressOrder::class, mappedBy="address")
+     */
+    private $addressOrders;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Warehouse::class, mappedBy="address")
+     */
+    private $warehouses;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->companies = new ArrayCollection();
+        $this->addressOrders = new ArrayCollection();
+        $this->warehouses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,6 +174,66 @@ class Address
             // set the owning side to null (unless already changed)
             if ($company->getAddress() === $this) {
                 $company->setAddress(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AddressOrder[]
+     */
+    public function getAddressOrders(): Collection
+    {
+        return $this->addressOrders;
+    }
+
+    public function addAddressOrder(AddressOrder $addressOrder): self
+    {
+        if (!$this->addressOrders->contains($addressOrder)) {
+            $this->addressOrders[] = $addressOrder;
+            $addressOrder->setAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAddressOrder(AddressOrder $addressOrder): self
+    {
+        if ($this->addressOrders->removeElement($addressOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($addressOrder->getAddress() === $this) {
+                $addressOrder->setAddress(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Warehouse[]
+     */
+    public function getWarehouses(): Collection
+    {
+        return $this->warehouses;
+    }
+
+    public function addWarehouse(Warehouse $warehouse): self
+    {
+        if (!$this->warehouses->contains($warehouse)) {
+            $this->warehouses[] = $warehouse;
+            $warehouse->setAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWarehouse(Warehouse $warehouse): self
+    {
+        if ($this->warehouses->removeElement($warehouse)) {
+            // set the owning side to null (unless already changed)
+            if ($warehouse->getAddress() === $this) {
+                $warehouse->setAddress(null);
             }
         }
 

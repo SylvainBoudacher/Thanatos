@@ -32,6 +32,11 @@ class Invoice
      */
     private $price;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="invoices")
+     */
+    private $command;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +74,18 @@ class Invoice
     public function setPrice(?float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCommand(): ?Order
+    {
+        return $this->command;
+    }
+
+    public function setCommand(?Order $command): self
+    {
+        $this->command = $command;
 
         return $this;
     }

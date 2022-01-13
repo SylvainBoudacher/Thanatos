@@ -34,9 +34,20 @@ class Material
      */
     private $companyMaterials;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ModelMaterial::class, mappedBy="material")
+     */
+    private $modelMaterials;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="materials")
+     */
+    private $media;
+
     public function __construct()
     {
         $this->companyMaterials = new ArrayCollection();
+        $this->modelMaterials = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +105,48 @@ class Material
                 $companyMaterial->setMaterial(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ModelMaterial[]
+     */
+    public function getModelMaterials(): Collection
+    {
+        return $this->modelMaterials;
+    }
+
+    public function addModelMaterial(ModelMaterial $modelMaterial): self
+    {
+        if (!$this->modelMaterials->contains($modelMaterial)) {
+            $this->modelMaterials[] = $modelMaterial;
+            $modelMaterial->setMaterial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModelMaterial(ModelMaterial $modelMaterial): self
+    {
+        if ($this->modelMaterials->removeElement($modelMaterial)) {
+            // set the owning side to null (unless already changed)
+            if ($modelMaterial->getMaterial() === $this) {
+                $modelMaterial->setMaterial(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?Media $media): self
+    {
+        $this->media = $media;
 
         return $this;
     }

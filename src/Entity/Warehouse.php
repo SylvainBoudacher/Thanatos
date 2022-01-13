@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\WarehouseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +28,26 @@ class Warehouse
      * @ORM\Column(type="integer", nullable=true)
      */
     private $drawersCount;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Corpse::class, mappedBy="warehouse")
+     */
+    private $corpses;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Address::class, inversedBy="warehouses")
+     */
+    private $address;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="warehouses")
+     */
+    private $media;
+
+    public function __construct()
+    {
+        $this->corpses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,6 +74,60 @@ class Warehouse
     public function setDrawersCount(?int $drawersCount): self
     {
         $this->drawersCount = $drawersCount;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Corpse[]
+     */
+    public function getCorpses(): Collection
+    {
+        return $this->corpses;
+    }
+
+    public function addCorpse(Corpse $corpse): self
+    {
+        if (!$this->corpses->contains($corpse)) {
+            $this->corpses[] = $corpse;
+            $corpse->setWarehouse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCorpse(Corpse $corpse): self
+    {
+        if ($this->corpses->removeElement($corpse)) {
+            // set the owning side to null (unless already changed)
+            if ($corpse->getWarehouse() === $this) {
+                $corpse->setWarehouse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?Media $media): self
+    {
+        $this->media = $media;
 
         return $this;
     }
