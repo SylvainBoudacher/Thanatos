@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ExtraRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class Extra
      * @ORM\Column(type="float", nullable=true)
      */
     private $price;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CompanyExtra::class, mappedBy="extra")
+     */
+    private $companyExtras;
+
+    public function __construct()
+    {
+        $this->companyExtras = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +81,36 @@ class Extra
     public function setPrice(?float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompanyExtra[]
+     */
+    public function getCompanyExtras(): Collection
+    {
+        return $this->companyExtras;
+    }
+
+    public function addCompanyExtra(CompanyExtra $companyExtra): self
+    {
+        if (!$this->companyExtras->contains($companyExtra)) {
+            $this->companyExtras[] = $companyExtra;
+            $companyExtra->setExtra($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyExtra(CompanyExtra $companyExtra): self
+    {
+        if ($this->companyExtras->removeElement($companyExtra)) {
+            // set the owning side to null (unless already changed)
+            if ($companyExtra->getExtra() === $this) {
+                $companyExtra->setExtra(null);
+            }
+        }
 
         return $this;
     }

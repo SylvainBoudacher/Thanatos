@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CompanyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,6 +53,38 @@ class Company
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $bic;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="companies")
+     */
+    private $media;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Address::class, inversedBy="companies")
+     */
+    private $address;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CompanyMaterial::class, mappedBy="company")
+     */
+    private $companyMaterials;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CompanyExtra::class, mappedBy="company")
+     */
+    private $companyExtras;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CompanyPainting::class, mappedBy="company")
+     */
+    private $companyPaintings;
+
+    public function __construct()
+    {
+        $this->companyMaterials = new ArrayCollection();
+        $this->companyExtras = new ArrayCollection();
+        $this->companyPaintings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,6 +171,120 @@ class Company
     public function setBic(?string $bic): self
     {
         $this->bic = $bic;
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?Media $media): self
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompanyMaterial[]
+     */
+    public function getCompanyMaterials(): Collection
+    {
+        return $this->companyMaterials;
+    }
+
+    public function addCompanyMaterial(CompanyMaterial $companyMaterial): self
+    {
+        if (!$this->companyMaterials->contains($companyMaterial)) {
+            $this->companyMaterials[] = $companyMaterial;
+            $companyMaterial->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyMaterial(CompanyMaterial $companyMaterial): self
+    {
+        if ($this->companyMaterials->removeElement($companyMaterial)) {
+            // set the owning side to null (unless already changed)
+            if ($companyMaterial->getCompany() === $this) {
+                $companyMaterial->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompanyExtra[]
+     */
+    public function getCompanyExtras(): Collection
+    {
+        return $this->companyExtras;
+    }
+
+    public function addCompanyExtra(CompanyExtra $companyExtra): self
+    {
+        if (!$this->companyExtras->contains($companyExtra)) {
+            $this->companyExtras[] = $companyExtra;
+            $companyExtra->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyExtra(CompanyExtra $companyExtra): self
+    {
+        if ($this->companyExtras->removeElement($companyExtra)) {
+            // set the owning side to null (unless already changed)
+            if ($companyExtra->getCompany() === $this) {
+                $companyExtra->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompanyPainting[]
+     */
+    public function getCompanyPaintings(): Collection
+    {
+        return $this->companyPaintings;
+    }
+
+    public function addCompanyPainting(CompanyPainting $companyPainting): self
+    {
+        if (!$this->companyPaintings->contains($companyPainting)) {
+            $this->companyPaintings[] = $companyPainting;
+            $companyPainting->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyPainting(CompanyPainting $companyPainting): self
+    {
+        if ($this->companyPaintings->removeElement($companyPainting)) {
+            // set the owning side to null (unless already changed)
+            if ($companyPainting->getCompany() === $this) {
+                $companyPainting->setCompany(null);
+            }
+        }
 
         return $this;
     }

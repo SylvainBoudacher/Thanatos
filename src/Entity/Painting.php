@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PaintingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class Painting
      * @ORM\Column(type="float", nullable=true)
      */
     private $price;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CompanyPainting::class, mappedBy="painting")
+     */
+    private $companyPaintings;
+
+    public function __construct()
+    {
+        $this->companyPaintings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +81,36 @@ class Painting
     public function setPrice(?float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompanyPainting[]
+     */
+    public function getCompanyPaintings(): Collection
+    {
+        return $this->companyPaintings;
+    }
+
+    public function addCompanyPainting(CompanyPainting $companyPainting): self
+    {
+        if (!$this->companyPaintings->contains($companyPainting)) {
+            $this->companyPaintings[] = $companyPainting;
+            $companyPainting->setPainting($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyPainting(CompanyPainting $companyPainting): self
+    {
+        if ($this->companyPaintings->removeElement($companyPainting)) {
+            // set the owning side to null (unless already changed)
+            if ($companyPainting->getPainting() === $this) {
+                $companyPainting->setPainting(null);
+            }
+        }
 
         return $this;
     }

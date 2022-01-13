@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MaterialRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +28,16 @@ class Material
      * @ORM\Column(type="float", nullable=true)
      */
     private $price;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CompanyMaterial::class, mappedBy="material")
+     */
+    private $companyMaterials;
+
+    public function __construct()
+    {
+        $this->companyMaterials = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,6 +64,36 @@ class Material
     public function setPrice(?float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompanyMaterial[]
+     */
+    public function getCompanyMaterials(): Collection
+    {
+        return $this->companyMaterials;
+    }
+
+    public function addCompanyMaterial(CompanyMaterial $companyMaterial): self
+    {
+        if (!$this->companyMaterials->contains($companyMaterial)) {
+            $this->companyMaterials[] = $companyMaterial;
+            $companyMaterial->setMaterial($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyMaterial(CompanyMaterial $companyMaterial): self
+    {
+        if ($this->companyMaterials->removeElement($companyMaterial)) {
+            // set the owning side to null (unless already changed)
+            if ($companyMaterial->getMaterial() === $this) {
+                $companyMaterial->setMaterial(null);
+            }
+        }
 
         return $this;
     }

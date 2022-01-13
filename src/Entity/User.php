@@ -58,6 +58,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $creditCards;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Address::class, inversedBy="users")
+     */
+    private $address;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Company::class, cascade={"persist", "remove"})
+     */
+    private $company;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="users")
+     */
+    private $media;
+
     public function __construct()
     {
         $this->creditCards = new ArrayCollection();
@@ -214,6 +229,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $creditCard->setUsers(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?Media $media): self
+    {
+        $this->media = $media;
 
         return $this;
     }
