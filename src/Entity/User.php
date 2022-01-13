@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -50,6 +52,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="date", nullable=true)
      */
     private $birthdate;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CreditCard::class, mappedBy="possessor")
+     */
+    private $creditCards;
+
+    public function __construct()
+    {
+        $this->creditCards = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -172,6 +184,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBirthdate(?\DateTimeInterface $birthdate): self
     {
         $this->birthdate = $birthdate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CreditCard[]
+     */
+    public function getCreditCards(): Collection
+    {
+        return $this->creditCards;
+    }
+
+    public function addCreditCard(CreditCard $creditCard): self
+    {
+        if (!$this->creditCards->contains($creditCard)) {
+            $this->creditCards[] = $creditCard;
+            $creditCard->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreditCard(CreditCard $creditCard): self
+    {
+        if ($this->creditCards->removeElement($creditCard)) {
+            // set the owning side to null (unless already changed)
+            if ($creditCard->getUsers() === $this) {
+                $creditCard->setUsers(null);
+            }
+        }
 
         return $this;
     }

@@ -37,6 +37,11 @@ class CreditCard
      */
     private $owner;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="creditCards")
+     */
+    private $possessor;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class CreditCard
     public function setOwner(?string $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getUsers(): ?User
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?User $users): self
+    {
+        $this->users = $users;
 
         return $this;
     }
