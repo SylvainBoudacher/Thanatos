@@ -2,14 +2,18 @@
 
 namespace App\Entity;
 
-use App\Repository\AddressOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\TimestampableTrait;
+use App\Repository\AddressOrderRepository;
 
 /**
  * @ORM\Entity(repositoryClass=AddressOrderRepository::class)
  */
 class AddressOrder
 {
+
+    use TimestampableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

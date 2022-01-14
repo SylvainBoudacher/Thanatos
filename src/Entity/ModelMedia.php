@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\ModelMediaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ModelMediaRepository;
+use App\Entity\Traits\TimestampableTrait;
 
 /**
  * @ORM\Entity(repositoryClass=ModelMediaRepository::class)
  */
 class ModelMedia
 {
+    use TimestampableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

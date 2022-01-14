@@ -2,16 +2,20 @@
 
 namespace App\Entity;
 
-use App\Repository\BurialRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BurialRepository;
+use App\Entity\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=BurialRepository::class)
  */
 class Burial
 {
+
+    use TimestampableTrait;
+    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

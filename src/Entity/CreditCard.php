@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\CreditCardRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CreditCardRepository;
+use App\Entity\Traits\TimestampableTrait;
 
 /**
  * @ORM\Entity(repositoryClass=CreditCardRepository::class)
  */
 class CreditCard
 {
+    use TimestampableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

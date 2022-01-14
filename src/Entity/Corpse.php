@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\CorpseRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CorpseRepository;
+use App\Entity\Traits\TimestampableTrait;
 
 /**
  * @ORM\Entity(repositoryClass=CorpseRepository::class)
  */
 class Corpse
 {
+    use TimestampableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

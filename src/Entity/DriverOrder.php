@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\DriverOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\TimestampableTrait;
+use App\Repository\DriverOrderRepository;
 
 /**
  * @ORM\Entity(repositoryClass=DriverOrderRepository::class)
  */
 class DriverOrder
 {
+    use TimestampableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\CompanyPaintingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\TimestampableTrait;
+use App\Repository\CompanyPaintingRepository;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyPaintingRepository::class)
  */
 class CompanyPainting
 {
+    use TimestampableTrait;
+    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\PreparationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\TimestampableTrait;
+use App\Repository\PreparationRepository;
 
 /**
  * @ORM\Entity(repositoryClass=PreparationRepository::class)
  */
 class Preparation
 {
+    use TimestampableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

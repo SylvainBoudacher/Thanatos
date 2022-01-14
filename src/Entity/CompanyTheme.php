@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\CompanyThemeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\TimestampableTrait;
+use App\Repository\CompanyThemeRepository;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyThemeRepository::class)
  */
 class CompanyTheme
 {
+    use TimestampableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
