@@ -21,7 +21,7 @@ class CreditCard
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=16, nullable=true)
      */
     private $number;
 
@@ -31,7 +31,7 @@ class CreditCard
     private $expirationDate;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=3, nullable=true)
      */
     private $cvc;
 

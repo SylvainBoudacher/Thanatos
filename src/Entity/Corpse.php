@@ -41,12 +41,12 @@ class Corpse
     private $dayOfDeath;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=40, nullable=true)
      */
     private $sex;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $causeOfDeath;
 

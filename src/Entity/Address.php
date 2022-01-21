@@ -29,12 +29,12 @@ class Address
     private $city;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=5, nullable=true)
      */
     private $postcode;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=4, nullable=true)
      */
     private $number;
 

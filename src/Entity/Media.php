@@ -27,6 +27,7 @@ class Media
      */
     private $name;
 
+    //TODO: checker la taille d'un lien s'il tiendra sur 255 caractères
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */

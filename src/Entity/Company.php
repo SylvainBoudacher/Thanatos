@@ -22,8 +22,9 @@ class Company
      */
     private $id;
 
+    //TODO: est ce que "type" sert vraiment a qqchose quand on a la colonne "roles" aussi
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $type;
 
@@ -38,22 +39,22 @@ class Company
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=14, nullable=true)
      */
     private $siret;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=34, nullable=true)
      */
     private $iban;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=23, nullable=true)
      */
     private $rib;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=11, nullable=true)
      */
     private $bic;
 
