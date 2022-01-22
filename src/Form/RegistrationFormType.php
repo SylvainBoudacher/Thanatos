@@ -25,14 +25,7 @@ class RegistrationFormType extends AbstractType
             ->add('address')
             ->add('email')
 
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
+
             ->add(
                 'plainPassword',
                 RepeatedType::class,
@@ -42,6 +35,7 @@ class RegistrationFormType extends AbstractType
                     'options' => ['attr' => ['class' => 'password-field']],
                     'required' => true,
                     'first_options'  => ['label' => 'Password'],
+                    // Repeat password -> duplique l'input pour la vérification du password
                     'second_options' => ['label' => 'Repeat Password'],
                     'mapped' => false,
                     'attr' => ['autocomplete' => 'new-password'],
@@ -53,11 +47,20 @@ class RegistrationFormType extends AbstractType
                             'min' => 6,
                             'minMessage' => 'Your password should be at least {{ limit }} characters',
                             // max length allowed by Symfony for security reasons
-                            'max' => 4096,
+                            'max' => 100,
                         ]),
                     ],
                 ]
-            );
+            )
+
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'You should agree to our terms.',
+                    ]),
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
