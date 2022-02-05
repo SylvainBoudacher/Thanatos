@@ -31,21 +31,22 @@ class RegistrationFormType extends AbstractType
                 RepeatedType::class,
                 [
                     'type' => PasswordType::class,
-                    'invalid_message' => 'The password fields must match.',
-                    'options' => ['attr' => ['class' => 'password-field']],
+                    'invalid_message' => 'Le mot de passe doit être le même.',
+                    'options' => ['attr' => ['class' => 'password-field block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring']],
                     'required' => true,
-                    'first_options'  => ['label' => 'Password'],
+                    'first_options'  => ['label' => 'Mot de passe'],
                     // Repeat password -> duplique l'input pour la vérification du password
-                    'second_options' => ['label' => 'Repeat Password'],
+                    'second_options' => ['label' => 'Comfirmation mot de passe'],
                     'mapped' => false,
                     'attr' => ['autocomplete' => 'new-password'],
+                    'label_attr' => ['class' => 'test'],
                     'constraints' => [
                         new NotBlank([
-                            'message' => 'Please enter a password',
+                            'message' => 'Entrer un mot de passe',
                         ]),
                         new Length([
                             'min' => 6,
-                            'minMessage' => 'Your password should be at least {{ limit }} characters',
+                            'minMessage' => 'Votre mot de passe doit faire au minimum {{ limit }} characters',
                             // max length allowed by Symfony for security reasons
                             'max' => 100,
                         ]),
@@ -57,7 +58,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter les termes.',
                     ]),
                 ],
             ]);
