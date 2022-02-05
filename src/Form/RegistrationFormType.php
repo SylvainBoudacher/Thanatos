@@ -34,9 +34,9 @@ class RegistrationFormType extends AbstractType
                     'invalid_message' => 'Le mot de passe doit être le même.',
                     'options' => ['attr' => ['class' => 'password-field block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring']],
                     'required' => true,
-                    'first_options'  => ['label' => 'Mot de passe'],
+                    'first_options'  => ['label' => 'Mot de passe', 'label_attr' => ['class' => 'text-gray-700 dark:text-gray-200 mt-4']],
                     // Repeat password -> duplique l'input pour la vérification du password
-                    'second_options' => ['label' => 'Comfirmation mot de passe'],
+                    'second_options' => ['label' => 'Comfirmation mot de passe', 'label_attr' => ['class' => 'text-gray-700 dark:text-gray-200 mt-4']],
                     'mapped' => false,
                     'attr' => ['autocomplete' => 'new-password'],
                     'label_attr' => ['class' => 'test'],
