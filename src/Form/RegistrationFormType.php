@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -21,7 +23,12 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('firstName')
             ->add('lastName')
-            ->add('birthDate')
+            ->add('birthDate', DateType::class, [
+                'required' => true,
+                'widget' => 'single_text',
+                // this is actually the default format for single_text
+                'format' => 'yyyy-MM-dd',
+            ])
             ->add('address')
             ->add('email')
 
@@ -53,6 +60,10 @@ class RegistrationFormType extends AbstractType
                     ],
                 ]
             )
+
+            ->add('save', SubmitType::class, [
+                'attr' => ['class' => 'save w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600 mt-4'],
+            ])
 
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,

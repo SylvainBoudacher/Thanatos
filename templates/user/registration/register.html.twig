@@ -7,8 +7,7 @@
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
 
-    
-    <div class="w-full max-w-lg p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800">
+    <div class="w-full max-w-lg p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 my-8">
         <h1 class="text-3xl font-semibold text-center text-gray-700 dark:text-white">Inscription</h1>
 
         <div class="flex items-center justify-center mt-4">
@@ -59,23 +58,15 @@
                 {{ form_widget(registrationForm.agreeTerms , {'attr': 
                         {'class': ''}} ) }}
             </div>
-        
-            <div class="mt-6">
-                <button 
-                    type="submit" 
-                    class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
-                    Inscription
-                </button>
-            </div>
-        
-    
-        {{ form_end(registrationForm) }}
 
+            {# Submit button #}
+            {{ form_widget(registrationForm.save, { 'label': 'M\'inscrire' }) }}
+        
+        {{ form_end(registrationForm) }}
+        
         <div class="flex items-center justify-between mt-4">
             <span class="w-full border-b dark:border-gray-500"></span>
         </div>
-
-       
 
         <p class="mt-8 text-xs font-light text-center text-gray-400"> Vous avez déjà un compte?<a href="#"
                 class="font-medium text-gray-700 dark:text-gray-200 hover:underline"> Conectez-vous ici</a></p>
