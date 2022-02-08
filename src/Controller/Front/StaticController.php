@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Front;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class StaticController extends AbstractController
 {
-    #[Route('/home', name: 'home')]
+    #[Route('/', name: 'landingPage')]
     public function index(): Response
     {
-        return $this->render('index.html.twig', [
-            'controller_name' => 'HomeController',
+        return $this->render('front/index.html.twig', [
+            'controller_name' => 'StaticController',
         ]);
     }
 }
