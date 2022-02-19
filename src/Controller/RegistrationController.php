@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Address as location;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +24,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/signup', name: 'signup')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHashedInterface): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -35,7 +33,7 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-                $userPasswordHasherInterface->hashPassword(
+                $userPasswordHashedInterface->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -69,6 +67,7 @@ class RegistrationController extends AbstractController
     public function verifyUserEmail(Request $request): Response
     {
         $this->denyAccessUnlessGranted('PUBLIC_ACCESS');
+
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
