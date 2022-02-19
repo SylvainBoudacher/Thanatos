@@ -6,8 +6,7 @@ controllers_front:
 controllers_back:
     resource: ../../src/Controller/Back
     type: annotation
-    prefix: /admin
-    name_prefix: admin_
+    name_prefix: back_
 
 controllers:
     resource: ../../src/Controller

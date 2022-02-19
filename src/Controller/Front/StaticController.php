@@ -15,4 +15,20 @@ class StaticController extends AbstractController
             'controller_name' => 'StaticController',
         ]);
     }
+
+    #[Route('/contact', name: 'contact')]
+    public function contact(): Response
+    {
+        return $this->render('front/contact.html.twig', [
+            'controller_name' => 'StaticController',
+        ]);
+    }
+
+    #[Route('/a-propos', name: 'about')]
+    public function about(): Response
+    {
+        return $this->render('front/about.html.twig', [
+            'controller_name' => 'StaticController',
+        ]);
+    }
 }
