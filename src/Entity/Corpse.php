@@ -13,6 +13,10 @@ class Corpse
 {
     use TimestampableTrait;
 
+    public const WOMEN = "Femme";
+    public const MAN = "Homme";
+    public const OTHER = "Autre";
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
