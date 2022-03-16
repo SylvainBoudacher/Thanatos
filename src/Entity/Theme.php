@@ -43,7 +43,7 @@ class Theme
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="themes")
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="themes", cascade={"persist"})
      */
     private $media;
 
