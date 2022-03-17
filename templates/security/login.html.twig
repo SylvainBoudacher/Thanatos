@@ -28,8 +28,7 @@
 
 
 
-
-    <div class="w-full max-w-sm p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800">
+    <div class="w-full max-w-sm p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20">
         <h1 class="text-3xl font-semibold text-center text-gray-700 dark:text-white">Thanatos</h1>
 
         <form class="mt-6">
@@ -69,8 +68,7 @@
             <span class="w-1/5 border-b dark:border-gray-600 lg:w-full"></span>
 
 
-        <p class="mt-8 text-xs font-light text-center text-gray-400"> Pas de compte ? <a href="#"
-                                                                                                class="font-medium text-gray-700 dark:text-gray-200 hover:underline">Créer en un ici</a></p>
+        <p class="mt-8 text-xs font-light text-center text-gray-400"> Pas de compte ? <a href="{{ path('app_register') }}"  class="font-medium text-gray-700 dark:text-gray-200 hover:underline">Créer en un ici</a></p>
     </div>
 
 {% endblock %}
