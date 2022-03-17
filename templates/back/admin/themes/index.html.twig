@@ -6,6 +6,13 @@
 
     <a href="{{ path("create_theme") }}">Ajouter un nouveau theme</a>
 
+    <ul>
+        {% for theme in themes %}
+            <li>{{ theme.name }}</li>
+            <li> <img src="{{ vich_uploader_asset(theme.media) }}" alt=""> </li>
+        {% endfor %}
+    </ul>
+
 
 
 
