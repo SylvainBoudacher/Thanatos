@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CorpseRepository;
 use App\Entity\Traits\TimestampableTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CorpseRepository::class)
@@ -26,41 +28,72 @@ class Corpse
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     * )
+     * @Assert\Regex("/^[a-z ][a-z- ][a-z ]+/i")
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotNull
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     * )
+     * @Assert\Regex("/^[a-z-]+$/i")
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotNull
      */
     private $birthdate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\NotNull
+     * @var string A "Y-m-d H:i:s" formatted value
+     * @Assert\LessThanOrEqual("today")
      */
     private $dayOfDeath;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
+     * @Assert\NotNull
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 5,
+     * )
      */
     private $sex;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 5000,
+     * )
      */
     private $causeOfDeath;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\Positive
+     * @Assert\NotBlank
      */
     private $weight;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\Positive
+     * @Assert\NotBlank
      */
     private $height;
 
@@ -214,5 +247,19 @@ class Corpse
         $this->warehouse = $warehouse;
 
         return $this;
+    }
+
+    public function checkDateConsistency(): bool
+    {
+        $dayOfdeath =  new Carbon($this->dayOfDeath);
+        $birthdate =  new Carbon($this->birthdate);
+
+        return $dayOfdeath->gte($birthdate) ;
+    }
+
+    public function isBirthdateValid(): bool
+    {
+        $birthdate =  new Carbon($this->birthdate);
+        return $birthdate->lt(Carbon::now());
     }
 }
