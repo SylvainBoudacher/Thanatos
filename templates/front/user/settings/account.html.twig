@@ -6,40 +6,10 @@
 
     <div class="container flex flex-row h-screen">
 
-        <div classe="flex flex-col w-32 bg-gray-80 ">
+        {{ include('components/sideBarUserSettings.html.twig') }}
 
-            <aside class="w-64 h-full bg-gray-80 " aria-label="Sidebar">
-                <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800 h-full">
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="#" aria-current="true" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-                                <span class="flex-1 ml-3 whitespace-nowrap">Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg>
-                                <span class="flex-1 ml-3 whitespace-nowrap">Mot de passe</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                    <path fill="none" d="M0 0h24v24H0V0Z"></path>
-                                    <path fill="#CBD5E0" d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2Zm-1 14H5c-.55 0-1-.45-1-1v-5h16v5c0 .55-.45 1-1 1Zm1-10H4V7c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v1Z"></path>
-                                </svg>
-                                <span class="flex-1 ml-3 whitespace-nowrap">Moyen de payement</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
-
-        </div>
-
-        <div class="flex-auto w-full mx-10">
-            <div class="p-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700 ">
+        <div class="flex-auto w-full mx-10 pt-20 mx-auto">
+            <div class="p-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700">
                 <form class="space-y-6" action="#">
                     <img class="mx-auto mb-3 w-24 h-24 rounded-full shadow-lg" src="https://media-exp1.licdn.com/dms/image/C4D03AQHN-jN4rSXPrg/profile-displayphoto-shrink_200_200/0/1636452305928?e=1652918400&v=beta&t=D5KEZxC6G29FOKCZ-5R6tAiFj3XkndhPeJ5cLBK091A" alt="Bonnie image"/>
 
