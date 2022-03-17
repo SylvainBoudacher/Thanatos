@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,9 +16,11 @@ class UserAccountUpdateFormType extends AbstractType
             ->add('email')
             ->add('firstname')
             ->add('lastname')
-            ->add('birthdate')
-            ->add('address')
-            ->add('media')
+            ->add('birthdate', DateType::class, [
+                'widget' => 'single_text',
+                // this is actually the default format for single_text
+                'format' => 'yyyy-MM-dd',
+            ])
         ;
     }
 

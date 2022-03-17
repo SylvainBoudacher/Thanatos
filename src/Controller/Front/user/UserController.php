@@ -33,7 +33,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('front/user/settings/account.html.twig', [
-            'controller_name' => 'UserController',
+            'userAccountUpdateForm' => $form->createView(),
         ]);
     }
 
