@@ -7,7 +7,9 @@
             <div class="alert alert-danger" role="alert">{{ flashError }}</div>
         {% endfor %}
 
-        <div class="w-full max-w-lg p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 my-8">
+        {{ include('components/navBar.html.twig') }}
+
+        <div class="w-full max-w-2xl p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 my-8">
             <h1 class="text-3xl font-semibold text-center text-gray-700 dark:text-white">Inscription</h1>
 
             <div class="flex items-center justify-center mt-4">
@@ -16,7 +18,7 @@
 
             {{ form_start(registrationForm) }}
 
-            <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+            <div class="grid grid-cols-2 gap-6 mt-4 sm:grid-cols-2">
                 <div>
                     <label class="text-gray-700 dark:text-gray-200" for="username">Prénom</label>
                     {{ form_widget(registrationForm.firstName , {'attr':
@@ -67,8 +69,7 @@
                 <span class="w-full border-b dark:border-gray-500"></span>
             </div>
 
-            <p class="mt-8 text-xs font-light text-center text-gray-400"> Vous avez déjà un compte?<a href="#"
-                                                                                                      class="font-medium text-gray-700 dark:text-gray-200 hover:underline"> Conectez-vous ici</a></p>
+            <p class="mt-8 text-xs font-light text-center text-gray-400"> Vous avez déjà un compte?<a href="{{ path('app_login') }}"  class="font-medium text-gray-700 dark:text-gray-200 hover:underline"> Conectez-vous ici</a></p>
         </div>
 
 
