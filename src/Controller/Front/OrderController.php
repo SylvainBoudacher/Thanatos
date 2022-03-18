@@ -76,7 +76,7 @@ class OrderController extends AbstractController
                 return $this->redirectToRoute('declare_corpse_confirmation');
             }
 
-            $this->addFlash('failed', "L'adresse s'est bien ajoutée");
+            $this->addFlash('success', "L'adresse s'est bien ajoutée");
         }
 
         return $this->renderForm('front/declareCorpsesAddress.html.twig', [
@@ -97,7 +97,7 @@ class OrderController extends AbstractController
         $addresses = $declareCorpses['addresses'];
 
         // declare corpses officially
-        if ($request->query->get('confirmation') === true) {
+        if ($request->query->get('confirmation') === 'true') {
 
             $entityManager = $doctrine->getManager();
 
