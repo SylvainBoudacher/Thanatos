@@ -1,0 +1,83 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+    {% block body %}
+        {% for flashError in app.flashes('verify_email_error') %}
+            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+        {% endfor %}
+
+        <div class="w-full max-w-lg p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 my-8">
+            <h1 class="text-3xl font-semibold text-center text-gray-700 dark:text-white">Lier votre société</h1>
+
+            <div class="flex items-center justify-center mt-4">
+                <span class="w-1/4 border-b dark:border-gray-500"></span>
+            </div>
+
+            {{ form_start(registrationForm) }}
+
+            <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="username">Nom</label>
+                    {{ form_widget(registrationForm.name , {'attr':
+                        {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                </div>
+
+                {% if role == 'USER_MORGUE' %}
+                
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="username">Nom</label>
+                            {{ form_widget(registrationForm.name , {'attr':
+                                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                        </div>
+
+                {% endif %}
+
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Siret</label>
+                    {{ form_widget(registrationForm.siret , {'attr':
+                        {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                </div>
+
+                                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Iban</label>
+                    {{ form_widget(registrationForm.iban , {'attr':
+                        {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                </div>
+
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="emailAddress">rib</label>
+                    {{ form_widget(registrationForm.rib , {'attr':
+                        {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                </div>
+
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="emailAddress">bic</label>
+                    {{ form_widget(registrationForm.bic , {'attr':
+                        {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                </div>
+
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="passwordConfirmation">Adresse</label>
+                    {{ form_widget(registrationForm.address , {'attr':
+                        {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                </div>
+
+                <div class="mt-4">
+                    <label class="text-gray-700 dark:text-gray-200 pr-3" for="username">J'accepte les termes</label>
+                    {{ form_widget(registrationForm.agreeTerms , {'attr':
+                        {'class': ''}} ) }}
+                </div>
+
+            {{ form_widget(registrationForm.save, { 'label': 'Ajouter votre société' }) }}
+
+            {{ form_end(registrationForm) }}
+
+            <div class="flex items-center justify-between mt-4">
+                <span class="w-full border-b dark:border-gray-500"></span>
+            </div>
+
+        </div>
+
+
+    {% endblock %}
