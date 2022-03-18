@@ -7,13 +7,20 @@ use App\Repository\ThemeRepository;
 use App\Entity\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ThemeRepository::class)
+ * @UniqueEntity("name")
  */
 class Theme
 {
     use TimestampableTrait;
+
+    public const TYPE_CLASSIC = "classic";
+    public const TYPE_SPECIAL = "special";
+
 
     /**
      * @ORM\Id
@@ -23,27 +30,50 @@ class Theme
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true, unique="true")
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 120,
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 500,
+     * )
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=80, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 7,
+     *      max = 7,
+     * )
      */
     private $type;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\PositiveOrZero
      */
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="themes")
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="themes", cascade={"persist"})
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $media;
 
