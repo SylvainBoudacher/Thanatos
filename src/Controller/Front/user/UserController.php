@@ -34,11 +34,6 @@ class UserController extends AbstractController
                 'Vos données ont bien été changer'
             );
             return $this->redirectToRoute('app_settings_account');
-        }else{
-            $this->addFlash(
-                'error',
-                'Une erreur est survenu'
-            );
         }
 
         return $this->render('front/user/settings/account.html.twig', [
