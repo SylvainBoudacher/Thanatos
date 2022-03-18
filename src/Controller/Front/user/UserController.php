@@ -47,6 +47,14 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/wallet/new-card', name: 'app_settings_wallet_new')]
+    public function newCard(): Response
+    {
+        return $this->render('front/user/settings/newCard.html.twig', [
+            'controller_name' => 'UserController',
+        ]);
+    }
+
     /**  ********************* */
 
     #[Route('/password', name: 'app_settings_password')]
@@ -55,7 +63,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
         $form = $this->createForm(UserAccountUpdateFormType::class, $user);
         $form->handleRequest($request);
-        
+
         return $this->render('front/user/settings/password.html.twig', [
             'ChangeUserPasswordForm' => $form->createView(),
         ]);
