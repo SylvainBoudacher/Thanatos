@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Theme;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,9 +14,14 @@ class ThemeType extends AbstractType
     {
         $builder
             ->add('name')
-//            ->add('description')
-//            ->add('type')
-//            ->add('price')
+            ->add('description')
+            ->add('type', ChoiceType::class, [
+                'choices'  => [
+                    'Classique' => "classic",
+                    'Spéciale' => "special",
+                ],
+            ])
+            ->add('price')
             ->add('media', MediaType::class)
         ;
     }
