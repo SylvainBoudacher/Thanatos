@@ -17,8 +17,8 @@ class ThemeType extends AbstractType
             ->add('description')
             ->add('type', ChoiceType::class, [
                 'choices'  => [
-                    'Classique' => "classic",
-                    'Spéciale' => "special",
+                    "Classique" => Theme::TYPE_CLASSIC,
+                    'Spéciale' => Theme::TYPE_SPECIAL,
                 ],
             ])
             ->add('price')
