@@ -6,6 +6,8 @@ use App\Entity\CreditCard;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+
 
 class NewCreditCardFormType extends AbstractType
 {
@@ -13,7 +15,11 @@ class NewCreditCardFormType extends AbstractType
     {
         $builder
             ->add('number')
-            ->add('expirationDate')
+            ->add('expirationDate' , DateType::class, [
+                'widget' => 'single_text',
+                'html5' => false,
+                'format' => 'yyyy-mm',
+            ])
             ->add('cvc')
             ->add('owner')
         ;

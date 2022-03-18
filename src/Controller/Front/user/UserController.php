@@ -2,7 +2,9 @@
 
 namespace App\Controller\Front\user;
 
+use App\Entity\CreditCard;
 use App\Entity\User;
+use App\Form\NewCreditCardFormType;
 use App\Form\UserAccountUpdateFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,10 +50,30 @@ class UserController extends AbstractController
     }
 
     #[Route('/wallet/new-card', name: 'app_settings_wallet_new')]
-    public function newCard(): Response
+    public function newCard(Request $request): Response
     {
+        $card = New CreditCard();
+        $form = $this->createForm(NewCreditCardFormType::class, $card);
+        $form->handleRequest($request);
+
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //get id user
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($card);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre carte à bien été rajouter'
+            );
+
+            return $this->redirectToRoute('app_settings_wallet');
+        }
+
         return $this->render('front/user/settings/newCard.html.twig', [
-            'controller_name' => 'UserController',
+            'NewCreditCardForm' => $form->createView(),
         ]);
     }
 
