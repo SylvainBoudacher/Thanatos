@@ -21,15 +21,24 @@ class UserController extends AbstractController
     #[Route('/account', name: 'app_settings_account')]
     public function account(Request $request): Response
     {
-
-        $user = new User();
+        $user = $this->getUser();
         $form = $this->createForm(UserAccountUpdateFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash(
+                'success',
+                'Vos données ont bien été changer'
+            );
+            return $this->redirectToRoute('app_settings_account');
+        }else{
+            $this->addFlash(
+                'error',
+                'Une erreur est survenu'
+            );
         }
 
         return $this->render('front/user/settings/account.html.twig', [
