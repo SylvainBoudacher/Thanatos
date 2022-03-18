@@ -4,13 +4,13 @@
 
     {{ include('components/navBar.html.twig') }}
 
-    <div class="container flex flex-row h-screen">
+    <div class="container flex flex-row h-100">
 
         {{ include('components/sideBarUserSettings.html.twig') }}
 
 
 
-        <div class="flex-auto w-full mx-10 pt-20 mx-auto">
+        <div class="flex-auto w-full mx-10 pt-[4rem] mx-auto">
 
             {% for message in app.flashes('success') %}
                 <div class="max-w-sm flex p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">

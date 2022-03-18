@@ -26,36 +26,38 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->getDoctrine()->getManager()->flush();
-
             $this->addFlash(
                 'success',
                 'Vos données ont bien été changer'
             );
             return $this->redirectToRoute('app_settings_account');
         }
-
         return $this->render('front/user/settings/account.html.twig', [
             'userAccountUpdateForm' => $form->createView(),
         ]);
     }
+    /**  ********************* */
 
     #[Route('/wallet', name: 'app_settings_wallet')]
     public function wallet(): Response
     {
-
-
         return $this->render('front/user/settings/wallet.html.twig', [
             'controller_name' => 'UserController',
         ]);
     }
 
+    /**  ********************* */
+
     #[Route('/password', name: 'app_settings_password')]
-    public function password(): Response
+    public function password(Request $request): Response
     {
+        $user = $this->getUser();
+        $form = $this->createForm(UserAccountUpdateFormType::class, $user);
+        $form->handleRequest($request);
+        
         return $this->render('front/user/settings/password.html.twig', [
-            'controller_name' => 'UserController',
+            'ChangeUserPasswordForm' => $form->createView(),
         ]);
     }
 }
