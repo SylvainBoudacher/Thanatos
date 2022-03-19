@@ -35,13 +35,13 @@ class CompanyType extends AbstractType
             ->add('rib', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
-                    new Regex('/(0[1-9]|[1-8]\d|9[0-7])$/')
+                    new Regex('/(?<B>\d{5})(?<G>\d{5})(?<C>\w{11})(?<K>\d{2})/')
                 ],
             ])
             ->add('bic', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
-                    new Regex('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i')
+                    new Regex('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/')
                 ],
             ])
             ->add('address', AddressType::class)

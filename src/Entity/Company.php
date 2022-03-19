@@ -43,34 +43,34 @@ class Company
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=14, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Regex("/^[a-z-]+$/i")
+     * @Assert\Regex("/^[0-9]{14}$/")
      */
     private $siret;
 
     /**
-     * @ORM\Column(type="string", length=34, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Regex("/^[a-z-]+$/i")
+     * @Assert\Regex("^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/")
      */
     private $iban;
 
     /**
-     * @ORM\Column(type="string", length=23, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
-     * @Assert\Regex("/^[a-z-]+$/i")
+     * @Assert\Regex("/(?<B>\d{5})(?<G>\d{5})(?<C>\w{11})(?<K>\d{2})/")
      * @Assert\NotBlank
      */
     private $rib;
 
     /**
-     * @ORM\Column(type="string", length=11, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Regex("/^[a-z-]+$/i")
+     * @Assert\Regex("/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/")
      */
     private $bic;
 
