@@ -115,6 +115,7 @@ class CreditCard
         return $this;
     }
 
+
     public function getUsers(): ?User
     {
         return $this->users;
@@ -125,5 +126,15 @@ class CreditCard
         $this->users = $users;
 
         return $this;
+    }
+
+    public function getPossessor(): ?User
+    {
+        return $this->possessor;
+    }
+
+    public function setPossessor(?User $possessor)
+    {
+        $this->possessor = $possessor;
     }
 }
