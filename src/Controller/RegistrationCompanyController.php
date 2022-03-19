@@ -64,6 +64,8 @@ class RegistrationCompanyController extends AbstractController
     public function registerDriverCompangy(Request $request, $user, $role): Response
     {
         $company = new Company();
+        $user = $this->getDoctrine()->getRepository(User::class)->find($user);
+
         if($role == 'a7#ddd8')
         {
             $form = $this->createForm(DriverType::class, $company);
@@ -78,6 +80,12 @@ class RegistrationCompanyController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($company);
             $entityManager->flush();
+
+            $user->setCompany($company);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            dd($user);
 
             return $this->redirectToRoute('app_register_compagny');
         }

@@ -7,6 +7,7 @@ use App\Repository\CompanyRepository;
 use App\Entity\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
@@ -64,7 +65,9 @@ class Company
     private $media;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Address::class, inversedBy="companies")
+     * @ORM\ManyToOne(targetEntity=Address::class, inversedBy="companies", cascade={"persist"})
+     * @Assert\Type(type="App\Entity\Address")
+     * @Assert\Valid()
      */
     private $address;
 
