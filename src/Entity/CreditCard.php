@@ -24,9 +24,9 @@ class CreditCard
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank
-     * @Assert\Length(
-     *      min = 16,
-     *      minMessage = "Votre numéro dois avoir {{ limit }} chiffres"
+     * @Assert\CardScheme(
+     *     schemes={"VISA"},
+     *     message="Les numéros de votre carte banquaire sont invalide."
      * )
      */
     private $number;
