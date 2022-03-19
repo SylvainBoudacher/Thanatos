@@ -18,6 +18,7 @@ class DriverType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('media', MediaType::class)
             ->add('siret', TextType::class, [
                 'constraints' => [
                     new NotBlank(),

@@ -31,6 +31,9 @@ class Company
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Regex("/^[a-z-]+$/i")
      */
     private $name;
 
@@ -41,26 +44,40 @@ class Company
 
     /**
      * @ORM\Column(type="string", length=14, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Regex("/^[a-z-]+$/i")
      */
     private $siret;
 
     /**
      * @ORM\Column(type="string", length=34, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Regex("/^[a-z-]+$/i")
      */
     private $iban;
 
     /**
      * @ORM\Column(type="string", length=23, nullable=true)
+     * @Assert\NotNull
+     * @Assert\Regex("/^[a-z-]+$/i")
+     * @Assert\NotBlank
      */
     private $rib;
 
     /**
      * @ORM\Column(type="string", length=11, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Regex("/^[a-z-]+$/i")
      */
     private $bic;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="companies")
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="companies", cascade={"persist"})
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $media;
 
