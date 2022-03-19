@@ -67,12 +67,12 @@ class CreditCard
         return $this->id;
     }
 
-    public function getNumber(): ?int
+    public function getNumber(): ?string
     {
         return $this->number;
     }
 
-    public function setNumber(?int $number): self
+    public function setNumber(?string $number): self
     {
         $this->number = $number;
 

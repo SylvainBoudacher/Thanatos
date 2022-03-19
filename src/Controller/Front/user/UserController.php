@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\NewCreditCardFormType;
 use App\Form\UserAccountUpdateFormType;
 use App\Repository\CreditCardRepository;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,13 +49,18 @@ class UserController extends AbstractController
         $user = $this->getUser();
         $wallets = $creditCardRep->findBy(['possessor' => $user]);
 
+        foreach ($wallets as $wallet){
+            $numbs = str_split($wallet->getNumber() , 4);
+            $wallet->setNumber($numbs[3]);
+
+        }
+
         if (count($wallets) >=5){
             $this->addFlash(
                 'error',
                 'Vous avez atteint votre limite de carte'
             );
         }
-
         return $this->render('front/user/settings/wallet.html.twig', [
             'controller_name' => 'UserController',
             'wallets' => $wallets,
