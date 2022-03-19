@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CreditCardRepository;
 use App\Entity\Traits\TimestampableTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CreditCardRepository::class)
@@ -22,11 +21,7 @@ class CreditCard
     private $id;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\Length(
-     *     min = 16 ,
-     *     minMessage = "Votre carte dois comporter 16 chiffres"
-     * )
+     * @ORM\Column(type="string", length=16, nullable=true)
      */
     private $number;
 
