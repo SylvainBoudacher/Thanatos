@@ -34,6 +34,7 @@ class CreditCard
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Assert\NotBlank
+     * @Assert\GreaterThanOrEqual("today" , message="Votre carte est expirer")
      */
     private $expirationDate;
 

@@ -52,7 +52,6 @@ class UserController extends AbstractController
         foreach ($wallets as $wallet){
             $numbs = str_split($wallet->getNumber() , 4);
             $wallet->setNumber($numbs[3]);
-
         }
 
         if (count($wallets) >=5){
