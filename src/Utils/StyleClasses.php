@@ -6,7 +6,7 @@ class StyleClasses
 {
     /* LABELS */
 
-    public const lABEL_DEFAULT = "block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300";
+    public const lABEL_DEFAULT = "block mb-2 text-sm font-medium text-gray-900";
 
     /* TEXT INPUT */
 
@@ -22,5 +22,5 @@ class StyleClasses
 
     /* HELP */
 
-    public const HELP_DEFAULT = "mt-1 text-sm text-gray-500 dark:text-gray-300";
+    public const HELP_DEFAULT = "mt-1 text-sm text-gray-500";
 }

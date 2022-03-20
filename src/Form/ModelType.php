@@ -7,6 +7,7 @@ use App\Entity\Model;
 use App\Utils\StyleClasses;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -67,7 +68,19 @@ class ModelType extends AbstractType
                     "class" => StyleClasses::SELECT_DEFAULT,
                 ],
             ])
-        ;
+            ->add('images', FileType::class,[
+                'label' => false,
+                'multiple' => true,
+                'mapped' => false,
+                'required' => false,
+                "attr" => [
+                    "class" => "mt-4"
+                ],
+                "help" => "ATTENTION : Les images utilisés seront TOUTES remplacées par celles que vous sélectionnerez maintenant",
+                "help_attr" => [
+                    "class" => StyleClasses::HELP_DEFAULT,
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

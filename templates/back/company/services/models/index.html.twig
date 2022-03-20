@@ -43,6 +43,7 @@
                                             <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ model.burial }}</td>
                                             <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ model.price }} €</td>
                                             <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                                                <a href="{{ path("details_model", {"id" : model.id}) }}" class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
                                                 <a href="{{ path("modify_model", {"id" : model.id}) }}" class="text-blue-600 mr-2 dark:text-blue-500 hover:underline">Edit</a>
                                                 <a href="{{ path("delete_model", {"id" : model.id}) }}" class="text-red-600 dark:text-red-500 hover:underline">Delete</a>
                                             </td>

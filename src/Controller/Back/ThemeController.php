@@ -50,6 +50,8 @@ class ThemeController extends AbstractController
     public function delete(EntityManagerInterface $em, ThemeRepository $themeRep, int $id): Response
     {
         $theme = $themeRep->find($id);
+        $media = $theme->getMedia();
+        $em->remove($media);
         $em->remove($theme);
         $em->flush();
 
