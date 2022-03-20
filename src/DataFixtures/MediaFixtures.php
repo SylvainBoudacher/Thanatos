@@ -18,70 +18,60 @@ class MediaFixtures extends Fixture
 
         $mediaUser = new Media();
         $mediaUser
-        ->setName("user-default")
         ->setPathname($imagesDirPath."user-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaUser);
 
         $mediaCompany = new Media();
         $mediaCompany
-        ->setName("company-default")
         ->setPathname($imagesDirPath."company-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaCompany);
 
         $mediaDriver = new Media();
         $mediaDriver
-        ->setName("driver-default")
         ->setPathname($imagesDirPath."driver-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaDriver);
 
         $mediaCorpse = new Media();
         $mediaCorpse
-        ->setName("corpse-default")
         ->setPathname($imagesDirPath."corpse-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaCorpse);
 
         $mediaWarehouse = new Media();
         $mediaWarehouse
-        ->setName("warehouse-default")
         ->setPathname($imagesDirPath."warehouse-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaWarehouse);
 
         $mediaTheme = new Media();
         $mediaTheme
-        ->setName("warehouse-default")
         ->setPathname($imagesDirPath."theme-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaTheme);
 
         $mediaMaterial = new Media();
         $mediaMaterial
-        ->setName("material-default")
         ->setPathname($imagesDirPath."material-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaMaterial);
 
         $mediaExtra = new Media();
         $mediaExtra
-        ->setName("extra-default")
         ->setPathname($imagesDirPath."extra-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaExtra);
 
         $mediaPainting = new Media();
         $mediaPainting
-        ->setName("painting-default")
         ->setPathname($imagesDirPath."painting-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaPainting);
 
         $mediaModel = new Media();
         $mediaModel
-        ->setName("model-default")
         ->setPathname($imagesDirPath."model-default.png")
         ->setIsVideo(0);
         $manager->persist($mediaModel);
