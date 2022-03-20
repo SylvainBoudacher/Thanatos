@@ -7,9 +7,12 @@ use App\Repository\BurialRepository;
 use App\Entity\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=BurialRepository::class)
+ * @UniqueEntity("name")
  */
 class Burial
 {
@@ -24,12 +27,24 @@ class Burial
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 255,
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 500,
+     * )
      */
     private $description;
 
@@ -100,5 +115,10 @@ class Burial
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }

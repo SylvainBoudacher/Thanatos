@@ -21,12 +21,12 @@ class ModelMedia
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Model::class, inversedBy="modelMedia")
+     * @ORM\ManyToOne(targetEntity=Model::class, inversedBy="modelMedia", cascade={"persist"})
      */
     private $model;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="modelMedia")
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="modelMedia", cascade={"persist"})
      */
     private $media;
 
