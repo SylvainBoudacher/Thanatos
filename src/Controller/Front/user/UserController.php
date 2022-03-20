@@ -25,6 +25,7 @@ class UserController extends AbstractController
     #[Route('/account', name: 'app_settings_account')]
     public function account(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
         $form = $this->createForm(UserAccountUpdateFormType::class, $user);
         $form->handleRequest($request);
@@ -42,7 +43,9 @@ class UserController extends AbstractController
         ]);
     }
     /**  ********************* */
-
+    /**
+     * @IsGranted("ROLE_USER")
+     */
     #[Route('/wallet', name: 'app_settings_wallet')]
     public function wallet(CreditCardRepository $creditCardRep): Response
     {
@@ -88,6 +91,13 @@ class UserController extends AbstractController
         return $this->render('front/user/settings/newCard.html.twig', [
             'NewCreditCardForm' => $form->createView(),
         ]);
+    }
+
+    #[Route('/wallet/delete-card/{id}', name: 'app_settings_wallet_delete')]
+    public function deleteCard($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
     }
 
     /**  ********************* */
