@@ -93,12 +93,17 @@ class UserController extends AbstractController
         ]);
     }
 
+
     #[Route('/wallet/delete-card/{id}', name: 'app_settings_wallet_delete')]
-    public function deleteCard($id)
+    public function delete(Request $request, CreditCard $creditCardRep)
     {
         $em = $this->getDoctrine()->getManager();
-        
+        $em->remove($creditCardRep);
+        $em->flush();
+
+        return $this->redirectToRoute('app_settings_wallet');
     }
+
 
     /**  ********************* */
 
