@@ -103,7 +103,7 @@ class Corpse
     private $command;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="corpses")
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="corpses", cascade={"persist"})
      */
     private $media;
 
