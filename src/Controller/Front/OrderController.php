@@ -8,6 +8,7 @@ use App\Entity\Corpse;
 use App\Entity\Order;
 use App\Form\AddressType;
 use App\Form\CorpseType;
+use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,8 +45,10 @@ class OrderController extends AbstractController
 
                     return $this->redirectToRoute('declare_corpse_address');
                 } else {
-                    $this->addFlash('success', 'Corps bien ajouté');
 
+                    $corpse = new Corpse();
+                    $form = $this->createForm(CorpseType::class, $corpse);
+                    $this->addFlash('success', 'Corps bien ajouté');
                 }
             } else {
                 $this->addFlash('failed', 'Les dates ne sont pas coherents');
@@ -76,6 +79,8 @@ class OrderController extends AbstractController
                 return $this->redirectToRoute('declare_corpse_confirmation');
             }
 
+            $address = new Address();
+            $form = $this->createForm(AddressType::class, $address);
             $this->addFlash('success', "L'adresse s'est bien ajoutée");
         }
 
@@ -104,8 +109,6 @@ class OrderController extends AbstractController
             // create order
             $order = new Order();
             $order->setIsValid(false);
-            // TODO : generate random number for order
-            $order->setNumber("de");
             $order->setPossessor($this->getUser());
 
             // insert corpses
@@ -131,6 +134,7 @@ class OrderController extends AbstractController
                 }
             }
             $entityManager->persist($order);
+            $order->setNumber($order->getId() . Carbon::now()->format('Ymd'));
 
             $entityManager->flush();
             $session->remove('declareCorpses');
