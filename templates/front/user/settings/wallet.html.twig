@@ -41,10 +41,12 @@
                 </button>
             </a>
             <!-- component -->
+
             {% for wallet in wallets %}
             <div class="max-w-sm bg-white  flex justify-center py-4">
+
                 <div class="space-y-16">
-                    <div class="w-96 h-56 m-auto bg-red-100 rounded-xl relative text-white shadow-2xl transition-transform transform ">
+                    <div class="w-96 h-56 m-auto bg-red-100 rounded-xl relative text-white shadow-2xl transition-transform transform  ">
 
                         <img class="relative object-cover w-full h-full rounded-xl" src="https://i.imgur.com/kGkSg1v.png">
 
@@ -86,8 +88,20 @@
                         </div>
                     </div>
                 </div>
+
             </div>
+                <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <svg class="w-6 h-6"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path fill="none" d="M0 0h24v24H0V0Z"></path>
+                        <path fill="#FFF" d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0 -.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41 .39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4Z"></path>
+                    </svg>
+                    Supprimer la carte
+                </button>
+
+
+
             {% endfor %}
+
         </div>
     </div>
 {% endblock %}
