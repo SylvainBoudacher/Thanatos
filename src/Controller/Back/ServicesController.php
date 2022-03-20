@@ -3,8 +3,11 @@
 namespace App\Controller\Back;
 
 use App\Entity\Burial;
+use App\Entity\Model;
 use App\Form\BurialType;
+use App\Form\ModelType;
 use App\Repository\BurialRepository;
+use App\Repository\ModelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -75,6 +78,64 @@ class ServicesController extends AbstractController
         $em->remove($burial);
         $em->flush();
         return $this->redirectToRoute("view_burials");
+
+    }
+
+    /* MODELS */
+
+    #[Route('/models', name: 'view_models')]
+    public function view_models(Request $request, ModelRepository $modelRep): Response
+    {
+        return $this->render("back/company/services/models/index.html.twig", [
+            "models" => $modelRep->findAll()
+        ]);
+    }
+
+    #[Route('/models/create', name: 'create_model')]
+    public function create_model(Request $request, EntityManagerInterface $em): Response
+    {
+        $model = new Model();
+        $form = $this->createForm(ModelType::class, $model);
+        $form->remove("company");
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($model);
+            $em->flush();
+            return $this->redirectToRoute("view_models");
+        }
+
+        return $this->render("back/company/services/models/create.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    #[Route('/models/modify/{id}', name: 'modify_model')]
+    public function modify_model(Request $request, EntityManagerInterface $em, int $id, ModelRepository $modelRep): Response
+    {
+        $model = $modelRep->find($id);
+        $form = $this->createForm(ModelType::class, $model);
+        $form->remove("company");
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($model);
+            $em->flush();
+            return $this->redirectToRoute("view_models");
+        }
+
+        return $this->render("back/company/services/models/modify.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    #[Route('/models/delete/{id}', name: 'delete_model')]
+    public function delete_model(EntityManagerInterface $em, int $id, ModelRepository $modelRep): Response
+    {
+        $model = $modelRep->find($id);
+        $em->remove($model);
+        $em->flush();
+        return $this->redirectToRoute("view_models");
 
     }
 

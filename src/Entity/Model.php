@@ -7,6 +7,7 @@ use App\Repository\ModelRepository;
 use App\Entity\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ModelRepository::class)
@@ -24,16 +25,31 @@ class Model
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 255,
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 500,
+     * )
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\PositiveOrZero
      */
     private $price;
 
@@ -44,6 +60,8 @@ class Model
 
     /**
      * @ORM\ManyToOne(targetEntity=Burial::class, inversedBy="models")
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $burial;
 
@@ -222,5 +240,10 @@ class Model
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }
