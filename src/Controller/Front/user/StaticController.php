@@ -22,4 +22,6 @@ class StaticController extends AbstractController
         ]);
     }
 
+
+
 }
