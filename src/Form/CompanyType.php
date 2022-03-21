@@ -21,27 +21,27 @@ class CompanyType extends AbstractType
             ->add('description')
             ->add('siret', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
+                    new NotBlank(['message' => 'Entrer un siret']),
                     new Regex('/^[0-9]{14}$/')
                 ],
             ])
 
             ->add('iban', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
+                    new NotBlank(['message' => 'Entrer un iban']),
                     new Regex('/^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/')
                 ],
             ])
             ->add('rib', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
+                    new NotBlank(['message' => 'Entrer un rib']),
                     new Regex('/(?<B>\d{5})(?<G>\d{5})(?<C>\w{11})(?<K>\d{2})/')
                 ],
             ])
             ->add('bic', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
-                    new Regex('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/')
+                    new NotBlank(['message' => 'Entrer un bic']),
+                    new Regex('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i')
                 ],
             ])
             ->add('address', AddressType::class)

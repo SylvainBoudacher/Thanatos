@@ -54,7 +54,7 @@ class Company
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Regex("^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/")
+     * @Assert\Regex("/^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/")
      */
     private $iban;
 
@@ -70,7 +70,7 @@ class Company
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Regex("/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/")
+     * @Assert\Regex("/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i")
      */
     private $bic;
 

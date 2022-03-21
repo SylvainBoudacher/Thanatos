@@ -85,9 +85,7 @@ class RegistrationCompanyController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            dd($user);
-
-            return $this->redirectToRoute('app_register_compagny');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register-compagny.html.twig', [

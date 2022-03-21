@@ -18,31 +18,47 @@ class DriverType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('media', MediaType::class)
+            ->add('media', MediaType::class, [
+                'constraints' => [
+                    new NotBlank(['message' => 'Ajouter un permis'])
+                ],
+            ])
             ->add('siret', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
-                    // new Regex('/^[0-9]{14}$/')
+                    new NotBlank(['message' => 'Entrer un siret']),
+                    new Regex('/^[0-9]{14}$/')
                 ],
+                'attr' => array(
+                    'placeholder' => 'hereYourPlaceHolder'
+                )
             ])
 
             ->add('iban', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
-                    // new Regex('/^(?:(?:IT|SM)\d{2}[A-Z]\d{22}|CY\d{2}[A-Z]\d{23}|NL\d{2}[A-Z]{4}\d{10}|LV\d{2}[A-Z]{4}\d{13}|(?:BG|BH|GB|IE)\d{2}[A-Z]{4}\d{14}|GI\d{2}[A-Z]{4}\d{15}|RO\d{2}[A-Z]{4}\d{16}|KW\d{2}[A-Z]{4}\d{22}|MT\d{2}[A-Z]{4}\d{23}|NO\d{13}|(?:DK|FI|GL|FO)\d{16}|MK\d{17}|(?:AT|EE|KZ|LU|XK)\d{18}|(?:BA|HR|LI|CH|CR)\d{19}|(?:GE|DE|LT|ME|RS)\d{20}|IL\d{21}|(?:AD|CZ|ES|MD|SA)\d{22}|PT\d{23}|(?:BE|IS)\d{24}|(?:FR|MR|MC)\d{25}|(?:AL|DO|LB|PL)\d{26}|(?:AZ|HU)\d{27}|(?:GR|MU)\d{28})$/')
+                    new NotBlank(['message' => 'Entrer un iban']),
+                    new Regex('/^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/')
                 ],
+                'attr' => array(
+                    'placeholder' => 'hereYourPlaceHolder'
+                )
             ])
             ->add('rib', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
-                    // new Regex('/(0[1-9]|[1-8]\d|9[0-7])$/')
+                    new NotBlank(['message' => 'Entrer un rib']),
+                    new Regex('/(?<B>\d{5})(?<G>\d{5})(?<C>\w{11})(?<K>\d{2})/')
                 ],
+                'attr' => array(
+                    'placeholder' => 'hereYourPlaceHolder'
+                )
             ])
             ->add('bic', TextType::class, [
                 'constraints' => [
-                    new NotBlank(),
-                    // new Regex('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i')
+                    new NotBlank(['message' => 'Entrer un bic']),
+                    new Regex('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i')
                 ],
+                'attr' => array(
+                    'placeholder' => 'hereYourPlaceHolder'
+                )
             ])
             ->add('address', AddressType::class)
 
