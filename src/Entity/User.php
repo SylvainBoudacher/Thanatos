@@ -72,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $address;
 
     /**
-     * @ORM\OneToOne(targetEntity=Company::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Company::class, cascade={"persist", "remove"}, fetch="EAGER")
      */
     private $company;
 

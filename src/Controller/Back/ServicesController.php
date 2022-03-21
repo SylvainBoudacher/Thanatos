@@ -9,8 +9,10 @@ use App\Entity\ModelMedia;
 use App\Form\BurialType;
 use App\Form\ModelType;
 use App\Repository\BurialRepository;
+use App\Repository\CompanyRepository;
 use App\Repository\ModelMediaRepository;
 use App\Repository\ModelRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -104,14 +106,16 @@ class ServicesController extends AbstractController
     }
 
     #[Route('/models/create', name: 'create_model')]
-    public function create_model(Request $request, EntityManagerInterface $em): Response
+    public function create_model(Request $request, EntityManagerInterface $em, CompanyRepository $companyRep, UserRepository $userRep): Response
     {
+        $company = $companyRep->find($userRep->find($this->getUser())->getCompany()->getId());
         $model = new Model();
         $form = $this->createForm(ModelType::class, $model);
         $form->remove("company");
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $model->setCompany($company);
             $images = $form->get("images")->getData();
 
             foreach ($images as $image) {
@@ -144,6 +148,7 @@ class ServicesController extends AbstractController
         $form = $this->createForm(ModelType::class, $model);
         $form->remove("company");
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
 
