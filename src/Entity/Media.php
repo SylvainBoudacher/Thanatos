@@ -87,7 +87,7 @@ class Media
     private $themes;
 
     /**
-     * @ORM\OneToMany(targetEntity=ModelMedia::class, mappedBy="media")
+     * @ORM\OneToMany(targetEntity=ModelMedia::class, mappedBy="media", orphanRemoval=true)
      */
     private $modelMedia;
 
