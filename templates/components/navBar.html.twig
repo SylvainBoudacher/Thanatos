@@ -82,7 +82,11 @@
                         <div class="flex justify-center md:block">
                             <button type="button" class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 white:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" type="button" data-dropdown-toggle="dropdown">
                                 <span class="sr-only">Open user menu</span>
-                                <img class="w-8 h-8 rounded-full" src="https://media-exp1.licdn.com/dms/image/C4D03AQHN-jN4rSXPrg/profile-displayphoto-shrink_200_200/0/1636452305928?e=1652918400&v=beta&t=D5KEZxC6G29FOKCZ-5R6tAiFj3XkndhPeJ5cLBK091A" alt="user photo">
+                                {% if app.user.media %}
+                                    <img class="object-cover w-8 h-8 rounded-full" src="{{ vich_uploader_asset(app.user.media) }}">
+                                {% endif %}
+
+
                             </button>
                             <!-- Dropdown menu -->
                             <div class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow white:bg-gray-700 white:divide-gray-600" id="dropdown">
