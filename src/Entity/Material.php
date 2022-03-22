@@ -43,7 +43,7 @@ class Material
     private $modelMaterials;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="materials")
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="materials", cascade={"persist"})
      */
     private $media;
 

@@ -3,13 +3,17 @@
 namespace App\Controller\Back;
 
 use App\Entity\Burial;
+use App\Entity\Material;
 use App\Entity\Media;
 use App\Entity\Model;
 use App\Entity\ModelMedia;
 use App\Form\BurialType;
+use App\Form\MaterialType;
 use App\Form\ModelType;
 use App\Repository\BurialRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\MaterialRepository;
+use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelMediaRepository;
 use App\Repository\ModelRepository;
 use App\Repository\UserRepository;
@@ -30,7 +34,9 @@ class ServicesController extends AbstractController
         return $this->render('back/company/services/index.html.twig');
     }
 
+
     /* BURIALS */
+
 
     #[Route('/burials', name: 'view_burials')]
     public function view_burial(Request $request, BurialRepository $burialRep): Response
@@ -86,7 +92,9 @@ class ServicesController extends AbstractController
 
     }
 
+
     /* MODELS */
+
 
     #[Route('/models', name: 'view_models')]
     public function view_models(ModelRepository $modelRep): Response
@@ -203,6 +211,77 @@ class ServicesController extends AbstractController
 
         return $this->redirectToRoute("view_models");
     }
+
+
+    /* MATERIALS */
+
+
+    #[Route('/materials', name: 'view_materials')]
+    public function view_materials(MaterialRepository $materialRep): Response
+    {
+        return $this->render("back/company/services/materials/index.html.twig", [
+            "materials" => $materialRep->findAll(),
+        ]);
+    }
+
+    #[Route('/materials/details/{id}', name: 'details_material')]
+    public function details_materials(MaterialRepository $materialRep, int $id): Response
+    {
+        return $this->render("back/company/services/materials/details.html.twig", [
+            "material" => $materialRep->find($id)
+        ]);
+    }
+
+    #[Route('/materials/create', name: 'create_material')]
+    public function create_materials(Request $request, EntityManagerInterface $em, MaterialRepository $materialRep): Response
+    {
+        $material = new Material();
+        $form = $this->createForm(MaterialType::class, $material);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($material);
+            $em->flush();
+            return $this->redirectToRoute("view_materials");
+        }
+
+        return $this->render("back/company/services/materials/create.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    #[Route('/materials/modify/{id}', name: 'modify_material')]
+    public function modify_materials(Request $request, EntityManagerInterface $em, MaterialRepository $materialRep, int $id): Response
+    {
+        $material = $materialRep->find($id);
+        $form = $this->createForm(MaterialType::class, $material);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($material);
+            $em->flush();
+            return $this->redirectToRoute("view_materials");
+        }
+
+        return $this->render("back/company/services/materials/modify.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    #[Route('/materials/delete/{id}', name: 'delete_material')]
+    public function delete_materials(EntityManagerInterface $em, MaterialRepository $materialRep, int $id): Response
+    {
+        $material = $materialRep->find($id);
+        $media = $material->getMedia();
+        $em->remove($media);
+        $em->remove($material);
+        $em->flush();
+
+        // TODO : ATTENTION : Checkez que aucuns materials n'est utilise par un company avant de supprimer
+
+        return $this->redirectToRoute("view_materials");
+    }
+
 
 
 }
