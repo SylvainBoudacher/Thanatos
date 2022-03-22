@@ -82,9 +82,15 @@ class Theme
      */
     private $preparations;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CompanyTheme::class, mappedBy="theme")
+     */
+    private $companyThemes;
+
     public function __construct()
     {
         $this->preparations = new ArrayCollection();
+        $this->companyThemes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +182,36 @@ class Theme
             // set the owning side to null (unless already changed)
             if ($preparation->getTheme() === $this) {
                 $preparation->setTheme(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompanyTheme[]
+     */
+    public function getCompanyThemes(): Collection
+    {
+        return $this->companyThemes;
+    }
+
+    public function addCompanyTheme(CompanyTheme $companyTheme): self
+    {
+        if (!$this->companyThemes->contains($companyTheme)) {
+            $this->companyThemes[] = $companyTheme;
+            $companyTheme->setTheme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyTheme(CompanyTheme $companyTheme): self
+    {
+        if ($this->companyThemes->removeElement($companyTheme)) {
+            // set the owning side to null (unless already changed)
+            if ($companyTheme->getTheme() === $this) {
+                $companyTheme->setTheme(null);
             }
         }
 
