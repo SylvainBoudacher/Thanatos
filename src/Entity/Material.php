@@ -7,6 +7,7 @@ use App\Repository\MaterialRepository;
 use App\Entity\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MaterialRepository::class)
@@ -24,11 +25,21 @@ class Material
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 120,
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\PositiveOrZero
+     *
      */
     private $price;
 
