@@ -46,7 +46,10 @@ class Company
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Regex("/^[0-9]{14}$/")
+     * @Assert\Regex(
+     *      pattern="/^[0-9]{14}$/",
+     *      message="exemple 12356894100056"
+     * )
      */
     private $siret;
 
@@ -54,15 +57,21 @@ class Company
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Regex("/^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/")
+     * @Assert\Regex(
+     *      pattern="/^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/",
+     *      message="exemple FR7630003035409876543210925"
+     * )
      */
     private $iban;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
-     * @Assert\Regex("/(?<B>\d{5})(?<G>\d{5})(?<C>\w{11})(?<K>\d{2})/")
      * @Assert\NotBlank
+     * @Assert\Regex(
+     *      pattern="/(?<B>\d{5})(?<G>\d{5})(?<C>\w{11})(?<K>\d{2})/",
+     *      message="exemple 1234512345az12345678912"
+     * )
      */
     private $rib;
 
@@ -70,7 +79,10 @@ class Company
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Regex("/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i")
+     * @Assert\Regex(
+     *      pattern="/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i",
+     *      message="exemple NOLADE21STS"
+     * )
      */
     private $bic;
 

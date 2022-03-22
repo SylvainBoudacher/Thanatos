@@ -17,7 +17,11 @@ class DriverType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
+            ->add('name',TextType::class,[
+                'attr' => array(
+                    'placeholder' => 'corbillardDriving'
+                )
+            ])
             ->add('media', MediaType::class, [
                 'constraints' => [
                     new NotBlank(['message' => 'Ajouter un permis'])
@@ -29,7 +33,7 @@ class DriverType extends AbstractType
                     new Regex('/^[0-9]{14}$/')
                 ],
                 'attr' => array(
-                    'placeholder' => 'hereYourPlaceHolder'
+                    'placeholder' => '12356894100056'
                 )
             ])
 
@@ -39,7 +43,7 @@ class DriverType extends AbstractType
                     new Regex('/^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/')
                 ],
                 'attr' => array(
-                    'placeholder' => 'hereYourPlaceHolder'
+                    'placeholder' => 'FR7630003035409876543210925'
                 )
             ])
             ->add('rib', TextType::class, [
@@ -48,7 +52,7 @@ class DriverType extends AbstractType
                     new Regex('/(?<B>\d{5})(?<G>\d{5})(?<C>\w{11})(?<K>\d{2})/')
                 ],
                 'attr' => array(
-                    'placeholder' => 'hereYourPlaceHolder'
+                    'placeholder' => '1234512345az12345678912'
                 )
             ])
             ->add('bic', TextType::class, [
@@ -57,7 +61,7 @@ class DriverType extends AbstractType
                     new Regex('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i')
                 ],
                 'attr' => array(
-                    'placeholder' => 'hereYourPlaceHolder'
+                    'placeholder' => 'NOLADE21STS'
                 )
             ])
             ->add('address', AddressType::class)
