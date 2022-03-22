@@ -19,6 +19,41 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
+    public function findLastFinishedLimitByUser(int $id, int $limit = 3): array
+    {
+        // automatically knows to select Products
+        // the "p" is an alias you'll use in the rest of the query
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.status = :status')
+            ->andWhere('o.possessor = :user')
+            ->setParameter('status',Order::FINISHED)
+            ->setParameter('user', $id)
+            ->orderBy('o.updatedAt', 'DESC')
+            ->setMaxResults( $limit );
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+    }
+
+    public function findMyCurrentOrder(int $user)
+    {
+        // automatically knows to select Products
+        // the "p" is an alias you'll use in the rest of the query
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.status != :status')
+            ->andWhere('o.possessor = :user')
+            ->setParameter('status',Order::FINISHED)
+            ->setParameter('user', $user)
+            ->orderBy('o.updatedAt', 'DESC')
+            ->setMaxResults( 1 );
+
+        $query = $qb->getQuery();
+
+        return $query->getSingleResult();
+    }
+
+
     // /**
     //  * @return Order[] Returns an array of Order objects
     //  */

@@ -1,11 +1,12 @@
 {% extends 'base_front.html.twig' %}
 
 {% block body %}
+	{{ include('components/navBar.html.twig') }}
 
 	{% form_theme form 'form_table_layout.html.twig' %}
 
 	<div class="w-full max-w-lg p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 my-8">
-		<h1 class="text-3xl font-semibold text-center text-gray-700 dark:text-white">Déclarer un corps</h1>
+		<h1 class="text-3xl font-semibold text-center text-gray-700 dark:text-white">Où se trouve vos corps ?</h1>
 
 		<div class="flex items-center justify-center mt-4">
 			<span class="w-1/4 border-b dark:border-gray-500"></span>
@@ -48,10 +49,12 @@
 		</div>
 
 		{# Submit button #}
-		<button type="submit" name="oneTime" class="text-gray-700 dark:text-gray-200 mt-4">Déclarer une adresse</button>
-		{% if app.session.get('declareCorpses') != null and app.session.get('declareCorpses')['corpses'] | length > 1 %}
-			<button type="submit" name="multipleTimes" class="text-gray-700 dark:text-gray-200 mt-4">Déclarer une autre adresse</button>
-		{% endif %}
+		<button type="submit"
+				class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 mt-3">
+  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+      Déclarer l'adresse
+  </span>
+		</button>
 		{{ form_end(form) }}
 
 		<div class="flex items-center justify-between mt-4">

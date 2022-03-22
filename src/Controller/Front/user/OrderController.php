@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Front;
+namespace App\Controller\Front\user;
 
 use App\Entity\Address;
 use App\Entity\AddressOrder;
@@ -8,15 +8,49 @@ use App\Entity\Corpse;
 use App\Entity\Order;
 use App\Form\AddressType;
 use App\Form\CorpseType;
+use App\Repository\OrderRepository;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[IsGranted("ROLE_USER")]
 class OrderController extends AbstractController
 {
+
+    #[Route('/tableau-de-bord', name: 'customer_dashboard', methods: ['GET'])]
+    public function dashboard(OrderRepository $orderRepository): Response {
+
+        $order = $orderRepository->findMyCurrentOrder($this->getUser()->getId()); // get current order
+        $orders = $orderRepository->findLastFinishedLimitByUser($this->getUser()->getId()); // get finished order
+
+        return $this->render('front/user/index.html.twig', [
+            'order' => $order,
+            'orders' => $orders
+        ]);
+
+    }
+
+    #[Route('/commande/{id}', name: 'customer_order', methods: ['GET'])]
+    public function show(Order $order, int $id): Response {
+
+
+        if ($order->getPossessor() != $this->getUser()) {
+            throw $this->createNotFoundException(
+                'Aucune commande pour l\'id: ' . $id . ' vous appartient'
+            );
+        }
+
+        return $this->render(
+            'front/user/order.html.twig', [
+                'order' => $order
+            ]
+        );
+
+    }
 
     #[Route('/declarer-corps', name: 'declare_corpse', methods: ['POST', 'GET'])]
     public function declareCorpses(Request $request): Response
@@ -53,9 +87,13 @@ class OrderController extends AbstractController
             } else {
                 $this->addFlash('failed', 'Les dates ne sont pas coherents');
             }
+        }else {
+            if ($request->request->get('oneCorpse') !== null) {
+                return $this->redirectToRoute('declare_corpse_address');
+            }
         }
 
-        return $this->renderForm('front/declareCorpse.html.twig', [
+        return $this->renderForm('front/user/declareCorpse/index.html.twig', [
             'form' => $form,
         ]);
     }
@@ -72,19 +110,14 @@ class OrderController extends AbstractController
             $session = $request->getSession();
 
             $declareCorpses = $session->get('declareCorpses', []);
-            $declareCorpses['addresses'][] = $address;
+            $declareCorpses['address'] = $address;
             $session->set('declareCorpses', $declareCorpses);
 
-            if ($request->request->get('oneTime') !== null) {
-                return $this->redirectToRoute('declare_corpse_confirmation');
-            }
+            return $this->redirectToRoute('declare_corpse_confirmation');
 
-            $address = new Address();
-            $form = $this->createForm(AddressType::class, $address);
-            $this->addFlash('success', "L'adresse s'est bien ajoutée");
         }
 
-        return $this->renderForm('front/declareCorpsesAddress.html.twig', [
+        return $this->renderForm('front/user/declareCorpse/address.html.twig', [
             'form' => $form,
         ]);
     }
@@ -99,7 +132,7 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
         $corpses = $declareCorpses['corpses'];
-        $addresses = $declareCorpses['addresses'];
+        $address = $declareCorpses['address'];
 
         // declare corpses officially
         if ($request->query->get('confirmation') === 'true') {
@@ -120,37 +153,37 @@ class OrderController extends AbstractController
             }
 
             // insert addresses
-            foreach ($addresses as $address) {
-                if ($address instanceof Address) {
+            if ($address instanceof Address) {
 
-                    // insert address-order
-                    $addressOrder = new AddressOrder();
-                    $addressOrder->setAddress($address);
-                    $addressOrder->setCommand($order);
+                // insert address-order
+                $addressOrder = new AddressOrder();
+                $addressOrder->setAddress($address);
+                $addressOrder->setCommand($order);
 
-                    $entityManager->persist($addressOrder);
-                    $entityManager->persist($address);
+                $entityManager->persist($addressOrder);
+                $entityManager->persist($address);
 
-                }
             }
+
             $entityManager->persist($order);
             $order->setNumber($order->getId() . Carbon::now()->format('Ymd'));
 
             $entityManager->flush();
             $session->remove('declareCorpses');
 
-            return $this->render('front/declareCorpsesSuccess.html.twig');
+            return $this->render('front/user/declareCorpse/success.html.twig');
         }
 
         // cancel declare corpses
         if ($request->query->get('confirmation') === 'false') {
             $session->remove('declareCorpses');
-            dd('redirect to dashboard');
+
+            $this->redirectToRoute('customer_dashboard');
         }
 
-        return $this->renderForm('front/declareCorpsesConfirmation.html.twig', [
+        return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
             'corpses' => $corpses,
-            'addresses' => $addresses
+            'address' => $address
         ]);
     }
 

@@ -1,0 +1,56 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+    {{ include('components/navBar.html.twig') }}
+
+    <h1 class="text-2xl">Récapitulatif</h1>
+<div class="p-4">
+
+        <div class="grid grid-cols-4 gaps-3">
+            {% for corpse in corpses %}
+                <div class="px-8 py-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
+
+                    <div class="mt-2">
+                        <a href="#"
+                           class="text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{ corpse.firstname }} {{ corpse.lastname }}</a>
+                        <p class="mt-2 text-gray-600 dark:text-gray-300">Sexe de la personne {{ corpse.sex }} / Taille
+                            et poids de la personne {{ corpse.height }}m {{ corpse.weight }}Kg/ Date de sa
+                            naissance {{ corpse.birthdate | date("d/m/Y") }} / Date de sa
+                            mort {{ corpse.dayOfDeath | date("d/m/Y H:s:i") }} <br> Cause de sa
+                            mort {{ corpse.causeOfDeath }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="grid grid-cols-2 mt-3 content-center">
+
+            <div class="px-8 py-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
+
+                <div class="mt-2">
+                    <a href="#"
+                       class="text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">{{ address.city }}</a>
+                    <p class="mt-2 text-gray-600 dark:text-gray-300">{{ address.number }} {{ address.street }} {{ address.postcode }}</p>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="mt-2">
+
+        <a href="{{ path('declare_corpse_confirmation', {confirmation: 'false'}) }}">
+
+            <button class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 text-white-300 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                Annuler
+            </button>
+        </a>
+
+        <a href="{{ path('declare_corpse_confirmation', {confirmation: 'true'}) }}">
+            <button class="px-4 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-green-600 text-white-300 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                Déclarer les corps
+            </button>
+        </a>
+    </div>
+
+</div>
+{% endblock %}

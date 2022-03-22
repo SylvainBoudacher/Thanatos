@@ -16,6 +16,9 @@ class Order
 {
     use TimestampableTrait;
 
+    public const NEW = "NEW";
+    public const FINISHED = "FINISHED";
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -67,6 +70,11 @@ class Order
      * @ORM\OneToMany(targetEntity=AddressOrder::class, mappedBy="command")
      */
     private $addressOrders;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $status;
 
     public function __construct()
     {
@@ -257,6 +265,18 @@ class Order
                 $addressOrder->setCommand(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

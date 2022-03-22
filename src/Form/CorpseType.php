@@ -51,7 +51,7 @@ class CorpseType extends AbstractType
                 'label' => "Cause de la mort"
             ])
             ->add('weight', NumberType::class, [
-                'label' => "Poids"
+                'label' => "Poids",
             ])
             ->add('height', NumberType::class, [
                 'label' => "Taille",
