@@ -16,9 +16,14 @@ class SecurityController extends AbstractController
     {
 
         if ($this->getUser() ) {
-            if ($this->getUser()->getRoles("ROLE_USER")[0] ){
+            if ($this->getUser()->getRoles("ROLE_DRIVER")[0] == "ROLE_DRIVER") {
+                return $this->redirectToRoute('driver_dashboard');
+            } elseif ($this->getUser()->getRoles("ROLE_MORGUE")[0] == "ROLE_MORGUE") {
+                return $this->redirectToRoute('morgue_dashboard');
+            } else {
                 return $this->redirectToRoute('user_dashboard');
             }
+
         }
 
         // get the login error if there is one

@@ -11,5 +11,10 @@
 <div class="example-wrapper">
     <h1>Page d'accueil</h1>
 
+    <ul>
+        <li><a href="{{ path('app_register_user_company', {slug: 'driver'} ) }}">Inscription Driver --- <span>a mettre dans le footer</span></a></li>
+        <li><a href="{{ path('app_register_user_company', {slug: 'morgue'} ) }}">Inscription MORGU --- <span>a mettre dans le footer</span></a></li>
+    </ul>
+
 </div>
 {% endblock %}

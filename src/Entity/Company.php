@@ -7,6 +7,7 @@ use App\Repository\CompanyRepository;
 use App\Entity\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
@@ -30,6 +31,9 @@ class Company
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Regex("/^[a-z-]+$/i")
      */
     private $name;
 
@@ -39,32 +43,60 @@ class Company
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=14, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *      pattern="/^[0-9]{14}$/",
+     *      message="exemple 12356894100056"
+     * )
      */
     private $siret;
 
     /**
-     * @ORM\Column(type="string", length=34, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *      pattern="/^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/",
+     *      message="exemple FR7630003035409876543210925"
+     * )
      */
     private $iban;
 
     /**
-     * @ORM\Column(type="string", length=23, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *      pattern="/(?<B>\d{5})(?<G>\d{5})(?<C>\w{11})(?<K>\d{2})/",
+     *      message="exemple 1234512345az12345678912"
+     * )
      */
     private $rib;
 
     /**
-     * @ORM\Column(type="string", length=11, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *      pattern="/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i",
+     *      message="exemple NOLADE21STS"
+     * )
      */
     private $bic;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="companies")
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="companies", cascade={"persist"})
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $media;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Address::class, inversedBy="companies")
+     * @ORM\ManyToOne(targetEntity=Address::class, inversedBy="companies", cascade={"persist"})
+     * @Assert\Type(type="App\Entity\Address")
+     * @Assert\Valid()
      */
     private $address;
 
