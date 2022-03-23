@@ -2,13 +2,11 @@
 
 {% block body %}
 
-    {{ include('components/navBar.html.twig') }}
+
 
     <div class="container flex flex-row h-100">
 
         {{ include('components/sideBarUserSettings.html.twig') }}
-
-
 
         <div class="flex-auto w-full mx-10 pt-[4rem] mx-auto">
 
@@ -27,10 +25,15 @@
             <div class="p-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700">
                 <div class="space-y-6" action="#">
                     {{ form_start(userAccountUpdateForm) }}
-                    {% if app.user.media %}
-                        <img class="object-cover w-full mx-auto mb-3 w-24 h-24 rounded-full shadow-lg" src="{{ vich_uploader_asset(app.user.media) }}">
-                        <img class="object-cover w-full mx-auto mb-3 w-24 h-24 rounded-full shadow-lg" src="{{ vich_uploader_asset(app.user.media) }}">
+
+                        <img class="mx-auto mb-3 w-24 h-24 rounded-full shadow-lg" src="https://media-exp1.licdn.com/dms/image/C4D03AQHN-jN4rSXPrg/profile-displayphoto-shrink_200_200/0/1636452305928?e=1652918400&v=beta&t=D5KEZxC6G29FOKCZ-5R6tAiFj3XkndhPeJ5cLBK091A" alt="Bonnie image"/>
+
+                    {% if user.media %}
+                        <img class="object-cover w-full mx-auto mb-3 w-24 h-24 rounded-full shadow-lg" src="{{ vich_uploader_asset(user.media) }}">
+                    {% else %}
+                        <p>pouet</p>
                     {% endif %}
+
                         <div class="mx-auto text-center">
                             <button type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800">Changer mon image</button>
                             <div class="w-56 my-4 mr-6">
@@ -42,7 +45,7 @@
                             {{ form_widget(userAccountUpdateForm.lastname ,
                                 {'attr':
                                     {'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white' ,
-                                        'value' :  app.user.lastname
+                                        'value' :  user.lastname
                                     }
                                 })
                             }}
@@ -54,7 +57,7 @@
                             {{ form_widget(userAccountUpdateForm.firstname ,
                                 {'attr':
                                     {'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white' ,
-                                        'value' :  app.user.firstname
+                                        'value' :  user.firstname
                                     }
                                 })
                             }}
@@ -73,7 +76,7 @@
                             {{ form_widget(userAccountUpdateForm.email ,
                                 {'attr':
                                     {'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white' ,
-                                        'value' :  app.user.email
+                                        'value' :  user.email
                                     }
                                 })
                             }}
