@@ -14,9 +14,30 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CompanyThemeRepository extends ServiceEntityRepository
 {
+
+    private $registry;
+
     public function __construct(ManagerRegistry $registry)
     {
+        $this->registry = $registry;
         parent::__construct($registry, CompanyTheme::class);
+    }
+
+    public function getCompaniesByTheme(int $theme): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT IDENTITY(ct.company) FROM App\Entity\CompanyTheme ct WHERE ct.theme = :theme'
+        )->setParameter('theme', $theme);
+
+        $result =  $query->getArrayResult();
+
+        $companyRepository = new CompanyRepository($this->registry);
+        $result = array_merge(...$result);
+
+        return $companyRepository->findBy(['id' => $result]);
+
     }
 
     // /**
