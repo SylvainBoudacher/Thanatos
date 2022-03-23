@@ -26,12 +26,12 @@
                 <div class="space-y-6" action="#">
                     {{ form_start(userAccountUpdateForm) }}
 
-                        <img class="mx-auto mb-3 w-24 h-24 rounded-full shadow-lg" src="https://media-exp1.licdn.com/dms/image/C4D03AQHN-jN4rSXPrg/profile-displayphoto-shrink_200_200/0/1636452305928?e=1652918400&v=beta&t=D5KEZxC6G29FOKCZ-5R6tAiFj3XkndhPeJ5cLBK091A" alt="Bonnie image"/>
+
 
                     {% if user.media %}
                         <img class="object-cover w-full mx-auto mb-3 w-24 h-24 rounded-full shadow-lg" src="{{ vich_uploader_asset(user.media) }}">
                     {% else %}
-                        <p>pouet</p>
+                        <img class="mx-auto mb-3 w-24 h-24 rounded-full shadow-lg" src="https://media-exp1.licdn.com/dms/image/C4D03AQHN-jN4rSXPrg/profile-displayphoto-shrink_200_200/0/1636452305928?e=1652918400&v=beta&t=D5KEZxC6G29FOKCZ-5R6tAiFj3XkndhPeJ5cLBK091A" alt="Bonnie image"/>
                     {% endif %}
 
                         <div class="mx-auto text-center">
