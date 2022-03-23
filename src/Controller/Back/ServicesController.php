@@ -3,19 +3,21 @@
 namespace App\Controller\Back;
 
 use App\Entity\Burial;
+use App\Entity\Extra;
 use App\Entity\Material;
 use App\Entity\Media;
 use App\Entity\Model;
 use App\Entity\ModelMedia;
 use App\Entity\Painting;
 use App\Form\BurialType;
+use App\Form\ExtraType;
 use App\Form\MaterialType;
 use App\Form\ModelType;
 use App\Form\PaintingType;
 use App\Repository\BurialRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\ExtraRepository;
 use App\Repository\MaterialRepository;
-use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelMediaRepository;
 use App\Repository\ModelRepository;
 use App\Repository\PaintingRepository;
@@ -288,6 +290,7 @@ class ServicesController extends AbstractController
 
     /* PEINTURE */
 
+
     #[Route('/paintings', name: 'view_paintings')]
     public function view_paintings(PaintingRepository $paintingRep): Response
     {
@@ -353,5 +356,75 @@ class ServicesController extends AbstractController
 
         return $this->redirectToRoute("view_paintings");
     }
+
+
+    /* EXTRAS */
+
+    #[Route('/extras', name: 'view_extras')]
+    public function view_extras(ExtraRepository $extraRep): Response
+    {
+        return $this->render("back/company/services/extras/index.html.twig", [
+            "extras" => $extraRep->findAll(),
+        ]);
+    }
+
+    #[Route('/extras/details/{id}', name: 'details_extra')]
+    public function details_extra(ExtraRepository $extraRep, int $id): Response
+    {
+        return $this->render("back/company/services/extras/details.html.twig", [
+            "extra" => $extraRep->find($id)
+        ]);
+    }
+
+    #[Route('/extras/create', name: 'create_extra')]
+    public function create_extra(Request $request, EntityManagerInterface $em): Response
+    {
+        $extra = new Extra();
+        $form = $this->createForm(ExtraType::class, $extra);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($extra);
+            $em->flush();
+            return $this->redirectToRoute("view_extras");
+        }
+
+        return $this->render("back/company/services/extras/create.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    #[Route('/extras/modify/{id}', name: 'modify_extra')]
+    public function modify_extras(Request $request, EntityManagerInterface $em, ExtraRepository $extraRep, int $id): Response
+    {
+        $extra = $extraRep->find($id);
+        $form = $this->createForm(ExtraType::class, $extra);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($extra);
+            $em->flush();
+            return $this->redirectToRoute("view_extras");
+        }
+
+        return $this->render("back/company/services/extras/modify.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    #[Route('/extras/delete/{id}', name: 'delete_extra')]
+    public function delete_extra(EntityManagerInterface $em, ExtraRepository $extraRep, int $id): Response
+    {
+        $extra = $extraRep->find($id);
+        $media = $extra->getMedia();
+        $em->remove($media);
+        $em->remove($extra);
+        $em->flush();
+
+        // TODO : ATTENTION : Checkez que aucun Extras n'est utilisé par un company avant de supprimer
+
+        return $this->redirectToRoute("view_extras");
+    }
+
 
 }
