@@ -17,13 +17,20 @@ class CompanyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
+            ->add('name',TextType::class,[
+                'attr' => array(
+                    'placeholder' => 'Enfer'
+                )
+            ])
             ->add('description')
             ->add('siret', TextType::class, [
                 'constraints' => [
                     new NotBlank(['message' => 'Entrer un siret']),
                     new Regex('/^[0-9]{14}$/')
                 ],
+                'attr' => array(
+                    'placeholder' => '12356894100056'
+                )
             ])
 
             ->add('iban', TextType::class, [
@@ -31,18 +38,27 @@ class CompanyType extends AbstractType
                     new NotBlank(['message' => 'Entrer un iban']),
                     new Regex('/^([A-Z]{2}[ \-]?[0-9]{2})(?=(?:[ \-]?[A-Z0-9]){9,30}$)((?:[ \-]?[A-Z0-9]{3,5}){2,7})([ \-]?[A-Z0-9]{1,3})?$/')
                 ],
+                'attr' => array(
+                    'placeholder' => 'FR7630003035409876543210925'
+                )
             ])
             ->add('rib', TextType::class, [
                 'constraints' => [
                     new NotBlank(['message' => 'Entrer un rib']),
                     new Regex('/(?<B>\d{5})(?<G>\d{5})(?<C>\w{11})(?<K>\d{2})/')
                 ],
+                'attr' => array(
+                    'placeholder' => '1234512345az12345678912'
+                )
             ])
             ->add('bic', TextType::class, [
                 'constraints' => [
                     new NotBlank(['message' => 'Entrer un bic']),
                     new Regex('/^[a-z]{6}[0-9a-z]{2}([0-9a-z]{3})?\z/i')
                 ],
+                'attr' => array(
+                    'placeholder' => 'NOLADE21STS'
+                )
             ])
             ->add('address', AddressType::class)
 

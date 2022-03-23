@@ -88,8 +88,6 @@ class Company
 
     /**
      * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="companies", cascade={"persist"})
-     * @Assert\NotNull
-     * @Assert\NotBlank
      */
     private $media;
 
