@@ -7,6 +7,7 @@ use App\Repository\AddressRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AddressRepository::class)
@@ -25,21 +26,37 @@ class Address
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotNull
+     * @Assert\Regex("/^[a-z ][a-z- ][a-z ]+/i")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     * )
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
+     * @Assert\NotNull
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 5,
+     * )
+     * @Assert\Regex("/^\d+$/")
      */
     private $postcode;
 
     /**
      * @ORM\Column(type="string", length=4, nullable=true)
+     * @Assert\NotNull
+     * @Assert\Regex("/^\d+$/")
      */
     private $number;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotNull
+     * @Assert\Regex("/^[a-z ][a-z-, ]*[a-z ]+$/i")
      */
     private $street;
 

@@ -43,11 +43,6 @@ class Painting
     private $companyPaintings;
 
     /**
-     * @ORM\OneToMany(targetEntity=CompanyTheme::class, mappedBy="painting")
-     */
-    private $companyThemes;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="paintings")
      */
     private $media;
@@ -60,7 +55,6 @@ class Painting
     public function __construct()
     {
         $this->companyPaintings = new ArrayCollection();
-        $this->companyThemes = new ArrayCollection();
         $this->preparations = new ArrayCollection();
     }
 
@@ -129,36 +123,6 @@ class Painting
             // set the owning side to null (unless already changed)
             if ($companyPainting->getPainting() === $this) {
                 $companyPainting->setPainting(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|CompanyTheme[]
-     */
-    public function getCompanyThemes(): Collection
-    {
-        return $this->companyThemes;
-    }
-
-    public function addCompanyTheme(CompanyTheme $companyTheme): self
-    {
-        if (!$this->companyThemes->contains($companyTheme)) {
-            $this->companyThemes[] = $companyTheme;
-            $companyTheme->setPainting($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCompanyTheme(CompanyTheme $companyTheme): self
-    {
-        if ($this->companyThemes->removeElement($companyTheme)) {
-            // set the owning side to null (unless already changed)
-            if ($companyTheme->getPainting() === $this) {
-                $companyTheme->setPainting(null);
             }
         }
 

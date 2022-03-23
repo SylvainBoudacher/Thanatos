@@ -26,9 +26,9 @@ class CompanyTheme
     private $company;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Painting::class, inversedBy="companyThemes")
+     * @ORM\ManyToOne(targetEntity=Theme::class, inversedBy="companyThemes")
      */
-    private $painting;
+    private $theme;
 
     public function getId(): ?int
     {
@@ -47,15 +47,16 @@ class CompanyTheme
         return $this;
     }
 
-    public function getPainting(): ?Painting
+    public function getTheme(): ?Theme
     {
-        return $this->painting;
+        return $this->theme;
     }
 
-    public function setPainting(?Painting $painting): self
+    public function setTheme(?Theme $theme): self
     {
-        $this->painting = $painting;
+        $this->theme = $theme;
 
         return $this;
     }
+
 }

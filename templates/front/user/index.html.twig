@@ -3,13 +3,107 @@
 {% block body %}
 
     {{ include('components/navBar.html.twig') }}
-<style>
+    {# <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+</style> #}
+    <a href="{{ path('declare_corpse') }}">
+    <button class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400">
+  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+      Déclarer un/des corps
+  </span>
+    </button>
+    </a>
+    <div class="example-wrapper p-10">
 
-<div class="example-wrapper">
-    <h1>Page d'accueil client connecté</h1>
+        <div class="grid grid-cols-3 gap-4">
+            <div class="bg-orange-500 rounded p-3 text-white col-span-2">
+                <h1 class="text-xl">Ma commande actuelle</h1>
 
-</div>
+                {% if order is not empty %}
+                    <ul class="list-disc">
+                        {% if order.status == constant('NEW', order) %}
+                            <button type="button"
+                                    class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                Nouvelle commande
+                            </button>
+
+                        {% endif %}
+                        <li>Numéro de commande : {{ order.number }}</li>
+                        <li>{{ order.isValid ? "Validé par l'administration" : "En cours de validation par l'administration" }}</li>
+                    </ul>
+
+                    <h2 class="text-lg">Cadavre(s)</h2>
+                    <div class="grid grid-cols-3 gap-2">
+                        {% for corpse in order.corpses|slice(0, 3) %}
+                            <a href="#"
+                               class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ corpse.firstname }} {{ corpse.lastname }}</h5>
+
+                                <ul class="list-disc">
+                                    <li>Anniversaire - Mort : {{ corpse.birthdate | date('d/m/y') }}
+                                        - {{ corpse.dayOfDeath | date('d/m/y H:i:s') }} </li>
+                                    <li>Sexe de la personne : {{ corpse.sex }}</li>
+                                    <li>Taille - poids : {{ corpse.height }}m - {{ corpse.weight }}Kg</li>
+                                </ul>
+
+                            </a>
+                        {% endfor %}
+                        {% if order.corpses|length > 3 %}<i>et plus</i> {% endif %}
+
+                    </div>
+
+                    <h2 class="text-lg">Adresse</h2>
+                    <div class="grid grid-cols-3 gap-2">
+                        {% for addressOrder in order.addressOrders %}
+                            {% set address = addressOrder.address %}
+                            <a href="#"
+                               class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ address.number }} {{ address.street }} {{ address.city }} {{ address.postcode }}</h5>
+                            </a>
+                        {% endfor %}
+
+                    </div>
+
+                    <br>
+                    <a href="{{ path('customer_order', {id: order.id} ) }}">
+                        <button type="button"
+                                class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900">
+                            Voir le détail
+                        </button>
+                    </a>
+
+                {% else %}
+                    <p>Aucune commande en cours</p>
+                {% endif %}
+
+            </div>
+            <div class="bg-yellow-800 rounded text-white p-3">
+                <h1 class="text-xl">Mes anciennes commandes</h1>
+
+                {% if orders is not empty %}
+
+                    {% for order in orders %}
+
+                        <a href="#"
+                           class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Commande
+                                n°{{ order.number }}</h5>
+                            <ul class="list-disc">
+
+                                <li>
+                                    {{ order.corpses|length }} Cadavre(s)
+                                </li>
+                            </ul>
+                        </a>
+                    {% endfor %}
+
+                {% else %}
+
+                    <p>Aucune ancienne commande</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
 {% endblock %}
