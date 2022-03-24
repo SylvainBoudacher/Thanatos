@@ -2,6 +2,10 @@
 
 {% block body %}
 
+    {% if is_granted('ROLE_USER') %}
+    <p>-add card for dashboard customer  user/index.html.twig</p>
+    {% else %}
+
 
     <div class="container flex flex-col px-6 py-10 mx-auto space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center">
         <div class="w-full lg:w-1/2">
@@ -274,7 +278,7 @@
         </div>
     </section>
 
-
+ {% endif %}
 
 
 {% endblock %}

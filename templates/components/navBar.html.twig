@@ -53,7 +53,7 @@
                                         </li>
 
                                         <li>
-                                            <a href="{{ path('app_settings_account') }}" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 white:hover:bg-gray-600 white:text-gray-200 white:hover:text-white">Paramètres</a>
+                                            <a href="{{ path('app_settings_account') }}" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 white:hover:bg-gray-600 white:text-gray-200 white:hover:text-white">Mon compte</a>
                                         </li>
 
                                         <hr class="border-gray-200 dark:border-gray-100 ">
@@ -73,10 +73,8 @@
                     {% elseif is_granted('ROLE_USER') -%}
                     <div class="items-center md:flex">
                         <div class="flex flex-col -mx-4 md:flex-row md:items-center md:mx-8">
-                            <a href="#" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">Bonjour</a>
-                            <a href="#" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">Je</a>
-                            <a href="#" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">M'appel</a>
-                            <a href="#" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">Romain</a>
+                            <a href="{{ path('declare_corpse') }}" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">Déclarer un corps</a>
+                            <a href="#" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">Mes commandes</a>
                         </div>
 
                         <div class="flex justify-center md:block">
@@ -95,12 +93,9 @@
                                     <span class="block text-sm font-medium text-gray-500 truncate white:text-gray-400">{{ app.user.username }}</span>
                                 </div>
                                 <ul class="py-1" aria-labelledby="dropdown">
-                                    <li>
-                                        <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 white:hover:bg-gray-600 white:text-gray-200 white:hover:text-white">Dashboard</a>
-                                    </li>
 
                                     <li>
-                                        <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 white:hover:bg-gray-600 white:text-gray-200 white:hover:text-white">Mes moyens de payements</a>
+                                        <a href="{{ path('app_settings_wallet') }}" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 white:hover:bg-gray-600 white:text-gray-200 white:hover:text-white">Mes moyens de payements</a>
                                     </li>
 
                                     <li>

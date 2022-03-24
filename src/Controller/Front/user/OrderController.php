@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
 
-    #[Route('/tableau-de-bord', name: 'customer_dashboard', methods: ['GET'])]
+    #[Route('/commande', name: 'user_order', methods: ['GET'])]
     public function dashboard(OrderRepository $orderRepository): Response {
 
         $order = $orderRepository->findMyCurrentOrder($this->getUser()->getId()); // get current order
@@ -39,7 +39,7 @@ class OrderController extends AbstractController
 
     }
 
-    #[Route('/commande/{id}', name: 'customer_order', methods: ['GET'])]
+    #[Route('/commande/{id}', name: 'user_order_id', methods: ['GET'])]
     public function show(Order $order, int $id): Response {
 
 
