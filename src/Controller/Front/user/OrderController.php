@@ -185,7 +185,7 @@ class OrderController extends AbstractController
         if ($request->query->get('confirmation') === 'false') {
             $session->remove('declareCorpses');
 
-            $this->redirectToRoute('customer_dashboard');
+            $this->redirectToRoute('user_order');
         }
 
         return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
