@@ -81,7 +81,6 @@ class ServicesController extends AbstractController
         $em->remove($burial);
         $em->flush();
         return $this->redirectToRoute("view_burials");
-
     }
 
     /* MODELS */

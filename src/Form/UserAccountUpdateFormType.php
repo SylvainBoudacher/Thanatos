@@ -3,10 +3,12 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Media;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class UserAccountUpdateFormType extends AbstractType
 {
@@ -21,6 +23,7 @@ class UserAccountUpdateFormType extends AbstractType
                 // this is actually the default format for single_text
                 'format' => 'yyyy-MM-dd',
             ])
+            ->add('media' , MediaType::class)
         ;
     }
 
