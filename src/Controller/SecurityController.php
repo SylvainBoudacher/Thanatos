@@ -21,7 +21,7 @@ class SecurityController extends AbstractController
             } elseif ($this->getUser()->getRoles("ROLE_MORGUE")[0] == "ROLE_MORGUE") {
                 return $this->redirectToRoute('morgue_dashboard');
             } else {
-                return $this->redirectToRoute('customer_dashboard');
+                return $this->redirectToRoute('homepage');
             }
 
         }
