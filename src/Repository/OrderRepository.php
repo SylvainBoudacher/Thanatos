@@ -50,7 +50,7 @@ class OrderRepository extends ServiceEntityRepository
 
         $query = $qb->getQuery();
 
-        return $query->execute();
+        return $query->getOneOrNullResult();
     }
 
 

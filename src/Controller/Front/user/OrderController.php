@@ -171,9 +171,9 @@ class OrderController extends AbstractController
                 $entityManager->persist($address);
 
             }
-
             $entityManager->persist($order);
             $order->setNumber($order->getId() . Carbon::now()->format('Ymd'));
+            $order->setStatus(Order::NEW);
 
             $entityManager->flush();
             $session->remove('declareCorpses');
