@@ -53,6 +53,18 @@ class OrderRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
+    public function findAllNewOrder()
+    {
+        // automatically knows to select Products
+        // the "p" is an alias you'll use in the rest of the query
+        return $this->createQueryBuilder('o')
+            ->where('o.status = :status')
+            ->setParameter('status',Order::NEW)
+            ->orderBy('o.updatedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     // /**
     //  * @return Order[] Returns an array of Order objects
