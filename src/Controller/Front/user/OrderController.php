@@ -4,11 +4,16 @@ namespace App\Controller\Front\user;
 
 use App\Entity\Address;
 use App\Entity\AddressOrder;
+use App\Entity\CompanyTheme;
 use App\Entity\Corpse;
 use App\Entity\Order;
 use App\Form\AddressType;
 use App\Form\CorpseType;
+use App\Repository\CompanyRepository;
+use App\Repository\CompanyThemeRepository;
+use App\Repository\CorpseRepository;
 use App\Repository\OrderRepository;
+use App\Repository\ThemeRepository;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -21,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
 
-    #[Route('/tableau-de-bord', name: 'customer_dashboard', methods: ['GET'])]
+    #[Route('/commande', name: 'user_order', methods: ['GET'])]
     public function dashboard(OrderRepository $orderRepository): Response {
 
         $order = $orderRepository->findMyCurrentOrder($this->getUser()->getId()); // get current order
@@ -34,7 +39,7 @@ class OrderController extends AbstractController
 
     }
 
-    #[Route('/commande/{id}', name: 'customer_order', methods: ['GET'])]
+    #[Route('/commande/{id}', name: 'user_order_id', methods: ['GET'])]
     public function show(Order $order, int $id): Response {
 
 
@@ -51,6 +56,8 @@ class OrderController extends AbstractController
         );
 
     }
+
+    /* DECLARE CORPSE */
 
     #[Route('/declarer-corps', name: 'declare_corpse', methods: ['POST', 'GET'])]
     public function declareCorpses(Request $request): Response
@@ -164,9 +171,9 @@ class OrderController extends AbstractController
                 $entityManager->persist($address);
 
             }
-
             $entityManager->persist($order);
             $order->setNumber($order->getId() . Carbon::now()->format('Ymd'));
+            $order->setStatus(Order::NEW);
 
             $entityManager->flush();
             $session->remove('declareCorpses');
@@ -178,7 +185,7 @@ class OrderController extends AbstractController
         if ($request->query->get('confirmation') === 'false') {
             $session->remove('declareCorpses');
 
-            $this->redirectToRoute('customer_dashboard');
+            $this->redirectToRoute('user_order');
         }
 
         return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
@@ -187,4 +194,62 @@ class OrderController extends AbstractController
         ]);
     }
 
+    /* ORDER SERVICE */
+    #[Route('/commander-un-service/1', name: 'user_order_theme', methods: ['POST', 'GET'])]
+    public function orderServiceTheme(Request $request, ThemeRepository $themeRepository, CorpseRepository $corpseRepository): Response
+    {
+        $themes = $themeRepository->findAll();
+        $session = $request->getSession();
+
+        if(is_numeric($request->query->get('corpse'))){
+            $cartSession['corpse'] = $request->query->get('corpse');
+            $session->set('cartSession', $cartSession);
+
+        }
+        if($request->query->get('nextStep') && $request->query->get('theme'))
+        {
+            $cartSession = $session->get('cartSession');
+            $cartSession['theme'] = $request->query->get('theme');
+            $session->set('cartSession', $cartSession);
+
+            return $this->redirectToRoute('user_order_company', ['themeId' => $request->query->get('theme')]);
+        }
+
+        return $this->render('front/user/orderService/index.html.twig', [
+            'themes' => $themes,
+        ]);
+    }
+
+    #[Route('/commander-un-service/2', name: 'user_order_company', methods: ['POST', 'GET'])]
+    public function orderServiceCompany(Request $request, CompanyThemeRepository $companyThemeRep, CompanyRepository $companyRepository, int $themeId = null): Response
+    {
+        $session = $request->getSession();
+
+        if($request->query->get('nextStep') && $request->query->get('company'))
+        {
+            $cartSession = $session->get('cartSession');
+            $cartSession['company'] = $request->query->get('company');
+            $session->set('cartSession', $cartSession);
+
+            return $this->redirectToRoute('user_order_product', ['companyId' => $request->query->get('company') ]);
+        }
+
+        $themeId = $request->query->get('themeId');
+        $companies = $companyThemeRep->getCompaniesByTheme($themeId);
+
+        return $this->render('front/user/orderService/companies.html.twig', [
+            'companies' => $companies,
+        ]);
+    }
+
+    #[Route('/commander-un-service/3', name: 'user_order_product', methods: ['POST', 'GET'])]
+    public function orderServiceProduct(Request $request, int $companyId = null): Response
+    {
+        $session = $request->getSession();
+        dump($session->all());
+        dd('hello');
+        return $this->render('front/user/orderService/products.html.twig', [
+            'companies' => $companies,
+        ]);
+    }
 }

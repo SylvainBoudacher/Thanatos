@@ -7,6 +7,7 @@ use App\Repository\ExtraRepository;
 use App\Entity\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ExtraRepository::class)
@@ -24,16 +25,31 @@ class Extra
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 255,
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 500,
+     * )
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\PositiveOrZero
      */
     private $price;
 
@@ -43,7 +59,7 @@ class Extra
     private $companyExtras;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="extras")
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="extras", cascade={"persist"})
      */
     private $media;
 
