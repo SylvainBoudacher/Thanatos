@@ -1,13 +1,9 @@
-{% extends 'base_back.html.twig' %}
+{% extends 'base_front.html.twig' %}
 
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
 <form method="post">
-
-
-    {{ include('components/navBar.html.twig') }}
-
 
     {% if error %}
         <div class="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -25,7 +21,6 @@
             </div>
         </div>
     {% endif %}
-
 
 
     <div class="w-full max-w-sm p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20">
