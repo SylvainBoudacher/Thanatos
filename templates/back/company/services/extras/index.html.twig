@@ -6,9 +6,21 @@
 
         <div>
 
-            <h1 class="text-3xl text-slate-800 mb-4 font-bold ">Gestion de vos Extras</h1>
+            <h1 class="text-3xl text-slate-800 mb-6 font-bold ">Gestion de vos Extras</h1>
+
+            <section class="flex flex-col min-h-[150px] bg-gray-100 p-4 rounded-lg shadow-md mb-6">
+                <p class="text-slate-700 text-lg font-light mb-2">
+                    Bienvenues dans votre panneau de gestions des Extras.
+                </p>
+                <p class="text-slate-700 text-lg font-light mb-2">
+                    C'est ici que vous allez pouvoir à la fois gérer ce qui est disponible dans notre base de données, et dans le même temps mettre à disposition
+                    les extras sur le market pour vos clients.
+                </p>
+            </section>
 
             <a href="{{ path("create_extra") }}" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Ajouter</a>
+
+            <h2 class="text-2xl text-slate-800 mt-6 mb-4 font-medium">Extras dans la base de données</h2>
 
             <div class="flex flex-col mt-6">
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
@@ -41,7 +53,8 @@
                                             <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
                                                 <a href="{{ path("details_extra", {"id" : extra.id}) }}" class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
                                                 <a href="{{ path("modify_extra", {"id" : extra.id}) }}" class="text-blue-600 mr-2 dark:text-blue-500 hover:underline">Modifier</a>
-                                                <a href="{{ path("delete_extra", {"id" : extra.id}) }}" class="text-red-600 dark:text-red-500 hover:underline">Supprimer</a>
+                                                <a href="{{ path("delete_extra", {"id" : extra.id}) }}" class="text-red-600 mr-2 dark:text-red-500 hover:underline">Supprimer</a>
+                                                <a href="{{ path("switch_extra", {"id" : extra.id}) }}" class="text-violet-600 dark:text-violet-500 hover:underline">Switch</a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -57,10 +70,67 @@
                 </div>
             </div>
 
+            <h2 class="text-2xl text-slate-800 my-4 font-medium">Extras que vous avez mis à dispositions des clients</h2>
+
+            <div class="flex flex-col mt-6">
+                <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                    <div class="inline-block min-w-full align-middle">
+                        <div class="overflow-hidden ">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
+                                <thead class="bg-gray-100 dark:bg-gray-700">
+                                <tr>
+                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                        Nom
+                                    </th>
+                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                        Description
+                                    </th>
+                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                        Prix
+                                    </th>
+                                    <th scope="col" class="p-4">
+                                        <span class="sr-only">Edit</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                {% if extrasSuscribedByCompany %}
+                                    {% for extraSuscribedByCompany in extrasSuscribedByCompany %}
+                                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ extraSuscribedByCompany.name }}</td>
+                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ extraSuscribedByCompany.description }}</td>
+                                            <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ extraSuscribedByCompany.price }} €</td>
+                                            <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                                                <a href="{{ path("details_extra", {"id" : extraSuscribedByCompany.id}) }}" class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
+                                                <a href="{{ path("switch_extra", {"id" : extraSuscribedByCompany.id}) }}" class="text-red-600 dark:text-red-500 hover:underline">Retirer</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <td colspan="5" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Vous n'avez mis aucun extras à dispositions des clients pour le moment</td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="flex flex-row-reverse">
             <a href="{{ path("home_services") }}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
+        </div>
+
+        <div class="absolute bottom-[0%] mb-4">
+            {% for message in app.flashes("success") %}
+                {% include 'components/toasts/success.html.twig' with {'message' : message} %}
+            {% endfor %}
+            {% for message in app.flashes("error") %}
+                {% include 'components/toasts/error.html.twig' with {'message' : message} %}
+            {% endfor %}
         </div>
 
 

@@ -98,7 +98,7 @@ class PaintingController extends AbstractController
     /* EXPOSED TO THE CLIENTS */
 
     #[Route('/switch/{id}', name: 'switch_painting')]
-    public function switch_company_themes(int $id, EntityManagerInterface $em, UserRepository $userRep, CompanyPaintingRepository $companyPaintingRep, PaintingRepository $paintingRep) : Response {
+    public function switch_painting(int $id, EntityManagerInterface $em, UserRepository $userRep, CompanyPaintingRepository $companyPaintingRep, PaintingRepository $paintingRep) : Response {
         $user = $userRep->find($this->getUser());
         $company = $user->getCompany();
         $painting = $paintingRep->find($id);
