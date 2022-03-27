@@ -83,6 +83,9 @@
                                 <span class="sr-only">Open user menu</span>
                                 {% if app.user.media %}
                                     <img class="object-cover w-8 h-8 rounded-full" src="{{ vich_uploader_asset(app.user.media) }}">
+                                {% else %}
+                                    <img class="object-cover w-8 h-8 rounded-full bg-gray-400" src="{{ asset("images/default.svg") }}">
+
                                 {% endif %}
 
 
