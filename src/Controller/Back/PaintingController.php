@@ -2,9 +2,12 @@
 
 namespace App\Controller\Back;
 
+use App\Entity\CompanyPainting;
 use App\Entity\Painting;
 use App\Form\PaintingType;
+use App\Repository\CompanyPaintingRepository;
 use App\Repository\PaintingRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,12 +20,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaintingController extends AbstractController
 {
     #[Route('/', name: 'view_paintings')]
-    public function view_paintings(PaintingRepository $paintingRep): Response
+    public function view_paintings(PaintingRepository $paintingRep, UserRepository $userRep): Response
     {
+        $user = $userRep->find($this->getUser());
+        $company = $user->getCompany();
+
+        $paintingsSuscribedByCompany = $paintingRep->getAllByCompany($company);
+
         return $this->render("back/company/services/paintings/index.html.twig", [
             "paintings" => $paintingRep->findAll(),
+            "paintingsSuscribedByCompany" => $paintingsSuscribedByCompany
         ]);
     }
+
+
+    /* THANATOS DATABASE RELATED */
+
 
     #[Route('/details/{id}', name: 'details_painting')]
     public function details_painting(PaintingRepository $paintingRep, int $id): Response
@@ -82,4 +95,38 @@ class PaintingController extends AbstractController
         return $this->redirectToRoute("view_paintings");
     }
 
+    /* EXPOSED TO THE CLIENTS */
+
+    #[Route('/switch/{id}', name: 'switch_painting')]
+    public function switch_company_themes(int $id, EntityManagerInterface $em, UserRepository $userRep, CompanyPaintingRepository $companyPaintingRep, PaintingRepository $paintingRep) : Response {
+        $user = $userRep->find($this->getUser());
+        $company = $user->getCompany();
+        $painting = $paintingRep->find($id);
+
+        // TODO : Meilleur vérification plus tard (genre theme désactivé par thanatos)
+        if (empty($company)) {
+            $this->addFlash("error", "Une erreur est survenue. Veuillez réessayez ultérieurement");
+            return $this->redirectToRoute("view_paintings");
+        }
+
+        $companyPainting = $companyPaintingRep->getOneByCompanyAndPainting($company, $painting);
+
+        if ($companyPainting) {
+            $em->remove($companyPainting);
+            $em->flush();
+            $this->addFlash("success", "La couleur ".$painting->getName()." ne sera plus disponible pour les clients");
+            return $this->redirectToRoute("view_paintings");
+        }
+
+        $companyPainting = new CompanyPainting();
+        $companyPainting->setCompany($company);
+        $companyPainting->setPainting($painting);
+
+        $em->persist($companyPainting);
+        $em->flush();
+
+        $this->addFlash("success", "La couleur ".$painting->getName()." est désormais disponibles pour les clients");
+        return $this->redirectToRoute("view_paintings");
+
+    }
 }
