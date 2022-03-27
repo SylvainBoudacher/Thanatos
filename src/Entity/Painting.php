@@ -57,7 +57,7 @@ class Painting
     private $companyPaintings;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="paintings")
+     * @ORM\ManyToOne(targetEntity=Media::class, inversedBy="paintings", cascade={"persist"})
      */
     private $media;
 
