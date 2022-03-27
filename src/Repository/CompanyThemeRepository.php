@@ -2,9 +2,14 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\CompanyTheme;
+use App\Entity\Theme;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use PhpParser\Node\Expr\Array_;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method CompanyTheme|null find($id, $lockMode = null, $lockVersion = null)
@@ -40,32 +45,33 @@ class CompanyThemeRepository extends ServiceEntityRepository
 
     }
 
-    // /**
-    //  * @return CompanyTheme[] Returns an array of CompanyTheme objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getOneByCompanyAndTheme(Company $company, Theme $theme) : ?CompanyTheme {
 
-    /*
-    public function findOneBySomeField($value): ?CompanyTheme
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('ct')
+            ->select('ct, c')
+            ->join("ct.company", "c")
+            ->where("ct.company = :company")
+            ->andWhere("ct.theme = :theme")
+            ->setParameter('company', $company)
+            ->setParameter('theme', $theme)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
+
+        return $query;
     }
-    */
+
+    public function getAllByCompany(Company $company) : Array {
+
+        $query = $this->createQueryBuilder('ct')
+            ->select('ct, t')
+            ->join("ct.company", "c")
+            ->join("ct.theme", "t")
+            ->where("ct.company = :company")
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->execute();
+
+        return $query;
+    }
 }
