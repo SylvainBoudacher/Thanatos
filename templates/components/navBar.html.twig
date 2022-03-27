@@ -73,8 +73,9 @@
                     {% elseif is_granted('ROLE_USER') -%}
                     <div class="items-center md:flex">
                         <div class="flex flex-col -mx-4 md:flex-row md:items-center md:mx-8">
+                            <a href="{{ path('homepage') }}" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">Accueil</a>
                             <a href="{{ path('declare_corpse') }}" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">Déclarer un corps</a>
-                            <a href="#" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">Mes commandes</a>
+                            <a href="{{ path('user_order') }}" class="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 white:text-gray-200 hover:bg-gray-300 white:hover:bg-gray-700">Mes commandes</a>
                         </div>
 
                         <div class="flex justify-center md:block">
@@ -146,8 +147,15 @@
                 </div>
 
                 <div class="flex items-center py-2 -mx-1 md:mx-0">
-                    <a class="block w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-gray-500 rounded-md hover:bg-blue-600 md:mx-2 md:w-auto" href="{{ path('app_login') }}">Connexion</a>
-                    <a class="block w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 md:mx-0 md:w-auto" href="{{ path('app_register') }}">Inscription</a>
+                    <button class="block w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-gray-500 rounded-md hover:bg-blue-600 md:mx-2 md:w-auto" type="button" data-modal-toggle="loginModal">
+                        Connextion
+                    </button>
+                    {{ include('/components/modalLogin.html.twig') }}
+
+                    <button class="block w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-600 transform bg-blue-500 rounded-md hover:bg-blue-600 md:mx-0 md:w-auto" type="button" data-modal-toggle="defaultModal">
+                        Inscription
+                    </button>
+                    {{ include('/components/modalregister.html.twig') }}
                 </div>
             </div>
         </div>

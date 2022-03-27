@@ -3,15 +3,124 @@
 {% block body %}
 
     {% if is_granted('ROLE_USER') %}
-        <p>t'es sur user/index.html.twig mais en version is_granted('ROLE_USER')
 
-            <br> Je vais rajouter une interface a la Ubereat pour declarer un corps ou commander ici
-            
-        </p>
+        <section class="bg-white white:bg-gray-900 pb-11">
+            <div class="container px-6 mx-auto">
+
+                <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
+                    <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
+                        <span class="inline-block text-dark-500 white:text-dark-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                            </svg>
+                        </span>
+
+                        <h1 class="text-2xl font-semibold text-gray-700 capitalize white:text-white">Déclarer un corps !</h1>
+
+                        <p class="text-gray-500 white:text-gray-300">
+                            Du petit Gregory à mamie, nos chauffeurs sont toujours prêts à prendre en charge votre commande le plus rapidement possible.
+                        </p>
+
+                        <a href="{{ path('declare_corpse') }}" class="inline-flex p-2 text-dark-500 capitalize transition-colors duration-200 transform bg-dark-100 rounded-full white:bg-dark-500 white:text-white hover:underline hover:text-dark-600 white:hover:text-dark-500">
+                            <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Déclarer</button>
+                        </a>
+                    </div>
+
+                    <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
+                        <span class="inline-block text-dark-500 white:text-dark-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                            </svg>
+                        </span>
+
+                        <h1 class="text-2xl font-semibold text-gray-700 capitalize white:text-white">Sélectionner une pompe funèbre</h1>
+
+                        <p class="text-gray-500 white:text-gray-300">
+                            Vous avez déjà déclarer un corps ou vous souhaitez simplement regarder nos pompes funèbre, choisissez un theme et regarder bien nos produits.
+                        </p>
+
+                        <a href="#" class="inline-flex p-2 text-dark-500 capitalize transition-colors duration-200 transform bg-dark-100 rounded-full white:bg-dark-500 white:text-white hover:underline hover:text-dark-600 white:hover:text-dark-500">
+                            <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Sélectionner</button>
+                        </a>
+                    </div>
+
+                    <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
+                        <span class="inline-block text-dark-500 white:text-dark-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                        </span>
+
+                        <h1 class="text-2xl font-semibold text-gray-700 capitalize white:text-white">Voir mes commandes</h1>
+
+                        <p class="text-gray-500 white:text-gray-300">
+                            En cours de commande ou déjà commander avant, regarder où en est votre commande et retrouver et télécharger vos factures ici !
+                        </p>
+
+                        <a href="{{ path('user_order') }}" class="inline-flex p-2 text-dark-500 capitalize transition-colors duration-200 transform bg-dark-100 rounded-full white:bg-dark-500 white:text-white hover:underline hover:text-dark-600 white:hover:text-dark-500">
+                            <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Mes commandes</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-gray-900">
+            <div class="container px-6 mx-auto">
+                <h1 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white  underline pt-7">Nos meilleurs pompes funèbres</h1>
+                <div class="flex justify-start  py-12">
+                    <div class="max-w-xs overflow-hidden bg-white rounded-lg shadow-lg white:bg-gray-800 mr-12">
+                        <div class="px-4 py-2">
+                            <h1 class="text-3xl font-bold text-gray-800 uppercase white:text-white">Chez Satan</h1>
+                            <p class="mt-1 text-sm text-gray-600 white:text-gray-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi quos quidem sequi illum facere recusandae voluptatibus</p>
+                        </div>
+
+                        <img class="object-cover w-full h-48 mt-2" src="https://www.radio-rfe.com/images/Texte-Biblique/question_a_se_poser_sur_l_enfer_-_tag.jpg" alt="NIKE AIR">
+
+                        <div class="flex items-center justify-between px-4 py-2 bg-white-900">
+
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-300 white:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            </div>
+
+                            <button class="px-2 py-1 text-xs font-semibold text-gray-900 uppercase transition-colors duration-200 transform bg-white rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none">Voir</button>
+                        </div>
+                    </div>
+
+                    <div class="max-w-xs overflow-hidden bg-white rounded-lg shadow-lg white:bg-gray-800 mr-12">
+                        <div class="px-4 py-2">
+                            <h1 class="text-3xl font-bold text-gray-800 uppercase white:text-white">PFG funéraires</h1>
+                            <p class="mt-1 text-sm text-gray-600 white:text-gray-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi quos quidem sequi illum facere recusandae voluptatibus</p>
+                        </div>
+
+                        <img class="object-cover w-full h-48 mt-2" src="data:image/jpeg;base64,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" alt="NIKE AIR">
+
+                        <div class="flex items-center justify-between px-4 py-2 bg-white-900">
+
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-300 white:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-gray-300 white:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            </div>
+
+                            <button class="px-2 py-1 text-xs font-semibold text-gray-900 uppercase transition-colors duration-200 transform bg-white rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none">Voir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
     {% else %}
 
 
-    <div class="container flex flex-col px-6 py-10 mx-auto space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center">
+    <div class="container flex flex-col px-6 py-8 mx-auto space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center">
         <div class="w-full lg:w-1/2">
             <div class="lg:max-w-lg">
                 <h1 class="text-3xl font-bold tracking-wide text-gray-800 white:text-white lg:text-5xl">
@@ -20,7 +129,7 @@
 
                 <div class="mt-8 space-y-5">
                     <p class="flex items-center -mx-2 text-gray-700 white:text-gray-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-2 text-dark-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
 
@@ -28,7 +137,7 @@
                     </p>
 
                     <p class="flex items-center -mx-2 text-gray-700 white:text-gray-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-2 text-dark-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
 
@@ -36,7 +145,7 @@
                     </p>
 
                     <p class="flex items-center -mx-2 text-gray-700 white:text-gray-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-2 text-dark-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
 
@@ -45,10 +154,10 @@
                 </div>
             </div>
 
-            <div class=" mt-8 bg-transparent white:border-gray-700 focus-within:border-blue-400 ">
+            <div class=" mt-8 bg-transparent white:border-gray-700 focus-within:border-dark-400 ">
 
                     <a href="{{ path('app_register') }}">
-                        <button type="button" class=" px-4 py-2 m-1 text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400">
+                        <button type="button" class=" px-4 py-2 m-1 text-white transition-colors duration-200 transform bg-dark-500 rounded-md hover:bg-dark-400 focus:outline-none focus:bg-dark-400">
                             Je m'inscris
                         </button>
                     </a>
@@ -62,7 +171,7 @@
     </div>
 
     {#THEMES#}
-    <section class="bg-white dark:bg-gray-800">
+    <section class="bg-dark dark:bg-gray-800">
         <div class="container px-6 py-8 mx-auto">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <div>
@@ -118,7 +227,7 @@
                         </div>
                     </div>
 
-                    <button class="w-full px-4 py-2 mt-10 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                    <button class="w-full px-4 py-2 mt-10 font-medium tracking-wide text-dark capitalize transition-colors duration-200 transform bg-dark-500 rounded-md hover:bg-dark-600 focus:outline-none focus:bg-dark-600">
                         Choose plan
                     </button>
                 </div>
@@ -150,7 +259,7 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
 
-                            <span class="mx-4 text-gray-700 dark:text-gray-300">Chat support</span>
+                            <span class="mx-4 text-gray-700 white:text-gray-300">Chat support</span>
                         </div>
 
                         <div class="flex items-center">
@@ -158,7 +267,7 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
 
-                            <span class="mx-4 text-gray-700 dark:text-gray-300">Optimize hashtags</span>
+                            <span class="mx-4 text-gray-700 white:text-gray-300">Optimize hashtags</span>
                         </div>
 
                         <div class="flex items-center">
@@ -166,16 +275,16 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
 
-                            <span class="mx-4 text-gray-700 dark:text-gray-300">Unlimited users</span>
+                            <span class="mx-4 text-gray-700 white:text-gray-300">Unlimited users</span>
                         </div>
                     </div>
 
-                    <button class="w-full px-4 py-2 mt-10 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                    <button class="w-full px-4 py-2 mt-10 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-dark-500 rounded-md hover:bg-dark-600 focus:outline-none focus:bg-dark-600">
                         Choose plan
                     </button>
                 </div>
 
-                <div class="px-6 py-4 transition-colors duration-200 transform bg-gray-700 rounded-lg dark:bg-gray-600">
+                <div class="px-6 py-4 transition-colors duration-200 transform bg-gray-700 rounded-lg white:bg-gray-600">
                     <p class="text-lg font-medium text-gray-100">Popular</p>
                     <h4 class="mt-2 text-4xl font-semibold text-gray-100">$99 <span class="text-base font-normal text-gray-400">/ Month</span></h4>
                     <p class="mt-4 text-gray-300">For most businesses that want to optimaize web queries.</p>
@@ -222,15 +331,15 @@
                         </div>
                     </div>
 
-                    <button class="w-full px-4 py-2 mt-10 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                    <button class="w-full px-4 py-2 mt-10 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-dark-500 rounded-md hover:bg-dark-600 focus:outline-none focus:bg-dark-600">
                         Choose plan
                     </button>
                 </div>
 
-                <div class="px-6 py-4 transition-colors duration-200 transform rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
-                    <p class="text-lg font-medium text-gray-800 dark:text-gray-100">Exterprise</p>
-                    <h4 class="mt-2 text-4xl font-semibold text-gray-800 dark:text-gray-100">$199 <span class="text-base font-normal text-gray-600 dark:text-gray-400">/ Month</span></h4>
-                    <p class="mt-4 text-gray-500 dark:text-gray-300">For most businesses that want to optimaize web queries.</p>
+                <div class="px-6 py-4 transition-colors duration-200 transform rounded-lg hover:bg-gray-200 white:hover:bg-gray-700">
+                    <p class="text-lg font-medium text-gray-800 white:text-gray-100">Exterprise</p>
+                    <h4 class="mt-2 text-4xl font-semibold text-gray-800 white:text-gray-100">$199 <span class="text-base font-normal text-gray-600 white:text-gray-400">/ Month</span></h4>
+                    <p class="mt-4 text-gray-500 white:text-gray-300">For most businesses that want to optimaize web queries.</p>
 
                     <div class="mt-8 space-y-8">
                         <div class="flex items-center">
@@ -238,7 +347,7 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
 
-                            <span class="mx-4 text-gray-700 dark:text-gray-300">All limited links</span>
+                            <span class="mx-4 text-gray-700 white:text-gray-300">All limited links</span>
                         </div>
 
                         <div class="flex items-center">
@@ -246,7 +355,7 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
 
-                            <span class="mx-4 text-gray-700 dark:text-gray-300">Own analytics platform</span>
+                            <span class="mx-4 text-gray-700 white:text-gray-300">Own analytics platform</span>
                         </div>
 
                         <div class="flex items-center">
@@ -254,7 +363,7 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
 
-                            <span class="mx-4 text-gray-700 dark:text-gray-300">Chat support</span>
+                            <span class="mx-4 text-gray-700 white:text-gray-300">Chat support</span>
                         </div>
 
                         <div class="flex items-center">
@@ -262,7 +371,7 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
 
-                            <span class="mx-4 text-gray-700 dark:text-gray-300">Optimize hashtags</span>
+                            <span class="mx-4 text-gray-700 white:text-gray-300">Optimize hashtags</span>
                         </div>
 
                         <div class="flex items-center">
@@ -270,11 +379,11 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
 
-                            <span class="mx-4 text-gray-700 dark:text-gray-300">Unlimited users</span>
+                            <span class="mx-4 text-gray-700 white:text-gray-300">Unlimited users</span>
                         </div>
                     </div>
 
-                    <button class="w-full px-4 py-2 mt-10 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                    <button class="w-full px-4 py-2 mt-10 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-dark-500 rounded-md hover:bg-dark-600 focus:outline-none focus:bg-dark-600">
                         Choose plan
                     </button>
                 </div>
