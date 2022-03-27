@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
+use App\Entity\CompanyExtra;
 use App\Entity\CompanyMaterial;
+use App\Entity\Material;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +22,19 @@ class CompanyMaterialRepository extends ServiceEntityRepository
         parent::__construct($registry, CompanyMaterial::class);
     }
 
-    // /**
-    //  * @return CompanyMaterial[] Returns an array of CompanyMaterial objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getOneByCompanyAndMaterial(Company $company, Material $material) : ?CompanyMaterial {
 
-    /*
-    public function findOneBySomeField($value): ?CompanyMaterial
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('cm')
+            ->select('cm, c')
+            ->join("cm.company", "c")
+            ->where("cm.company = :company")
+            ->andWhere("cm.material = :material")
+            ->setParameter('company', $company)
+            ->setParameter('material', $material)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
+
+        return $query;
     }
-    */
 }
