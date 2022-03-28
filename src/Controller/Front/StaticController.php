@@ -11,9 +11,24 @@ class StaticController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(): Response
     {
-        return $this->render('front/index.html.twig', [
-            'controller_name' => 'StaticController',
-        ]);
+
+        if ($this->getUser() ) {
+            if ($this->getUser()->getRoles("ROLE_DRIVER")[0] == "ROLE_DRIVER") {
+                return $this->redirectToRoute('dashboard_driver');
+            } elseif ($this->getUser()->getRoles("ROLE_MORGUE")[0] == "ROLE_MORGUE") {
+                return $this->redirectToRoute('morgue_dashboard');
+            } else {
+                return $this->render('front/index.html.twig', [
+                    'controller_name' => 'StaticController',
+                ]);
+            }
+
+        }else
+        {
+            return $this->render('front/index.html.twig', [
+                'controller_name' => 'StaticController',
+            ]);
+        }
     }
 
     #[Route('/contact', name: 'contact')]

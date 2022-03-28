@@ -12,13 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted("ROLE_DRIVER")]
-#[Route("/driver")]
+#[Route("/driver/orders")]
 class DriverController extends AbstractController
 {
     /**
      * @IsGranted("ROLE_DRIVER")
     */
-    #[Route('/', name: 'driver_dashboard')]
+    
+    #[Route('/', name: 'driver_orders')]
     public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository, DriverOrderRepository $driverOrderRepository): Response
     {
         $company = $companyRepository->find($this->getUser()->getCompany());
@@ -27,7 +28,7 @@ class DriverController extends AbstractController
 
         $getDriverOrders = $company->getDriverOrders();
 
-        return $this->render('front/driver/index.html.twig', [
+        return $this->render('front/driver/orders/index.html.twig', [
             'controller_name' => 'DriverController',
             'orders' => $orders,
         ]);
@@ -82,7 +83,7 @@ class DriverController extends AbstractController
         $entityManager->persist($order);
         $entityManager->flush();
 
-        return $this->redirectToRoute('driver_dashboard');
+        return $this->redirectToRoute('driver_orders');
     }
 
     #[Route('/order_stocked/{order_id}', name: 'order_stocked')]
@@ -98,7 +99,7 @@ class DriverController extends AbstractController
         $entityManager->persist($order);
         $entityManager->flush();
 
-        return $this->redirectToRoute('driver_dashboard');
+        return $this->redirectToRoute('driver_orders');
     }
 
     #[Route('/order/{id}', name: 'my_order')]
@@ -107,7 +108,7 @@ class DriverController extends AbstractController
 
         $order = $orderRepository->find($id);
 
-        return $this->render('front/driver/show.html.twig', [
+        return $this->render('front/driver/orders/show.html.twig', [
             'order' => $order,
         ]);
     }

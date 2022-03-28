@@ -1,0 +1,37 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    {% for order in orders %}
+            <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex justify-end px-4 pt-4">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Nb corpse : {{ order.corpses.count() }}</span>
+                </div>
+                <div class="flex flex-col items-center pb-10">
+                    <img class="mb-3 w-24 h-24 rounded-full shadow-lg" src="{{ asset('images/uploads/thebataman-6238e19786691083872923.jpeg') }}" alt="user image"/>
+                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ order.possessor.lastname }} {{ order.possessor.firstname }}</h5>
+                    <span class="text-sm text-gray-500 dark:text-gray-400"></span>
+                    {% for addressOrder in order.addressOrders %}
+                        {% set address = addressOrder.address %}
+                            <span class="text-sm text-gray-500 dark:text-gray-400">{{ address.number }} {{ address.street }} {{ address.city }} {{ address.postcode }}</span>
+                    {% endfor %}
+                    <div class="flex mt-4 space-x-3 lg:mt-6">
+                        <a href="{{ path('take_order', {'order_id': order.id}) }}" class="inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Take order</a>
+                    </div>
+                </div>
+            </div>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="7">no records found</td>
+            
+        </tr>
+    {% endfor %}
+
+</div>
+{% endblock %}
