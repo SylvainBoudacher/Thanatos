@@ -16,7 +16,11 @@ class Order
 {
     use TimestampableTrait;
 
-    public const NEW = "NEW";
+    public const NEW_ORDER = "NEW_ORDER";
+    public const DRIVER_INVALID = "DRIVER_INVALID";
+    public const DRIVER_VALIDATE = "DRIVER_VALIDATE";
+    public const DRIVER_STOCKED = "DRIVER_STOCKED";
+    public const DRIVER_ASCERTAINMENT = "DRIVER_ASCERTAINMENT";
     public const FINISHED = "FINISHED";
 
     /**

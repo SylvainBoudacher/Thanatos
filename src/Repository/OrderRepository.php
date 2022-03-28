@@ -59,12 +59,11 @@ class OrderRepository extends ServiceEntityRepository
         // the "p" is an alias you'll use in the rest of the query
         return $this->createQueryBuilder('o')
             ->where('o.status = :status')
-            ->setParameter('status',Order::NEW)
+            ->setParameter('status',Order::NEW_ORDER)
             ->orderBy('o.updatedAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
-
 
     // /**
     //  * @return Order[] Returns an array of Order objects
