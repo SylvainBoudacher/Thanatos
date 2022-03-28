@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
+use App\Entity\CompanyTheme;
 use App\Entity\Theme;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,32 +21,16 @@ class ThemeRepository extends ServiceEntityRepository
         parent::__construct($registry, Theme::class);
     }
 
-    // /**
-    //  * @return Theme[] Returns an array of Theme objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getAllByCompany(Company $company) {
 
-    /*
-    public function findOneBySomeField($value): ?Theme
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('t')
+            ->select('t')
+            ->join("t.companyThemes", "ct")
+            ->where("ct.company = :company")
+            ->setParameter('company', $company)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->execute();
+
+        return $query;
     }
-    */
 }
