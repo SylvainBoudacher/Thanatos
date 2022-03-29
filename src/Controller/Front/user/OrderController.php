@@ -4,23 +4,41 @@ namespace App\Controller\Front\user;
 
 use App\Entity\Address;
 use App\Entity\AddressOrder;
-use App\Entity\CompanyTheme;
+use App\Entity\Burial;
+use App\Entity\Company;
+use App\Entity\CompanyExtra;
+use App\Entity\CompanyPainting;
 use App\Entity\Corpse;
+use App\Entity\Extra;
+use App\Entity\Material;
+use App\Entity\Model;
+use App\Entity\ModelExtra;
+use App\Entity\ModelMaterial;
 use App\Entity\Order;
+use App\Entity\Preparation;
+use App\Entity\Theme;
 use App\Form\AddressType;
 use App\Form\CorpseType;
+use App\Form\NewPreparationType;
+use App\Repository\CompanyPaintingRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\CompanyThemeRepository;
 use App\Repository\CorpseRepository;
+use App\Repository\ModelExtraRepository;
+use App\Repository\ModelMaterialRepository;
+use App\Repository\ModelRepository;
 use App\Repository\OrderRepository;
+use App\Repository\PaintingRepository;
 use App\Repository\ThemeRepository;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 #[IsGranted("ROLE_USER")]
 class OrderController extends AbstractController
@@ -198,6 +216,7 @@ class OrderController extends AbstractController
     #[Route('/commander-un-service/1', name: 'user_order_theme', methods: ['POST', 'GET'])]
     public function orderServiceTheme(Request $request, ThemeRepository $themeRepository, CorpseRepository $corpseRepository): Response
     {
+
         $themes = $themeRepository->findAll();
         $session = $request->getSession();
 
@@ -217,6 +236,8 @@ class OrderController extends AbstractController
 
         return $this->render('front/user/orderService/index.html.twig', [
             'themes' => $themes,
+            'referer' => $request->headers->get('referer')
+
         ]);
     }
 
@@ -231,7 +252,7 @@ class OrderController extends AbstractController
             $cartSession['company'] = $request->query->get('company');
             $session->set('cartSession', $cartSession);
 
-            return $this->redirectToRoute('user_order_product', ['companyId' => $request->query->get('company') ]);
+            return $this->redirectToRoute('user_order_product');
         }
 
         $themeId = $request->query->get('themeId');
@@ -243,13 +264,126 @@ class OrderController extends AbstractController
     }
 
     #[Route('/commander-un-service/3', name: 'user_order_product', methods: ['POST', 'GET'])]
-    public function orderServiceProduct(Request $request, int $companyId = null): Response
+    public function orderServiceProduct(Request $request, ModelMaterialRepository $modelMaterialRepository): Response
     {
         $session = $request->getSession();
-        dump($session->all());
-        dd('hello');
+        $cartSession = $session->get('cartSession');
+
+        if($request->query->get('nextStep') && $request->query->get('burial'))
+        {
+            $cartSession['burial'] = $request->query->get('burial');
+            $session->set('cartSession', $cartSession);
+
+            return $this->redirectToRoute('user_order_product_specificity');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $company = $em->getRepository(Company::class)->find($cartSession['company']);
+        $burials = $modelMaterialRepository->getBurialsByCompany($company);
+
+        return $this->render('front/user/orderService/burials.html.twig', ['burials' => $burials]);
+    }
+
+    #[Route('/commander-un-service/4', name: 'user_order_product_specificity', methods: ['POST', 'GET'])]
+    public function orderServiceProductSpecificity(Request $request, PaintingRepository $paintingRepository, ModelRepository $modelRepository): Response
+    {
+        $session = $request->getSession();
+        $cartSession = $session->get('cartSession');
+
+        $em = $this->getDoctrine()->getManager();
+        $company = $em->getRepository(Company::class)->find($cartSession['company']);
+        $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
+        $paintings = $paintingRepository->getByCompany($company);
+        $models = $modelRepository->getByCompanyAndBurial($company, $burial);
+
+        $submittedToken = $request->request->get('token');
+
+        if($this->isCsrfTokenValid('model-item', $submittedToken) && $request->query->get('nextStep') && $request->query->get('model'))
+        {
+            $extraGood = true;
+            $material = $request->request->get('material');
+            $extras = $request->request->get('extras');
+            $model = $em->getRepository(Model::class)->find($request->query->get('model'));
+            $modelExtras = [];
+
+            if(!empty($extras)){
+                foreach ($extras as $extra)
+                {
+                    $modelExtra = $em->getRepository(ModelExtra::class)->findOneBy(['model' => $model, 'extra' => $extra]);
+                    if(!empty($modelExtra)) $modelExtras[] = $modelExtra->getId();
+                    else $extraGood = false;
+                }
+            }
+
+            $modelMaterial = $em->getRepository(ModelMaterial::class)->findOneBy(['model' => $model, 'material' => $material]);
+
+            if(!$extraGood || empty($modelMaterial) )
+            {
+                $this->addFlash('failed', 'Les valeurs ne sont pas corrects');
+
+            }else {
+
+                $cartSession = $session->get('cartSession');
+                $cartSession['model'] = $model->getId();
+                $cartSession['modelExtras'] = $modelExtras;
+                $cartSession['modelMaterial'] = $modelMaterial->getId();
+                $session->set('cartSession', $cartSession);
+
+                return $this->redirectToRoute('user_order_recap');
+            }
+        }
+
         return $this->render('front/user/orderService/products.html.twig', [
-            'companies' => $companies,
+            'models' => $models,
+            'paintings' => $paintings
+        ]);
+    }
+
+    #[Route('/commander-un-service/recapitulatif', name: 'user_order_recap', methods: ['POST', 'GET'])]
+    public function orderServiceRecap(Request $request): Response
+    {
+        $session = $request->getSession();
+        $cartSession = $session->get('cartSession');
+        $em = $this->getDoctrine()->getManager();
+        $total = 0;
+
+        $corpse = $em->getRepository(Corpse::class)->find($cartSession['corpse']);
+        $theme = $em->getRepository(Theme::class)->find($cartSession['theme']);
+        $company = $em->getRepository(Company::class)->find($cartSession['company']);
+        $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
+        $model = $em->getRepository(Model::class)->find($cartSession['model']);
+        $extras = $em->getRepository(Extra::class)->findBy([ 'id' => $cartSession['modelExtras']]);
+        $modelMaterial = $em->getRepository(Material::class)->find($cartSession['modelMaterial']);
+
+        /* ADDITION TOTAL */
+        foreach ($extras as $extra)
+        {
+            $total += $extra->getPrice();
+        }
+        $total += $theme->getPrice();
+        $total += $model->getPrice();
+        $total += $modelMaterial->getPrice();
+
+        if($request->query->get('confirm'))
+        {
+            $preparation = new Preparation();
+            $preparation->setPrice($total);
+            $preparation->setCorpse($corpse);
+            $preparation->setTheme($theme);
+            $preparation->setModelMaterial($painting);
+
+            return $this->redirectToRoute('user_order_product_specificity');
+        }
+
+        return $this->render('front/user/orderService/recap.html.twig', [
+            'corpse' => $corpse,
+            'theme' => $theme,
+            'company' => $company,
+            'burial' => $burial,
+            'model' => $model,
+            'extras' => $extras,
+            'modelMaterial' => $modelMaterial,
+            'total' => $total
         ]);
     }
 }

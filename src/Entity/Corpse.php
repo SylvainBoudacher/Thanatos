@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=CorpseRepository::class)
  */
-class Corpse
+class  Corpse
 {
     use TimestampableTrait;
 
