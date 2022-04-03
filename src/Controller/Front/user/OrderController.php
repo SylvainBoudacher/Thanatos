@@ -300,36 +300,34 @@ class OrderController extends AbstractController
 
         if($this->isCsrfTokenValid('model-item', $submittedToken) && $request->query->get('nextStep') && $request->query->get('model'))
         {
-            $extraGood = true;
+            $options = true;
             $material = $request->request->get('material');
-            $extras = $request->request->get('extras');
+            $extra = $request->request->get('extra');
             $model = $em->getRepository(Model::class)->find($request->query->get('model'));
-            $modelExtras = [];
+            $modelExtra = NULL;
 
-            if(!empty($extras)){
-                foreach ($extras as $extra)
-                {
-                    $modelExtra = $em->getRepository(ModelExtra::class)->findOneBy(['model' => $model, 'extra' => $extra]);
-                    if(!empty($modelExtra)) $modelExtras[] = $modelExtra->getId();
-                    else $extraGood = false;
-                }
+            if(!empty($extra)){
+                $modelExtra = $em->getRepository(ModelExtra::class)->findOneBy(['model' => $model, 'extra' => $extra]);
+                if( empty($modelExtra)) $options = false;
             }
 
-            $modelMaterial = $em->getRepository(ModelMaterial::class)->findOneBy(['model' => $model, 'material' => $material]);
+            if($options){
+            
+                $modelMaterial = $em->getRepository(ModelMaterial::class)->findOneBy(['model' => $model, 'material' => $material]);
+                
+                if(!empty($modelMaterial)){
 
-            if(!$extraGood || empty($modelMaterial) )
-            {
-                $this->addFlash('failed', 'Les valeurs ne sont pas corrects');
+                    $cartSession = $session->get('cartSession');
+                    $cartSession['model'] = $model->getId();
+                    $cartSession['modelExtra'] = $modelExtra ? $modelExtra->getId() : NULL;
+                    $cartSession['modelMaterial'] = $modelMaterial->getId();
+                    $session->set('cartSession', $cartSession);
+
+                    return $this->redirectToRoute('user_order_recap');
+                }
 
             }else {
-
-                $cartSession = $session->get('cartSession');
-                $cartSession['model'] = $model->getId();
-                $cartSession['modelExtras'] = $modelExtras;
-                $cartSession['modelMaterial'] = $modelMaterial->getId();
-                $session->set('cartSession', $cartSession);
-
-                return $this->redirectToRoute('user_order_recap');
+                $this->addFlash('error', 'Un soucis avec votre formulaire');
             }
         }
 
@@ -347,22 +345,20 @@ class OrderController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $total = 0;
 
+
         $corpse = $em->getRepository(Corpse::class)->find($cartSession['corpse']);
         $theme = $em->getRepository(Theme::class)->find($cartSession['theme']);
         $company = $em->getRepository(Company::class)->find($cartSession['company']);
         $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
         $model = $em->getRepository(Model::class)->find($cartSession['model']);
-        $extras = $em->getRepository(Extra::class)->findBy([ 'id' => $cartSession['modelExtras']]);
-        $modelMaterial = $em->getRepository(Material::class)->find($cartSession['modelMaterial']);
+        $modelExtra = $cartSession['modelExtra'] ? $em->getRepository(ModelExtra::class)->find($cartSession['modelExtra']) : null;
+        $modelMaterial = $em->getRepository(ModelMaterial::class)->find($cartSession['modelMaterial']);
 
         /* ADDITION TOTAL */
-        foreach ($extras as $extra)
-        {
-            $total += $extra->getPrice();
-        }
+        $total += $modelExtra ? $modelExtra->getExtra()->getPrice() : 0;
         $total += $theme->getPrice();
         $total += $model->getPrice();
-        $total += $modelMaterial->getPrice();
+        $total += $modelMaterial->getMaterial()->getPrice();
 
         if($request->query->get('confirm'))
         {
@@ -370,9 +366,14 @@ class OrderController extends AbstractController
             $preparation->setPrice($total);
             $preparation->setCorpse($corpse);
             $preparation->setTheme($theme);
-            $preparation->setModelMaterial($painting);
+            $preparation->setModelMaterial($modelMaterial);
 
-            return $this->redirectToRoute('user_order_product_specificity');
+            $em->persist($preparation);
+            $em->flush();
+
+            $session->remove('cartSession');
+
+            return $this->redirectToRoute('user_order_success');
         }
 
         return $this->render('front/user/orderService/recap.html.twig', [
@@ -381,9 +382,16 @@ class OrderController extends AbstractController
             'company' => $company,
             'burial' => $burial,
             'model' => $model,
-            'extras' => $extras,
-            'modelMaterial' => $modelMaterial,
+            'extra' => $modelExtra ? $modelExtra->getExtra() : [],
+            'material' => $modelMaterial->getMaterial(),
             'total' => $total
         ]);
+    }
+
+    #[Route('/commander-un-service/confirmation', name: 'user_order_success', methods: ['POST', 'GET'])]
+    public function orderServiceSuccess(Request $request): Response
+    {
+        
+        return $this->render('front/user/orderService/successOrder.html.twig');
     }
 }
