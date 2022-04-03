@@ -2,27 +2,47 @@
 
 {% block body %}
 
-    <h1>Gestion des service de la morgue</h1>
+    <div class="container flex flex-row h-100">
 
-    <ul>
-        <li>
-            <a href="#">Gérer les peintures</a>
-        </li>
-        <li>
-            <a href="#">Gérer les matériaux</a>
-        </li>
-        <li>
-            <a href="#">Gérer les themes souscrits auprès de Thanatos</a>
-        </li>
-        <li>
-            <a href="#">Gérer les extras</a>
-        </li>
-        <li>
-            <a href="{{ path("view_burials") }}">Gérer les Burials</a>
-        </li>
-        <li>
-            <a href="{{ path("view_models") }}">Gérer les Modèles de burials</a>
-        </li>
-    </ul>
+        {{ include('components/sideBarPro.html.twig') }}
+
+            <div class="p-10">
+
+                <h1 class="font-bold text-3xl text-slate-800 mb-4">Gestion des service de la morgue</h1>
+
+                <h2 class="font-light text-lg text-blue-900 ml-2 my-2">Service dans la DB Thanatos</h2>
+
+                <ul>
+                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                        <a href="{{ path("view_burials") }}">Gérer les Burials</a>
+                    </li>
+                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                        <a href="{{ path("view_materials") }}">Gérer les MATERIAUX</a>
+                    </li>
+                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                        <a href="{{ path("view_paintings") }}">Gérer les PAINTING</a>
+                    </li>
+                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                        <a href="{{ path("view_extras") }}">Gérer les EXTRAS</a>
+                    </li>
+                </ul>
+
+                <h2 class="font-light text-lg text-blue-900 ml-2 my-2">Service auquels votre compagnie s'engage à fournir</h2>
+
+                <ul>
+                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                        <a href="{{ path("view_models") }}">Gérer les Modèles de burials</a>
+                    </li>
+                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                        <a href="{{ path("view_company_themes") }}">Gérer les souscription aux THEMES chez Thanatos</a>
+                    </li>
+                    {#            <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">#}
+                    {#                <a href="{{ path("view_company_paintings") }}">Gérer les PAINTINGS que vous allez rendre disponible pour les clients</a>#}
+                    {#            </li>#}
+                </ul>
+
+            </div>
+
+    </div>
 
 {% endblock %}

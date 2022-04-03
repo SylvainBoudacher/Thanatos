@@ -2,79 +2,74 @@
 
 namespace App\Controller\Back;
 
-use App\Entity\Theme;
-use App\Form\ThemeType;
+use App\Entity\CompanyTheme;
+use App\Repository\CompanyRepository;
+use App\Repository\CompanyThemeRepository;
 use App\Repository\ThemeRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[IsGranted("ROLE_ADMIN")]
-#[Route("/admin/themes")]
+#[Route("/company/services/themes")]
+#[IsGranted("ROLE_COMPANY")]
 class ThemeController extends AbstractController
 {
-    #[Route('/', name: 'home_theme')]
-    public function index(ThemeRepository $themeRep): Response
-    {
+    #[Route('/', name: 'view_company_themes')]
+    public function view_company_themes(ThemeRepository $themeRep, CompanyThemeRepository $companyThemeRep, UserRepository $userRep ) : Response {
+        $user = $userRep->find($this->getUser());
+        $company = $user->getCompany();
+
         $themes = $themeRep->findAll();
+        $themesSuscribedByCompany = $themeRep->getAllByCompany($company);
 
-        return $this->render('back/admin/themes/index.html.twig', [
-            "themes" => $themes
-        ]);
-    }
+        $detailedThemes = [];
 
-    #[Route('/create', name: 'create_theme')]
-    public function create(Request $request): Response
-    {
-        $theme = new Theme();
-        $form = $this->createForm(ThemeType::class, $theme);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($theme);
-            $entityManager->flush();
-
-            return $this->redirectToRoute("home_theme");
+        foreach ($themes as $theme) {
+            $detailedThemes[] = [
+                "theme" => $theme,
+                "isSuscribed" => in_array($theme, $themesSuscribedByCompany, true),
+            ];
         }
 
-        return $this->render('back/admin/themes/create.html.twig', [
-            "form" => $form->createView()
+        return $this->render("back/company/services/company_themes/index.html.twig", [
+            "detailedThemes" => $detailedThemes
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'delete_theme')]
-    public function delete(EntityManagerInterface $em, ThemeRepository $themeRep, int $id): Response
-    {
+    #[Route('/switch/{id}', name: 'switch_company_themes')]
+    public function switch_company_themes(EntityManagerInterface $em,  ThemeRepository $themeRep, int $id, CompanyRepository $companyRep, UserRepository $userRep, CompanyThemeRepository $companyThemeRep) : Response {
+        $user = $userRep->find($this->getUser());
+        $company = $user->getCompany();
         $theme = $themeRep->find($id);
-        $media = $theme->getMedia();
-        $em->remove($media);
-        $em->remove($theme);
-        $em->flush();
 
-        // TODO : Warning, later if there are company that uses a specific theme while an order is not finished
+        // TODO : Meilleur vérification plus tard (genre theme désactivé par thanatos)
+        if (!empty($company)) {
 
-        return $this->redirectToRoute("home_theme");
-    }
+            $companyTheme = $companyThemeRep->getOneByCompanyAndTheme($company, $theme);
 
-    #[Route('/modify/{id}', name: 'modify_theme')]
-    public function modify(EntityManagerInterface $em, Request $request, ThemeRepository $themeRep, int $id): Response
-    {
-        $theme = $themeRep->find($id);
-        $form = $this->createForm(ThemeType::class, $theme);
-        $form->handleRequest($request);
+            if ($companyTheme) {
+                $em->remove($companyTheme);
+                $em->flush();
+                $this->addFlash("success", "Vous vous êtes désinscrit du thème ".$theme->getName().".");
+                return $this->redirectToRoute("view_company_themes");
+            }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($theme);
+            $companyTheme = new CompanyTheme();
+            $companyTheme->setCompany($company);
+            $companyTheme->setTheme($theme);
+
+            $em->persist($companyTheme);
             $em->flush();
-            return $this->redirectToRoute("home_theme");
+            $this->addFlash("success", "Vous vous êtes inscrit au thème ".$theme->getName().".");
+            return $this->redirectToRoute("view_company_themes");
         }
 
-        return $this->render("back/admin/themes/modify.html.twig", [
-            "form" => $form->createView()
-        ]);
+        $this->addFlash("error", "Une erreur est survenue. Veuillez réessayez ultérieurement");
+        return $this->redirectToRoute("view_company_themes");
     }
+
+
 }

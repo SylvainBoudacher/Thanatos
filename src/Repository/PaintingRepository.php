@@ -51,16 +51,16 @@ class PaintingRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getAllByCompany(Company $company) {
 
-    /*
-    public function findOneBySomeField($value): ?Painting
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('p')
+            ->select('p')
+            ->join("p.companyPaintings", "cp")
+            ->where("cp.company = :company")
+            ->setParameter('company', $company)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->execute();
+
+        return $query;
     }
-    */
 }

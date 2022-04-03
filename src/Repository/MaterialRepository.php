@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\Material;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,32 +20,16 @@ class MaterialRepository extends ServiceEntityRepository
         parent::__construct($registry, Material::class);
     }
 
-    // /**
-    //  * @return Material[] Returns an array of Material objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getAllByCompany(Company $company) {
 
-    /*
-    public function findOneBySomeField($value): ?Material
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('m')
+            ->select('m')
+            ->join("m.companyMaterials", "cm")
+            ->where("cm.company = :company")
+            ->setParameter('company', $company)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->execute();
+
+        return $query;
     }
-    */
 }
