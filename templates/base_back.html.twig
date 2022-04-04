@@ -16,6 +16,7 @@
     {% endblock %}
 </head>
 <body>
+{{ include('components/navBar/navBar.html.twig') }}
 <script src="https://unpkg.com/flowbite@1.3.4/dist/flowbite.js"></script>
 {% block body %}{% endblock %}
 <script src="{{ asset("js/toasts.js") }}"></script>

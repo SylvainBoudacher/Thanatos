@@ -1,11 +1,7 @@
 {% extends 'base_back.html.twig' %}
 
 {% block body %}
-
-    {{ include('components/navBar.html.twig') }}
-
-    <div class="flex flex-row h-100">
-
+    <div class="container flex flex-row h-100">
         {{ include('components/sideBarPro.html.twig') }}
 
         <div class="h-screen px-10 py-4 flex flex-col justify-between w-[100%]">
@@ -135,8 +131,5 @@
 
 
         </div>
-
-
     </div>
-
 {% endblock %}

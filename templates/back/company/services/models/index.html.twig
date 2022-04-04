@@ -1,13 +1,8 @@
 {% extends 'base_back.html.twig' %}
 
 {% block body %}
-
-    {{ include('components/navBar.html.twig') }}
-
     <div class="container flex flex-row h-100">
-
         {{ include('components/sideBarPro.html.twig') }}
-
         <div class="h-screen px-10 py-4 flex flex-col justify-between w-full">
             <div>
                 <h1 class="text-3xl text-slate-800 mb-4 font-bold py-6">Gestion de vos modèles de tombes</h1>
@@ -65,7 +60,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="flex flex-row-reverse">
                 <a href="{{ path("home_services") }}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
             </div>

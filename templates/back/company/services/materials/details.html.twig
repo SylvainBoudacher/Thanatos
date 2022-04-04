@@ -1,13 +1,8 @@
 {% extends 'base_back.html.twig' %}
 
 {% block body %}
-
-    {{ include('components/navBar.html.twig') }}
-
     <div class="container flex flex-row h-100">
-
         {{ include('components/sideBarPro.html.twig') }}
-
         <div class="h-screen px-10 py-4 flex flex-col justify-between w-full">
             <div>
                 <h1 class="text-3xl text-slate-800 mb-4 font-bold py-6">Détails du matériaux : {{ material.name }}</h1>
