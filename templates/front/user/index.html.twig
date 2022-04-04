@@ -11,12 +11,12 @@
     </a>
     <div class="example-wrapper p-10">
 
-
         <div class="grid grid-cols-3 gap-4">
             <div class="bg-orange-500 rounded p-3 text-white col-span-2">
                 <h1 class="text-xl">Ma commande actuelle</h1>
 
-                {% if order is not empty %}
+                {% if ordersNotFinished is not empty %}
+                    {% for order in ordersNotFinished %}
                     <ul class="list-disc">
                         {% if order.status == constant('NEW', order) %}
                             <button type="button"
@@ -69,6 +69,7 @@
                         </button>
                     </a>
 
+                {% endfor %}
                 {% else %}
                     <p>Aucune commande en cours</p>
                 {% endif %}
@@ -77,9 +78,9 @@
             <div class="bg-yellow-800 rounded text-white p-3">
                 <h1 class="text-xl">Mes anciennes commandes</h1>
 
-                {% if orders is not empty %}
+                {% if ordersFinished is not empty %}
 
-                    {% for order in orders %}
+                    {% for order in ordersFinished %}
 
                         <a href="#"
                            class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">

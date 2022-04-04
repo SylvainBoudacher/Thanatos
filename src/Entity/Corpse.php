@@ -112,6 +112,11 @@ class  Corpse
      */
     private $warehouse;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Preparation::class, cascade={"persist", "remove"}, fetch="EAGER")
+     */
+    private $preparation;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -262,4 +267,18 @@ class  Corpse
         $birthdate =  new Carbon($this->birthdate);
         return $birthdate->lt(Carbon::now());
     }
+
+    public function getPreparation(): ?Preparation
+    {
+        return $this->preparation;
+    }
+
+    public function setPreparation(?Preparation $preparation): self
+    {
+//        $preparation->setCorpse($this);
+        $this->preparation = $preparation;
+
+        return $this;
+    }
+
 }

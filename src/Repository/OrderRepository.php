@@ -45,12 +45,12 @@ class OrderRepository extends ServiceEntityRepository
             ->andWhere('o.possessor = :user')
             ->setParameter('status',Order::FINISHED)
             ->setParameter('user', $user)
-            ->orderBy('o.updatedAt', 'DESC')
-            ->setMaxResults( 1 );
+            ->orderBy('o.updatedAt', 'DESC');
+//            ->setMaxResults( 1 );
 
         $query = $qb->getQuery();
 
-        return $query->getOneOrNullResult();
+        return $query->execute();
     }
 
 

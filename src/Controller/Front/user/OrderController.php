@@ -29,6 +29,7 @@ use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PaintingRepository;
+use App\Repository\PreparationRepository;
 use App\Repository\ThemeRepository;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,19 +48,18 @@ class OrderController extends AbstractController
     #[Route('/commande', name: 'user_order', methods: ['GET'])]
     public function dashboard(OrderRepository $orderRepository): Response {
 
-        $order = $orderRepository->findMyCurrentOrder($this->getUser()->getId()); // get current order
-        $orders = $orderRepository->findLastFinishedLimitByUser($this->getUser()->getId()); // get finished order
+        $ordersNotFinished = $orderRepository->findMyCurrentOrder($this->getUser()->getId()); // get current order
+        $ordersFinished = $orderRepository->findLastFinishedLimitByUser($this->getUser()->getId()); // get finished order
 
         return $this->render('front/user/index.html.twig', [
-            'order' => $order,
-            'orders' => $orders
+            'ordersNotFinished' => $ordersNotFinished,
+            'ordersFinished' => $ordersFinished
         ]);
 
     }
 
     #[Route('/commande/{id}', name: 'user_order_id', methods: ['GET'])]
-    public function show(Order $order, int $id): Response {
-
+    public function show(Order $order, int $id, PreparationRepository $preparationRepository): Response {
 
         if ($order->getPossessor() != $this->getUser()) {
             throw $this->createNotFoundException(
@@ -67,9 +67,16 @@ class OrderController extends AbstractController
             );
         }
 
+        $corpses = $order->getCorpses();
+        foreach ($corpses as $corpse)
+        {
+            $corpse->setPreparation($preparationRepository->findOneBy(['corpse' => $corpse]));
+        }
+
         return $this->render(
             'front/user/order.html.twig', [
-                'order' => $order
+                'order' => $order,
+                'corpses' => $corpses
             ]
         );
 
@@ -345,7 +352,6 @@ class OrderController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $total = 0;
 
-
         $corpse = $em->getRepository(Corpse::class)->find($cartSession['corpse']);
         $theme = $em->getRepository(Theme::class)->find($cartSession['theme']);
         $company = $em->getRepository(Company::class)->find($cartSession['company']);
@@ -367,6 +373,7 @@ class OrderController extends AbstractController
             $preparation->setCorpse($corpse);
             $preparation->setTheme($theme);
             $preparation->setModelMaterial($modelMaterial);
+            $corpse->setPreparation($preparation);
 
             $em->persist($preparation);
             $em->flush();
