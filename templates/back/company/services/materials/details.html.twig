@@ -23,11 +23,14 @@
                         </li>
                     </ul>
                 </div>
+                {% if material.media %}
                 <div class="flex flex-wrap">
                     <div class="w-56 my-4 mr-6">
                         <img class="rounded-lg object-fit w-full" src="{{ vich_uploader_asset(material.media) }}" alt="Image de {{ material.name }}">
                     </div>
                 </div>
+                {% endif %}
+
             </div>
 
             <div class="flex flex-row-reverse">
