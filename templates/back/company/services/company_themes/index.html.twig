@@ -2,26 +2,17 @@
 
 {% block body %}
 
-    {{ include('components/navBar.html.twig') }}
-
     <div class="container flex flex-row h-100">
 
         {{ include('components/sideBarPro.html.twig') }}
-
         <div class="h-screen px-10 py-4 flex flex-col justify-between w-full">
-
             <div>
-
                 <h1 class="text-3xl text-slate-800 mb-4 font-bold py-6">Gestion de vos thèmes souscrit à Thanatos</h1>
 
                 <a href="{{ path("create_extra") }}" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Selectionner les thèmes</a>
 
                 <div class="flex flex-wrap mt-10">
-
                     {% for detailedTheme in detailedThemes %}
-
-                    {#{{ dump(detailedTheme.isSuscribed) }}#}
-
                         <div class="max-w-2xl mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
                             {% if vich_uploader_asset(detailedTheme.theme.media) != null %}
                             <img class="object-cover w-full h-64" src="{{ vich_uploader_asset(detailedTheme.theme.media) }}" alt="Theme de {{ detailedTheme.theme.name }}">
@@ -66,14 +57,5 @@
                 {% include 'components/toasts/error.html.twig' with {'message' : message} %}
             {% endfor %}
         </div>
-
-
-
-
     </div>
-
-
-
-
-
 {% endblock %}
