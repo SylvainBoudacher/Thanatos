@@ -17,6 +17,7 @@ class StaticController extends AbstractController
     #[Route('/user', name: 'user_dashboard')]
     public function index(): Response
     {
+        dd('homepage');
         return $this->render('front/user/index.html.twig', [
             'controller_name' => 'StaticController',
         ]);

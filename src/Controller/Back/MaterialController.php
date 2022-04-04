@@ -88,8 +88,7 @@ class MaterialController extends AbstractController
     public function delete_materials(EntityManagerInterface $em, MaterialRepository $materialRep, int $id): Response
     {
         $material = $materialRep->find($id);
-        $media = $material->getMedia();
-        $em->remove($media);
+        if($material->getMedia()) $em->remove($material->getMedia());
         $em->remove($material);
         $em->flush();
 
