@@ -2,16 +2,11 @@
 
 {% block body %}
 
-    {{ include('components/navBar.html.twig') }}
-
-        <div class="container flex flex-row h-100">
-
-        {{ include('components/sideBarPro.html.twig') }}
-
+    <div class="container flex flex-row h-100">
+    {{ include('components/sideBarPro.html.twig') }}
         <div class="h-screen px-10 py-4 flex flex-col justify-between w-full">
             <div>
                 <h1 class="text-3xl text-slate-800 mb-4 font-bold py-6">Détails du matériaux : {{ extra.name }}</h1>
-
                 <div class="my-5 p-4 max-w-sm bg-white rounded-lg border shadow-md sm:p-6 dark:bg-gray-800 dark:border-gray-700">
                     <h5 class="mb-3 text-base font-semibold text-gray-900 lg:text-xl dark:text-white">
                         {{ extra.name }}
@@ -36,9 +31,4 @@
             </div>
         </div>
     </div>
-
-
-
-
-
 {% endblock %}

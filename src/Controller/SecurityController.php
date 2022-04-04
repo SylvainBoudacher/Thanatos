@@ -18,8 +18,8 @@ class SecurityController extends AbstractController
         if ($this->getUser() ) {
             if ($this->getUser()->getRoles("ROLE_DRIVER")[0] == "ROLE_DRIVER") {
                 return $this->redirectToRoute('driver_dashboard');
-            } elseif ($this->getUser()->getRoles("ROLE_MORGUE")[0] == "ROLE_MORGUE") {
-                return $this->redirectToRoute('morgue_dashboard');
+            } elseif ($this->getUser()->getRoles("ROLE_COMPANY")[0] == "ROLE_COMPANY") {
+                return $this->redirectToRoute('home_company');
             } else {
                 return $this->redirectToRoute('homepage');
             }
