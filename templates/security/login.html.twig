@@ -1,0 +1,69 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<form method="post">
+
+    {% if error %}
+        <div class="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <div class="flex items-center justify-center w-12 bg-red-500">
+                <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z"/>
+                </svg>
+            </div>
+
+            <div class="px-4 py-2 -mx-3">
+                <div class="mx-3">
+                    <span class="font-semibold text-red-500 dark:text-red-400">Erreur</span>
+                    <p class="text-sm text-gray-600 dark:text-gray-200">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="w-full max-w-sm p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20">
+        <h1 class="text-3xl font-semibold text-center text-gray-700 dark:text-white">Thanatos</h1>
+
+        <form class="mt-6">
+            <div>
+                <label for="username" class="block text-sm text-gray-800 dark:text-gray-200">Email</label>
+
+                <input type="email"
+                       value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus
+                           class="form-control block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+            </div>
+
+            <div class="mt-4">
+                <div class="flex items-center justify-between">
+                    <label for="password" class="block text-sm text-gray-800 dark:text-gray-200">Mot de passe</label>
+                    <a href="#" class="text-xs text-gray-600 dark:text-gray-400 hover:underline">Mot de passe perdu ?</a>
+                </div>
+
+                <input type="password" name="password" id="inputPassword"  autocomplete="current-password" required
+                       class="form-control block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+            </div>
+
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+
+            <div class="mt-6">
+                <button
+                        class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+                    Connexion
+                </button>
+            </div>
+
+
+        </form>
+
+
+            <span class="w-1/5 border-b dark:border-gray-600 lg:w-full"></span>
+
+
+        <p class="mt-8 text-xs font-light text-center text-gray-400"> Pas de compte ? <a href="{{ path('app_register') }}"  class="font-medium text-gray-700 dark:text-gray-200 hover:underline">Créer en un ici</a></p>
+    </div>
+
+{% endblock %}

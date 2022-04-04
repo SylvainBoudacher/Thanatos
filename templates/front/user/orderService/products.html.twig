@@ -1,0 +1,79 @@
+{% extends 'base_front.html.twig' %}
+
+
+{% block body %}
+
+    <div class="p-5">
+        <h1 class="text-4xl mb-3">Choisir le modèle avec ses options</h1>
+        <div class="flex flex-row flex-wrap justify-center">
+
+
+            {% for model in models %}
+                <form action="{{ path('user_order_product_specificity', {'nextStep': true, 'model': model.id}) }}"
+                      method="post">
+                    <input type="hidden" name="token" value="{{ csrf_token('model-item') }}"/>
+
+                    <div
+                            class="flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row dark:border-gray-700 dark:bg-gray-800">
+                        <img class="object-cover w-full h-96 rounded-t-lg md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
+                             src="{{ asset('images/logo-thanatos.svg') }}" alt="">
+
+                        <div class="flex flex-col justify-between p-4 leading-normal">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ model.name }}</h5>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ model.description }}</p>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ model.price }}€</p>
+
+                            <h1 class="text-3xl  text-gray-900 dark:text-white">Les matériaux</h1>
+                            <div class="flex flex-wrap gap-3 w-full h-fit bg-blue-800 rounded p-4">
+                                {% set modelMaterials = model.modelMaterials %}
+                                {% for modelMaterial in modelMaterials %}
+
+                                    {% set material = modelMaterial.material %}
+                                    <div class=" bg-blue-500 w-36 h-fit rounded">
+                                        {% if material.media %}
+                                            <img class="rounded-t-lg" src="{{ vich_uploader_asset(material.media) }}"
+                                                 alt="Image de {{ material.name }}">
+                                        {% else %}
+                                            <img class="rounded-t-lg" src="{{ asset('images/material-default.png') }}"
+                                                 alt="Image de {{ material.name }}">
+                                        {% endif %}
+                                        {{ material.name }}
+                                        <br> {{ material.price }}€
+                                        <input type="radio" name="material" value="{{ material.id }}">
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <h1 class="text-3xl  text-gray-900 dark:text-white">Les extras</h1>
+                            <div class="flex flex-wrap gap-3 w-full h-fit bg-blue-800 rounded p-4">
+                                {% set modelExtras = model.modelExtras %}
+                                {% for modelExtra in modelExtras %}
+
+                                    {% set extra = modelExtra.extra %}
+                                    <div class=" bg-blue-500 w-36 h-fit rounded">
+                                        {% if extra.media %}
+                                            <img class="rounded-t-lg" src="{{ vich_uploader_asset(extra.media) }}"
+                                                 alt="Image de {{ extra.name }}">
+                                        {% else %}
+                                            <img class="rounded-t-lg" src="{{ asset('images/extra-default.png') }}"
+                                                 alt="Image de {{ extra.name }}">
+                                        {% endif %}
+                                        {{ extra.name }}
+                                        <br> {{ extra.price }}€
+                                        <input type="radio" name="extra" value="{{ extra.id }}">
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                        <button type="submit"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            Selection
+                        </button>
+                    </div>
+                </form>
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

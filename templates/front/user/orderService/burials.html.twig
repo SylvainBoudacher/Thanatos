@@ -1,0 +1,26 @@
+{% extends 'base_front.html.twig' %}
+
+
+{% block body %}
+
+    <div class="p-5">
+    <h1 class="text-4xl mb-3">Choisir un contenant</h1>
+<div class="flex gap-3 flex-wrap justify-around">
+
+    {% for burial in burials %}
+    <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-5">
+            <a href="#">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ burial.name }}</h5>
+            </a>
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ burial.description }}</p>
+            <a href="{{ path('user_order_product', {burial: burial.id, nextStep: true}) }}" class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Selectionner
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+    </div>
+{% endblock %}

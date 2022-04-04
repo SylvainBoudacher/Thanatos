@@ -1,0 +1,56 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+
+    <a href="{{ referer }}" class="inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+        <svg class="mr-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+        Etape précedente
+    </a>
+
+    <h1 class="text-7xl">Selection d'un thème</h1>
+
+    <div class="flex">
+        {% if themes is not empty %}
+            {% for theme in themes %}
+
+                <div class="max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                    <img class="object-cover object-center min-w-[500px] h-56"
+                         src="{{ vich_uploader_asset(theme.media) }}" alt="Theme de {{ theme.name }}">
+
+                    <div class="px-6 py-4">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">{{ theme.name }}</h2>
+
+                        <p class="py-2 text-gray-700 dark:text-gray-400">{{ theme.description }}</p>
+
+                        <div class="flex items-center mt-4 text-gray-700 dark:text-gray-200">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 11H10V13H14V11Z"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M7 5V4C7 2.89545 7.89539 2 9 2H15C16.1046 2 17 2.89545 17 4V5H20C21.6569 5 23 6.34314 23 8V18C23 19.6569 21.6569 21 20 21H4C2.34314 21 1 19.6569 1 18V8C1 6.34314 2.34314 5 4 5H7ZM9 4H15V5H9V4ZM4 7C3.44775 7 3 7.44769 3 8V14H21V8C21 7.44769 20.5522 7 20 7H4ZM3 18V16H21V18C21 18.5523 20.5522 19 20 19H4C3.44775 19 3 18.5523 3 18Z"/>
+                            </svg>
+
+                            <h3 class="px-2 text-sm">Type : {{ theme.type }}</h3>
+                        </div>
+
+                        <div class="flex items-center mt-4 text-gray-700 dark:text-gray-200 mb-4">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M3.00977 5.83789C3.00977 5.28561 3.45748 4.83789 4.00977 4.83789H20C20.5523 4.83789 21 5.28561 21 5.83789V17.1621C21 18.2667 20.1046 19.1621 19 19.1621H5C3.89543 19.1621 3 18.2667 3 17.1621V6.16211C3 6.11449 3.00333 6.06765 3.00977 6.0218V5.83789ZM5 8.06165V17.1621H19V8.06199L14.1215 12.9405C12.9499 14.1121 11.0504 14.1121 9.87885 12.9405L5 8.06165ZM6.57232 6.80554H17.428L12.7073 11.5263C12.3168 11.9168 11.6836 11.9168 11.2931 11.5263L6.57232 6.80554Z"/>
+                            </svg>
+
+                            <h3 class="px-2 text-sm">Price : {{ theme.price }}</h3>
+                        </div>
+
+                        <a class="bg-yellow-500 rounded-full py-2 px-4"
+                           href="{{ path("user_order_theme", {nextStep: true, theme: theme.id}) }}">Selectionner</a>
+                    </div>
+                </div>
+
+            {% endfor %}
+        {% else %}
+            Aucun thèmes disponible
+        {% endif %}
+    </div>
+{% endblock %}
