@@ -40,6 +40,8 @@ class PaintingController extends AbstractController
     #[Route('/details/{id}', name: 'details_painting')]
     public function details_painting(PaintingRepository $paintingRep, int $id): Response
     {
+       /* dump($id);
+        dd($paintingRep->find($id));*/
         return $this->render("back/company/services/paintings/details.html.twig", [
             "painting" => $paintingRep->find($id)
         ]);

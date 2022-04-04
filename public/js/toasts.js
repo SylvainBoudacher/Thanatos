@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     toasts.forEach((toast) => {
 
         if (toast !== null) {
-            toast.classList.add("translate-x-[0%]");
+            toast.classList.add("translate-x-[-80%]");
         }
     })
 

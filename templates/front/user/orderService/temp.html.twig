@@ -1,0 +1,111 @@
+{% extends 'base_front.html.twig' %}
+
+
+{% block body %}
+
+    <style type="text/css">
+        .container-text-divider {
+            width: 100%;
+            border-bottom: 1px solid black;
+            text-align: center;
+        }
+
+        .container-text-divider .text-divider {
+            font-size: 40px;
+            background-color: #F3F5F6;
+            padding: 0 10px;
+        }
+
+    </style>
+    <script type="text/javascript">
+     var glob = 0;
+        window.addEventListener('load', function () {
+
+            /* Dynamic choices for order services */
+            let containerChoices = document.querySelectorAll('.container-choice');
+            glob = containerChoices;
+            Array.from(document.querySelectorAll('.container-choice > div')).forEach(function (choice) {
+
+                /* when click a category, sub category related appear */
+                choice.addEventListener("click", function (e) {
+                    let parentSubChoiceContainer = "";
+
+                    let data = e.target.dataset.main;
+                    let datasetSelected = ".product-choice[data-second='" + data + "']";
+                    document.querySelectorAll(datasetSelected).forEach(function (subChoice) {
+                        subChoice.classList.toggle('hidden');
+                        parentSubChoiceContainer = subChoice.parentNode;
+                    });
+
+                    console.log(parentSubChoiceContainer)
+                    glob = parentSubChoiceContainer;
+
+                });
+            });
+        })
+    </script>
+
+    <div class="flex flex-col p-3 gap-3 h-full">
+
+        <div class="container-text-divider">
+  <span class="text-divider">
+    Produit <!--Padding is optional-->
+  </span>
+        </div>
+        {# BURIAL #}
+        <div id="burial" class="container-choice flex gap-3 w-full h-fit bg-indigo-800 rounded p-4">
+            <div class="product-choice flex-auto bg-indigo-500 h-32 rounded" data-main="burial1">Cercueil</div>
+            <div class="product-choice flex-auto bg-indigo-500 h-32 rounded" data-main="burial2">Boîte de conserve</div>
+        </div>
+        <div class="container-text-divider">
+  <span class="text-divider">
+    Modèles <!--Padding is optional-->
+  </span>
+        </div>
+        {# MODEL #}
+        <div id="model" class="container-choice container-model flex gap-3 w-full h-fit bg-emerald-800 rounded p-4">
+            <div class="product-choice hidden flex-auto bg-emerald-500 h-32 rounded" data-second="burial1" data-main="model1">En forme d'étoile</div>
+            <div class="product-choice hidden flex-auto bg-emerald-500 h-32 rounded" data-second="burial2" data-main="model2">Sous forme classique</div>
+            <div class="product-choice hidden flex-auto bg-emerald-500 h-32 rounded" data-second="burial1" data-main="model3">En forme d'ovale</div>
+        </div>
+        <div class="container-text-divider">
+  <span class="text-divider">
+    Matériaux <!--Padding is optional-->
+  </span>
+        </div>
+        {# MATERIAL #}
+        <div id="material" class="flex container-choice gap-3 w-full h-fit bg-blue-800 rounded p-4">
+            <div class="product-choice hidden flex-auto bg-blue-500 h-32 rounded" data-second="model1">En pin</div>
+            <div class="product-choice hidden flex-auto bg-blue-500 h-32 rounded" data-second="model2">En hêtre</div>
+            <div class="product-choice hidden flex-auto bg-blue-500 h-32 rounded" data-second="model2">En carton</div>
+            <div class="product-choice hidden flex-auto bg-blue-500 h-32 rounded" data-second="model2">En acajou</div>
+        </div>
+
+        <div class="container-text-divider">
+  <span class="text-divider">
+    Couleur <!--Padding is optional-->
+  </span>
+        </div>
+        {# PAINTING #}
+        <div class="flex justify-around flex-wrap gap-3 w-full h-fit bg-blue-200 rounded p-4">
+            <div class="bg-yellow-400 h-24 w-24 rounded"></div>
+            <div class="bg-stone-700 h-24 w-24 rounded"></div>
+            <div class="bg-pink-600 h-24 w-24 rounded"></div>
+            <div class="bg-violet-900 h-24 w-24 rounded"></div>
+        </div>
+
+        <div class="container-text-divider">
+  <span class="text-divider">
+    Extras <!--Padding is optional-->
+  </span>
+        </div>
+        {# EXTRA #}
+        <div class="flex gap-3 w-full h-fit bg-yellow-800 rounded p-4">
+            <div class="flex-auto bg-yellow-500 h-32 rounded">Chapi chapo</div>
+            <div class="flex-auto bg-yellow-500 h-32 rounded">Noeud de pap'</div>
+            <div class="flex-auto bg-yellow-500 h-32 rounded">Epine de Noël</div>
+        </div>
+
+    </div>
+    </div>
+{% endblock %}

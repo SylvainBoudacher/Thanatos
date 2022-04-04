@@ -1,13 +1,8 @@
 {% extends 'base_back.html.twig' %}
 
 {% block body %}
-
-    {{ include('components/navBar.html.twig') }}
-
     <div class="container flex flex-row h-100">
-
         {{ include('components/sideBarPro.html.twig') }}
-
         <div class="h-screen px-10 py-4 flex flex-col justify-between w-full">
             <div>
                 <h1 class="text-3xl text-slate-800 mb-4 font-bold py-6">Détails du matériaux : {{ material.name }}</h1>
@@ -23,11 +18,14 @@
                         </li>
                     </ul>
                 </div>
+                {% if material.media %}
                 <div class="flex flex-wrap">
                     <div class="w-56 my-4 mr-6">
                         <img class="rounded-lg object-fit w-full" src="{{ vich_uploader_asset(material.media) }}" alt="Image de {{ material.name }}">
                     </div>
                 </div>
+                {% endif %}
+
             </div>
 
             <div class="flex flex-row-reverse">

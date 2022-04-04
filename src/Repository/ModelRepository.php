@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Burial;
+use App\Entity\Company;
 use App\Entity\Model;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +19,21 @@ class ModelRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Model::class);
+    }
+
+    public function getByCompanyAndBurial(Company $company, Burial $burial)
+    {
+
+        $query = $this->createQueryBuilder('model')
+            ->select('model')
+            ->where('model.company = :company')
+            ->andWhere('model.burial = :burial')
+            ->setParameter('company', $company)
+            ->setParameter('burial', $burial)
+            ->getQuery()
+            ->execute();
+
+        return $query;
     }
 
     // /**
