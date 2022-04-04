@@ -2,16 +2,10 @@
 
 {% block body %}
 
-    {{ include('components/navBar.html.twig') }}
 
     <div class="container flex flex-row h-100">
-
         {{ include('components/sideBarUserSettings.html.twig') }}
-
-
-
         <div class="flex flex-col w-full  pt-[4rem] mx-auto">
-
             {{ include('components/succesFlasheMessage.html.twig') }}
 
             {{ form_start(NewCreditCardForm) }}
