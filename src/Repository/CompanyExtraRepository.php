@@ -2,7 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\CompanyExtra;
+use App\Entity\CompanyPainting;
+use App\Entity\Extra;
+use App\Entity\Painting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +23,20 @@ class CompanyExtraRepository extends ServiceEntityRepository
         parent::__construct($registry, CompanyExtra::class);
     }
 
-    // /**
-    //  * @return CompanyExtra[] Returns an array of CompanyExtra objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getOneByCompanyAndExtra(Company $company, Extra $extra) : ?CompanyExtra {
 
-    /*
-    public function findOneBySomeField($value): ?CompanyExtra
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('ce')
+            ->select('ce, c')
+            ->join("ce.company", "c")
+            ->where("ce.company = :company")
+            ->andWhere("ce.extra = :extra")
+            ->setParameter('company', $company)
+            ->setParameter('extra', $extra)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
+
+        return $query;
     }
-    */
+
 }

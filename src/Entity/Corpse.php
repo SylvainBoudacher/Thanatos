@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=CorpseRepository::class)
  */
-class Corpse
+class  Corpse
 {
     use TimestampableTrait;
 
@@ -111,6 +111,11 @@ class Corpse
      * @ORM\ManyToOne(targetEntity=Warehouse::class, inversedBy="corpses")
      */
     private $warehouse;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Preparation::class, cascade={"persist", "remove"}, fetch="EAGER")
+     */
+    private $preparation;
 
     public function getId(): ?int
     {
@@ -262,4 +267,18 @@ class Corpse
         $birthdate =  new Carbon($this->birthdate);
         return $birthdate->lt(Carbon::now());
     }
+
+    public function getPreparation(): ?Preparation
+    {
+        return $this->preparation;
+    }
+
+    public function setPreparation(?Preparation $preparation): self
+    {
+//        $preparation->setCorpse($this);
+        $this->preparation = $preparation;
+
+        return $this;
+    }
+
 }

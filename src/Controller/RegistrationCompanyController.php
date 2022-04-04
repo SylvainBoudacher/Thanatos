@@ -37,7 +37,7 @@ class RegistrationCompanyController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            $user->setRoles([$role == 'a7#ddd8' ? 'ROLE_DRIVER' : 'ROLE_MORGUE']);
+            $user->setRoles([$role == 'a7#ddd8' ? 'ROLE_DRIVER' : 'ROLE_COMPANY']);
             $user->setPassword(
             $userPasswordHasherInterface->hashPassword(
                     $user,

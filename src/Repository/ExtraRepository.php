@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\Extra;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,32 +20,16 @@ class ExtraRepository extends ServiceEntityRepository
         parent::__construct($registry, Extra::class);
     }
 
-    // /**
-    //  * @return Extra[] Returns an array of Extra objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getAllByCompany(Company $company) {
 
-    /*
-    public function findOneBySomeField($value): ?Extra
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('e')
+            ->select('e')
+            ->join("e.companyExtras", "ce")
+            ->where("ce.company = :company")
+            ->setParameter('company', $company)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->execute();
+
+        return $query;
     }
-    */
 }

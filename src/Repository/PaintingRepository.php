@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Burial;
+use App\Entity\Company;
 use App\Entity\Painting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +19,20 @@ class PaintingRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Painting::class);
+    }
+
+    public function getByCompany(Company $company)
+    {
+
+        $query = $this->createQueryBuilder('painting')
+            ->select('painting')
+            ->join('App\Entity\CompanyPainting', 'cp', 'WITH', 'cp.painting = painting')
+            ->where('cp.company = :company')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->execute();
+
+        return $query;
     }
 
     // /**
@@ -35,16 +51,16 @@ class PaintingRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getAllByCompany(Company $company) {
 
-    /*
-    public function findOneBySomeField($value): ?Painting
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('p')
+            ->select('p')
+            ->join("p.companyPaintings", "cp")
+            ->where("cp.company = :company")
+            ->setParameter('company', $company)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->execute();
+
+        return $query;
     }
-    */
 }

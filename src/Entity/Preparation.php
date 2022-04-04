@@ -26,7 +26,8 @@ class Preparation
     private $price;
 
     /**
-     * @ORM\OneToOne(targetEntity=Corpse::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Corpse::class, cascade={"persist", "remove"}, fetch="EAGER", inversedBy="preparation")
+     * @ORM\JoinColumn(name="corpse_id", referencedColumnName="id")
      */
     private $corpse;
 

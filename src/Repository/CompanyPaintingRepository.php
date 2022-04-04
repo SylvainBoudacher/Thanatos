@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\CompanyPainting;
+use App\Entity\Painting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +21,21 @@ class CompanyPaintingRepository extends ServiceEntityRepository
         parent::__construct($registry, CompanyPainting::class);
     }
 
-    // /**
-    //  * @return CompanyPainting[] Returns an array of CompanyPainting objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getOneByCompanyAndPainting(Company $company, Painting $painting) : ?CompanyPainting {
 
-    /*
-    public function findOneBySomeField($value): ?CompanyPainting
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('cp')
+            ->select('cp, c')
+            ->join("cp.company", "c")
+            ->where("cp.company = :company")
+            ->andWhere("cp.painting = :painting")
+            ->setParameter('company', $company)
+            ->setParameter('painting', $painting)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
+
+        return $query;
     }
-    */
+
+
 }

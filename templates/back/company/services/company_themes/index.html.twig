@@ -1,0 +1,61 @@
+{% extends 'base_back.html.twig' %}
+
+{% block body %}
+
+    <div class="container flex flex-row h-100">
+
+        {{ include('components/sideBarPro.html.twig') }}
+        <div class="h-screen px-10 py-4 flex flex-col justify-between w-full">
+            <div>
+                <h1 class="text-3xl text-slate-800 mb-4 font-bold py-6">Gestion de vos thèmes souscrit à Thanatos</h1>
+
+                <a href="{{ path("create_extra") }}" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Selectionner les thèmes</a>
+
+                <div class="flex flex-wrap mt-10">
+                    {% for detailedTheme in detailedThemes %}
+                        <div class="max-w-2xl mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            {% if vich_uploader_asset(detailedTheme.theme.media) != null %}
+                            <img class="object-cover w-full h-64" src="{{ vich_uploader_asset(detailedTheme.theme.media) }}" alt="Theme de {{ detailedTheme.theme.name }}">
+                            {% else %}
+                            <img class="object-cover w-full h-64" src="/images/theme-default.png" alt="Theme de {{ detailedTheme.theme.name }}">
+                            {% endif %}
+                            <div class="p-6">
+                                <div>
+                                    <span class="py-2 px-4 rounded-full {% if detailedTheme.theme.type == 'classic' %} bg-green-300 {% else %} bg-red-300 {% endif %} text-xs font-medium text-white uppercase">{{ detailedTheme.theme.type }}</span>
+                                    <a href="#" class="block mt-4 text-2xl font-semibold text-gray-800 transition-colors duration-200 transform dark:text-white hover:text-gray-600 hover:underline">{{ detailedTheme.theme.name }}</a>
+                                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ detailedTheme.theme.description }}</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between">
+                                <a href="{{ path("switch_company_themes", {"id" : detailedTheme.theme.id }) }}">SWITCH</a>
+                                <div class="flex flex-row-reverse">
+                                    {% if detailedTheme.isSuscribed == false %}
+                                        <span class="mr-4">Non souscris</span>
+                                        <div class="rounded-full w-[20px] h-[20px] bg-red-500 translate-y-[10%] mr-2"></div>
+                                    {% elseif detailedTheme.isSuscribed == true %}
+                                        <span class="mr-4">Souscrit</span>
+                                        <div class="rounded-full w-[20px] h-[20px] bg-green-500 translate-y-[10%] mr-2"></div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="flex flex-row-reverse">
+            <a href="{{ path("home_services") }}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
+        </div>
+
+
+        <div class="absolute bottom-[0%] mb-4">
+            {% for message in app.flashes("success") %}
+                {% include 'components/toasts/success.html.twig' with {'message' : message} %}
+            {% endfor %}
+            {% for message in app.flashes("error") %}
+                {% include 'components/toasts/error.html.twig' with {'message' : message} %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
