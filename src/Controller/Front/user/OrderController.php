@@ -119,10 +119,6 @@ class OrderController extends AbstractController
             } else {
                 $this->addFlash('failed', 'Les dates ne sont pas coherents');
             }
-        }else {
-            if ($request->request->get('oneCorpse') !== null) {
-                return $this->redirectToRoute('declare_corpse_address');
-            }
         }
 
         return $this->renderForm('front/user/declareCorpse/index.html.twig', [
@@ -140,9 +136,9 @@ class OrderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $session = $request->getSession();
-
             $declareCorpses = $session->get('declareCorpses', []);
             $declareCorpses['address'] = $address;
+
             $session->set('declareCorpses', $declareCorpses);
 
             return $this->redirectToRoute('declare_corpse_confirmation');
@@ -159,6 +155,7 @@ class OrderController extends AbstractController
     {
         $session = $request->getSession();
         $declareCorpses = $session->get('declareCorpses');
+
         if ($declareCorpses === null || !isset($declareCorpses['corpses'])) {
             $session->remove('declareCorpses');
             return $this->redirectToRoute('homepage');
