@@ -112,8 +112,8 @@ class OrderController extends AbstractController
                     return $this->redirectToRoute('declare_corpse_address');
                 } else {
 
-                    $corpse = new Corpse();
-                    $form = $this->createForm(CorpseType::class, $corpse);
+//                    $corpse = new Corpse();
+//                    $form = $this->createForm(CorpseType::class, $corpse);
                     $this->addFlash('success', 'Corps bien ajouté');
                 }
             } else {

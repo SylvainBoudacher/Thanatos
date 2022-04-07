@@ -14,6 +14,11 @@ RUN apt-get update && \
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
+COPY local.ini /usr/local/etc/php/conf.d/local.ini
+
+COPY apm-agent-php.deb /var/tmp/apm-agent-php.deb
+RUN apt install /var/tmp/apm-agent-php.deb
+
 WORKDIR /var/www
 
 CMD composer i -o ; wait-for-it db:5432 -- bin/console doctrine:migrations:migrate ;  php-fpm
