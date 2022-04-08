@@ -31,6 +31,8 @@ services:
       - APP_ENV=${APP_ENV}
       - APP_SECRET=${APP_SECRET}
       - DATABASE_URL=${DATABASE_URL}
+      - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL}
+      - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME}
     healthcheck:
       interval: 10s
       timeout: 3s
@@ -54,6 +56,11 @@ services:
     ports:
       - "80:80"
       - "443:443"
+
+networks:
+  default:
+    external:
+      name: elk
 
 volumes:
   db-data: {}
