@@ -6,7 +6,10 @@ module.exports = {
     },
 
     fontFamily: {
-      sans: ['Graphik', 'sans-serif'],
+      'sans': ['Graphik', 'sans-serif'],
+      'body': ['poppins'],
+
+
     },
 
     extend: {
