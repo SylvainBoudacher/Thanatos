@@ -2,95 +2,92 @@
 
 {% block body %}
 
-    <div class="container px-6 mx-auto py-5 ">
-        <div class="flex flex-row  pb-5  ">
-            <p class="font-bold text-3xl">Order #6478387</p>
-            <a href="#">
-                <p class="text-sm text-blue-800 pt-3 pl-10">View invoice</p>
-            </a>
+    {% if ordersNotFinished is not empty %}
+        {% for order in ordersNotFinished %}
+            {% if order.status == constant('NEW_ORDER', order) %}
 
-            <svg class="w-6 pt-2 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0Z"></path><path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path></svg>
-        </div>
+        <div class="container px-6 mx-auto py-6 ">
+            <div class="flex flex-row  pb-3 justify-start ">
+                <p class="font-bold text-2xl">Commande #{{ order.number }}</p>
+                <a href="#">
+                    <p class="text-sm text-blue-800 pt-2 pl-10">View invoice</p>
+                </a>
+                <svg class="w-6 pt-1 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0Z"></path><path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path></svg>
+            </div>
+
+            <section class="dark:bg-white rounded-xl shadow-md ">
+                <div class="container px-9 py-10 mx-auto rounded-t-lg border border-slate-200">
+                    <div class="flex flex-row">
+                        <div class="md:flex md:items-center ">
+                            <div class="grid pr-4">
+                                <div>
+                                    <div class="bg-gray-200 rounded-lg shadow-xs">
+                                        <img class="object-cover rounded-xl aspect-square max-w-[8rem]" src="{{ asset('images/cerceuillePNG.png') }}">
+                                    </div>
 
 
-        <section class="dark:bg-white rounded-xl shadow-md ">
-            <div class="container px-9 py-10 mx-auto rounded-t-lg border border-slate-200">
-                <div class="flex flex-row">
-                    <div class="md:flex md:items-center ">
-                        <div class="grid pr-4">
-                            <div>
-                                {#<img class="object-cover rounded-xl aspect-square max-w-[10rem]"  src="{{ asset("images/logo-thanatos.svg") alt="">#}
-                                <div class="bg-gray-200 rounded-lg shadow-xs">
-                                    <img class="object-cover rounded-xl aspect-square max-w-[8rem]" src="{{ asset('images/cerceuillePNG.png') }}">
                                 </div>
-
-
                             </div>
+
+                            <div class=" max-w-lg min-w-64 mx-4 h-full ">
+                                <h1 class="text-xl font-semibold text-gray-900 capitalize white:text-white">Cerceuil XXL en bois</h1>
+
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    135.20€
+                                </p>
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    Un ceceuil durable en bois d'hêtre BLABLABLABLAB BLABLABLABLABBLABLABLABLABBLABLABLABLAB BLABLABLABLAB
+                                </p>
+                            </div>
+
+
+                            <div class=" w-64 mx-4 h-full ">
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps concerner</h1>
+                                {% for corpse in order.corpses|slice(0, 3) %}
+                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                        {{ corpse.firstname }} {{ corpse.lastname }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+
+
+                            <div class="w-64 mx-4 h-full">
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Adresse de livraison</h1>
+
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    34 allée des Renards
+                                </p>
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    76450 Poitoux-Charente
+                                </p>
+                            </div>
+
                         </div>
-
-                        <div class=" max-w-lg min-w-64 mx-4 h-full">
-                            <h1 class="text-xl font-semibold text-gray-900 capitalize white:text-white">Cerceuil XXL en bois</h1>
-
-                            <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                135.20€
-                            </p>
-                            <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                Un ceceuil durable en bois d'hêtre BLABLABLABLAB BLABLABLABLABBLABLABLABLABBLABLABLABLAB BLABLABLABLAB
-                            </p>
-                        </div>
-
-                        <div class="w-64 mx-4 h-full">
-                            <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps delivery</h1>
-
-                            <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                René leFada
-                            </p>
-                            <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                Gerad mentor
-                            </p>
-                        </div>
-
-                        <div class="w-64 mx-4 h-full">
-                            <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Delivery address</h1>
-
-                            <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                34 allée des Renards
-                            </p>
-                            <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                76450 Poitoux-Charente
-                            </p>
-                        </div>
-
                     </div>
                 </div>
-            </div>
-            {#End of the card#}
-            <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
-                <div class="flex flex-row">
-                    <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Preparing to ship on March, 2021</p>
+                {#End of the card#}
+                <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
+                    <div class="flex flex-row">
+                        <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Preparing to ship on March, 2021</p>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
+                    </div>
+                    <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                        <p>Order placed</p>
+                        <p>Processing</p>
+                        <p>Shipped</p>
+                        <p>Delivered</p>
+                    </div>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
-                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
-                </div>
-                <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
-                    <p>Order placed</p>
-                    <p>Processing</p>
-                    <p>Shipped</p>
-                    <p>Delivered</p>
-                </div>
-            </div>
-        </section>
-    </div>
+            </section>
+        </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 
-    <a href="{{ path('declare_corpse') }}">
-    <button class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400">
-  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-      Déclarer un/des corps
-  </span>
-    </button>
-    </a>
+
     <div class="example-wrapper p-10">
-
         <div class="grid grid-cols-3 gap-4">
             <div class="bg-orange-500 rounded p-3 text-white col-span-2">
                 <h1 class="text-xl">Ma commande actuelle</h1>
