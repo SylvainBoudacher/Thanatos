@@ -2,17 +2,22 @@
 
 {% block body %}
 
+    <div class="mx-auto  text-center lg:mb-16 mb-8 pt-8">
+        <h2 class="mb-4 text-3xl lg:text-4xl font-extrabold text-gray-900 ">Vos commandes</h2>
+    </div>
+
     {% if ordersNotFinished is not empty %}
         {% for order in ordersNotFinished %}
             {% if order.status == constant('NEW_ORDER', order) %}
 
         <div class="container px-6 mx-auto py-6 ">
-            <div class="flex flex-row  pb-3 justify-start ">
-                <p class="font-bold text-2xl">Commande #{{ order.number }}</p>
+
+            <div class="flex flex-row  pb-4 justify-start ">
+                <p class="font-bold text-3xl pb-3 text-gray-800">Commande #{{ order.number }}</p>
                 <a href="#">
-                    <p class="text-sm text-blue-800 pt-2 pl-10">View invoice</p>
+                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">View invoice</p>
                 </a>
-                <svg class="w-6 pt-1 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0Z"></path><path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path></svg>
+                <svg class="w-6  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0Z"></path><path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path></svg>
             </div>
 
             <section class="dark:bg-white rounded-xl shadow-md ">
@@ -28,7 +33,7 @@
                             </div>
 
                             <div class=" max-w-lg min-w-64 mx-4 h-full ">
-                                <h1 class="text-xl font-semibold text-gray-900 capitalize white:text-white">Cerceuil XXL en bois</h1>
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Cerceuil XXL en bois</h1>
 
                                 <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
                                     135.20€
