@@ -29,6 +29,7 @@ class RegistrationFormType extends AbstractType
                 'format' => 'yyyy-MM-dd',
             ])
             ->add('address', AddressType::class)
+
             ->add('email')
 
             ->add(
