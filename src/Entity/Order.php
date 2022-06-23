@@ -83,7 +83,7 @@ class Order
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $type;
+    private $types;
 
     public function __construct()
     {
@@ -290,14 +290,14 @@ class Order
         return $this;
     }
 
-    public function getType(): ?string
+    public function getTypes(): ?string
     {
-        return $this->type;
+        return $this->types;
     }
 
-    public function setType(?string $type): self
+    public function setTypes(?string $types): self
     {
-        $this->type = $type;
+        $this->types = $types;
 
         return $this;
     }

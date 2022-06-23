@@ -45,6 +45,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
 
+    /*
+         * Order status :
+         *  *NEW
+         *  *DELIVERY_REACH
+         *  *PROCESSING
+         *  *SHIPPED
+         *  *DELIVERED
+        */
+
+    /*
+     * Order type:
+     *  *DRIVE
+     *  *FUNERAL
+     */
+
+
     #[Route('/commande', name: 'user_order', methods: ['GET'])]
     public function dashboard(OrderRepository $orderRepository): Response {
 
@@ -53,9 +69,8 @@ class OrderController extends AbstractController
 
         return $this->render('front/user/myCommand/index.html.twig', [
             'ordersNotFinished' => $ordersNotFinished,
-            'ordersFinished' => $ordersFinished
+            'ordersFinished' => $ordersFinished,
         ]);
-
     }
 
     #[Route('/commande/{id}', name: 'user_order_id', methods: ['GET'])]
@@ -195,7 +210,8 @@ class OrderController extends AbstractController
             }
             $entityManager->persist($order);
             $order->setNumber($order->getId() . Carbon::now()->format('Ymd'));
-            $order->setStatus(Order::NEW_ORDER);
+            $order->setStatus('NEW');
+            $order->setTypes('DRIVER');
 
             $entityManager->flush();
             $session->remove('declareCorpses');
