@@ -13,7 +13,7 @@ restart:
 	docker-compose restart
 
 composer:
-	docker-compose exec php composer install
+	rm -rf vendor/* && docker-compose exec php composer install
 
 bdd:
 	docker-compose exec php bin/console d:s:u --force
