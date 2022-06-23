@@ -1,6 +1,26 @@
 <section class="bg-white white:bg-gray-900 pb-11">
     <div class="container px-6 mx-auto">
 
+        {#{% if ordersNotFinished is not empty %}
+            {% for order in ordersNotFinished %}
+                <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
+                    <div class="flex flex-row">
+                        <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Preparing to ship on March, 2021</p>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
+                    </div>
+                    <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                        <p>Order placed</p>
+                        <p>Processing</p>
+                        <p>Shipped</p>
+                        <p>Delivered</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}#}
+
+
         <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
             <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
                         <span class="inline-block text-dark-500 white:text-dark-400">
