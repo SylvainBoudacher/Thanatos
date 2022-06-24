@@ -26,11 +26,11 @@ class StaticController extends AbstractController
 
             } else
             {
-                $orderTRy = $orderRepository->findAllOrderWhenTypeIsType('DRIVER');
+                $orderNotClose = $orderRepository->findAllOrderWithoutStatus('CLOSE');
 
                 return $this->render('front/index.html.twig', [
                     'controller_name' => 'StaticController',
-                    'orderTRy' => $orderTRy,
+                    'orderNotClose' => $orderNotClose,
                 ]);
 
 

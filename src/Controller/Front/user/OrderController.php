@@ -44,12 +44,12 @@ class OrderController extends AbstractController
          *  *DELIVERY_REACH
          *  *PROCESSING
          *  *SHIPPED
-         *  *DELIVERED
+         *  *CLOSE
         */
 
     /*
      * Order type:
-     *  *DRIVE
+     *  *DRIVER
      *  *FUNERAL
      */
 
@@ -57,14 +57,13 @@ class OrderController extends AbstractController
     #[Route('/commande', name: 'user_order', methods: ['GET'])]
     public function dashboard(OrderRepository $orderRepository): Response {
 
-        $ordersNotFinished = $orderRepository->findMyCurrentOrder($this->getUser()->getId()); // get current order
-        $ordersFinished = $orderRepository->findLastFinishedLimitByUser($this->getUser()->getId()); // get finished order
-        $orderTRy = $orderRepository->findAllOrderWhenTypeIsType('DRIVER');
+        $orderNotClose = $orderRepository->findAllOrderWithoutStatus('CLOSE');
+        $orderClose = $orderRepository->findAllOrderWhenStatus('CLOSE');
 
         return $this->render('front/user/myCommand/index.html.twig', [
-            'ordersNotFinished' => $ordersNotFinished,
-            'ordersFinished' => $ordersFinished,
-            'orderTRy' => $orderTRy,
+            'orderNotClose' => $orderNotClose,
+            'orderClose' => $orderClose,
+
         ]);
     }
 
