@@ -32,7 +32,6 @@ class OrderRepository extends ServiceEntityRepository
             ->setMaxResults( $limit );
 
         $query = $qb->getQuery();
-
         return $query->execute();
     }
 
@@ -49,21 +48,6 @@ class OrderRepository extends ServiceEntityRepository
 //            ->setMaxResults( 1 );
 
         $query = $qb->getQuery();
-
-        return $query->execute();
-    }
-
-    public function findAllNewOrder()
-    {
-        // automatically knows to select Products
-        // the "p" is an alias you'll use in the rest of the query
-        $qb = $this->createQueryBuilder('o')
-            ->where('o.status = :status')
-            ->setParameter('status',Order::NEW_ORDER)
-            ->orderBy('o.updatedAt', 'DESC');
-
-        $query = $qb->getQuery();
-
         return $query->execute();
     }
 
@@ -73,11 +57,52 @@ class OrderRepository extends ServiceEntityRepository
             ->where('o.types = :types')
             ->setParameter('types', $type)
             ->orderBy('o.updatedAt','DESC');
-
         $query = $qb->getQuery();
-
         return $query->execute();
+    }
 
+    public function findAllOrderWhenTypeWhitStatus($type , $status)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.types = :types')
+            ->where('o.status = :status')
+            ->setParameter('types', $type)
+            ->setParameter('status', $status)
+            ->orderBy('o.updatedAt','DESC');
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
+    public function findAllOrderWhenTypeWithoutStatus($type , $status)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.types = :types')
+            ->where('o.status != :status')
+            ->setParameter('types', $type)
+            ->setParameter('status', $status)
+            ->orderBy('o.updatedAt','DESC');
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
+    public function findAllOrderWhenType($type)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.types = :types')
+            ->setParameter('types', $type)
+            ->orderBy('o.updatedAt','DESC');
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
+    public function findAllOrderWhenStatus($status)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.status = :status')
+            ->setParameter('status', $status)
+            ->orderBy('o.updatedAt','DESC');
+        $query = $qb->getQuery();
+        return $query->execute();
     }
 
 
