@@ -13,15 +13,15 @@
             {#{{ encore_entry_link_tags('app') }}#}
             <script src="https://cdn.tailwindcss.com"></script>
             <link rel="stylesheet" href="https://unpkg.com/flowbite@1.3.4/dist/flowbite.min.css" />
+            <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
         {% endblock %}
 
         {% block javascripts %}{#{{ encore_entry_script_tags('app') }}#}
         {% endblock %}
     </head>
-    <body>
 
+    <body class="min-h-screen">
     {{ include('components/navBar/navBar.html.twig') }}
-
         {# ALERTS  #}
         {% for message in app.flashes('failed') %}
             <div class="flex w-full  mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -76,12 +76,13 @@
             </ul>
         {% endif %}
 
-
-
         {% block body %}
-
         {% endblock %}
     </body>
+    {% block footer %}
+        {{ include('/components/footer.html.twig') }}
+    {% endblock %}
 
-</html></body><footer></footer><script src="https://unpkg.com/flowbite@1.3.4/dist/flowbite.js"></script></html>
+    <script src="https://unpkg.com/flowbite@1.3.4/dist/flowbite.js"></script>
+</html>
 

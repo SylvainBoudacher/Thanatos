@@ -43,8 +43,12 @@ class BurialController extends AbstractController
     }
 
     #[Route('/modify/{id}', name: 'modify_burial')]
-    public function modify_burial(Request $request, EntityManagerInterface $em, int $id, BurialRepository $burialRep): Response
-    {
+    public function modify_burial(
+        Request $request,
+        EntityManagerInterface $em,
+        int $id,
+        BurialRepository $burialRep
+    ): Response {
         $burial = $burialRep->find($id);
         $form = $this->createForm(BurialType::class, $burial);
         $form->handleRequest($request);

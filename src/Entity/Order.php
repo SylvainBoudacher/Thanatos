@@ -80,6 +80,11 @@ class Order
      */
     private $status;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $types;
+
     public function __construct()
     {
         $this->driverOrders = new ArrayCollection();
@@ -281,6 +286,18 @@ class Order
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTypes(): ?string
+    {
+        return $this->types;
+    }
+
+    public function setTypes(?string $types): self
+    {
+        $this->types = $types;
 
         return $this;
     }

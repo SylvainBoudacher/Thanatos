@@ -6,11 +6,7 @@ use App\Entity\Address;
 use App\Entity\AddressOrder;
 use App\Entity\Burial;
 use App\Entity\Company;
-use App\Entity\CompanyExtra;
-use App\Entity\CompanyPainting;
 use App\Entity\Corpse;
-use App\Entity\Extra;
-use App\Entity\Material;
 use App\Entity\Model;
 use App\Entity\ModelExtra;
 use App\Entity\ModelMaterial;
@@ -20,11 +16,9 @@ use App\Entity\Theme;
 use App\Form\AddressType;
 use App\Form\CorpseType;
 use App\Form\NewPreparationType;
-use App\Repository\CompanyPaintingRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\CompanyThemeRepository;
 use App\Repository\CorpseRepository;
-use App\Repository\ModelExtraRepository;
 use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelRepository;
 use App\Repository\OrderRepository;
@@ -33,7 +27,6 @@ use App\Repository\PreparationRepository;
 use App\Repository\ThemeRepository;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,17 +38,34 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
 
+    /*
+         * Order status :
+         *  *NEW
+         *  *DELIVERY_REACH
+         *  *PROCESSING
+         *  *SHIPPED
+         *  *DELIVERED
+        */
+
+    /*
+     * Order type:
+     *  *DRIVE
+     *  *FUNERAL
+     */
+
+
     #[Route('/commande', name: 'user_order', methods: ['GET'])]
     public function dashboard(OrderRepository $orderRepository): Response {
 
         $ordersNotFinished = $orderRepository->findMyCurrentOrder($this->getUser()->getId()); // get current order
         $ordersFinished = $orderRepository->findLastFinishedLimitByUser($this->getUser()->getId()); // get finished order
+        $orderTRy = $orderRepository->findAllOrderWhenTypeIsType('DRIVER');
 
-        return $this->render('front/user/index.html.twig', [
+        return $this->render('front/user/myCommand/index.html.twig', [
             'ordersNotFinished' => $ordersNotFinished,
-            'ordersFinished' => $ordersFinished
+            'ordersFinished' => $ordersFinished,
+            'orderTRy' => $orderTRy,
         ]);
-
     }
 
     #[Route('/commande/{id}', name: 'user_order_id', methods: ['GET'])]
@@ -195,7 +205,8 @@ class OrderController extends AbstractController
             }
             $entityManager->persist($order);
             $order->setNumber($order->getId() . Carbon::now()->format('Ymd'));
-            $order->setStatus(Order::NEW_ORDER);
+            $order->setStatus('NEW');
+            $order->setTypes('DRIVER');
 
             $entityManager->flush();
             $session->remove('declareCorpses');

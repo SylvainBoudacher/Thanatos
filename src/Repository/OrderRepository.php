@@ -57,40 +57,30 @@ class OrderRepository extends ServiceEntityRepository
     {
         // automatically knows to select Products
         // the "p" is an alias you'll use in the rest of the query
-        return $this->createQueryBuilder('o')
+        $qb = $this->createQueryBuilder('o')
             ->where('o.status = :status')
             ->setParameter('status',Order::NEW_ORDER)
-            ->orderBy('o.updatedAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('o.updatedAt', 'DESC');
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
     }
 
-    // /**
-    //  * @return Order[] Returns an array of Order objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllOrderWhenTypeIsType($type)
     {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('o.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.types = :types')
+            ->setParameter('types', $type)
+            ->orderBy('o.updatedAt','DESC');
 
-    /*
-    public function findOneBySomeField($value): ?Order
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $query = $qb->getQuery();
+
+        return $query->execute();
+
     }
-    */
+
+
+
+
 }
