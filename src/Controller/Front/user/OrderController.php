@@ -59,10 +59,12 @@ class OrderController extends AbstractController
 
         $ordersNotFinished = $orderRepository->findMyCurrentOrder($this->getUser()->getId()); // get current order
         $ordersFinished = $orderRepository->findLastFinishedLimitByUser($this->getUser()->getId()); // get finished order
+        $orderTRy = $orderRepository->findAllOrderWhenTypeIsType('DRIVER');
 
         return $this->render('front/user/myCommand/index.html.twig', [
             'ordersNotFinished' => $ordersNotFinished,
             'ordersFinished' => $ordersFinished,
+            'orderTRy' => $orderTRy,
         ]);
     }
 

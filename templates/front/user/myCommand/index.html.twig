@@ -6,9 +6,8 @@
         <h2 class="mb-4 text-3xl lg:text-4xl font-extrabold text-gray-900 ">Vos commandes</h2>
     </div>
 
-    {% if ordersNotFinished is not empty %}
-        {% for order in ordersNotFinished %}
-            {% if order.status == constant('NEW_ORDER', order) %}
+{% if orderTRy is not empty %}
+    {% for order in orderTRy %}
 
         <div class="container px-6 mx-auto py-6 ">
 
@@ -83,7 +82,7 @@
                 </div>
             </section>
         </div>
-            {% endif %}
+
         {% endfor %}
     {% endif %}
 
