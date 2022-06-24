@@ -6,173 +6,113 @@
         <h2 class="mb-4 text-3xl lg:text-4xl font-extrabold text-gray-900 ">Vos commandes</h2>
     </div>
 
-{% if orderTRy is not empty %}
-    {% for order in orderTRy %}
+    {% if orderNotClose is not empty %}
+        {% for order in orderNotClose %}
+            <div class="container px-6 mx-auto py-6 ">
 
-        <div class="container px-6 mx-auto py-6 ">
+                <div class="flex flex-row  pb-4 justify-start ">
+                    <p class="font-bold text-3xl pb-3 text-gray-800">Commande #{{ order.number }}</p>
+                    <a href="#">
+                        <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir la facture</p>
+                    </a>
+                    <svg class="w-6  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0Z"></path><path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path></svg>
+                </div>
 
-            <div class="flex flex-row  pb-4 justify-start ">
-                <p class="font-bold text-3xl pb-3 text-gray-800">Commande #{{ order.number }}</p>
-                <a href="#">
-                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">View invoice</p>
-                </a>
-                <svg class="w-6  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0Z"></path><path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path></svg>
-            </div>
+                <section class="dark:bg-white rounded-xl shadow-md ">
+                    <div class="container px-9 py-10 mx-auto rounded-t-lg border border-slate-200">
+                        <div class="flex flex-row">
+                            <div class="md:flex md:items-center ">
+                                <div class="grid pr-4">
+                                    <div>
+                                        <div class="bg-gray-200 rounded-lg shadow-xs">
 
-            <section class="dark:bg-white rounded-xl shadow-md ">
-                <div class="container px-9 py-10 mx-auto rounded-t-lg border border-slate-200">
-                    <div class="flex flex-row">
-                        <div class="md:flex md:items-center ">
-                            <div class="grid pr-4">
-                                <div>
-                                    <div class="bg-gray-200 rounded-lg shadow-xs">
-                                        <img class="object-cover rounded-xl aspect-square max-w-[8rem]" src="{{ asset('images/cerceuillePNG.png') }}">
+                                            {% if order.types == 'DRIVER' %}
+                                                <img class="w-[10rem] object-fit rounded-xl aspect-square max-w-[10rem]" src="{{ asset('images/LivraisonLogo.svg') }}">
+                                            {% elseif order.types == 'FUNERAL' %}
+                                                <img class="w-[8rem] object-cover rounded-xl aspect-square max-w-[8rem]" src="{{ asset('images/commandeLogo.svg') }}">
+                                            {% endif %}
+
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class=" max-w-lg min-w-64 mx-4 h-full ">
-                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Cerceuil XXL en bois</h1>
+                                <div class=" max-w-lg min-w-64 mx-4 h-full ">
+                                    <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
+                                        {% if order.types == 'DRIVER' %}
+                                            Prise en charge / Livraison
+                                        {% elseif order.types == 'FUNERAL' %}
+                                            Commande d'une préparation
+                                        {% endif %}
 
-                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                    135.20€
-                                </p>
-                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                    Un ceceuil durable en bois d'hêtre BLABLABLABLAB BLABLABLABLABBLABLABLABLABBLABLABLABLAB BLABLABLABLAB
-                                </p>
-                            </div>
+                                    </h1>
 
-                            <div class=" w-64 mx-4 h-full ">
-                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps concerner</h1>
-                                {% for corpse in order.corpses|slice(0, 3) %}
                                     <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                        {{ corpse.firstname }} {{ corpse.lastname }}
+                                        135.20€
                                     </p>
-                                {% endfor %}
+                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                        {% if order.types == 'DRIVER' %}
+                                            Prise en charge d'un corps par l'un de notre chauffeur agréer par Thanatos.
+                                        {% elseif order.types == 'FUNERAL' %}
+                                            Commande d'une préparation chez 'order.company.name'
+                                        {% endif %}
+
+                                    </p>
+                                </div>
+
+                                <div class=" w-64 mx-4 h-full ">
+                                    <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps concerner</h1>
+                                    {% for corpse in order.corpses|slice(0, 3) %}
+                                        <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                            {{ corpse.firstname }} {{ corpse.lastname }}
+                                        </p>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="w-64 mx-4 h-full">
+                                    <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
+
+                                            Adresse de livraison
+                                    </h1>
+
+                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                        34 allée des Renards
+                                    </p>
+                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                        76450 Poitoux-Charente
+                                    </p>
+                                </div>
+
                             </div>
-
-                            <div class="w-64 mx-4 h-full">
-                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Adresse de livraison</h1>
-
-                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                    34 allée des Renards
-                                </p>
-                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                    76450 Poitoux-Charente
-                                </p>
-                            </div>
-
                         </div>
                     </div>
-                </div>
-                {#End of the card#}
-                <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
-                    <div class="flex flex-row">
-                        <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Preparing to ship on March, 2021</p>
+                    {#End of the card#}
+                    <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
+                        <div class="flex flex-row">
+                            <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Preparing to ship on March, 2021</p>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
+                        </div>
+                        <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                            <p>Order placed</p>
+                            <p>Processing</p>
+                            <p>Shipped</p>
+                            <p>Delivered</p>
+                        </div>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
-                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
-                    </div>
-                    <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
-                        <p>Order placed</p>
-                        <p>Processing</p>
-                        <p>Shipped</p>
-                        <p>Delivered</p>
-                    </div>
-                </div>
-            </section>
-        </div>
+                </section>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if orderClose is not empty %}
+        {% for order in orderClose %}
 
         {% endfor %}
     {% endif %}
 
+    {% if orderClose is empty and orderNotClose is empty%}
+        <p>pouet</p>
+    {% endif %}
 
-    <div class="example-wrapper p-10">
-        <div class="grid grid-cols-3 gap-4">
-            <div class="bg-orange-500 rounded p-3 text-white col-span-2">
-                <h1 class="text-xl">Ma commande actuelle</h1>
-
-                {% if ordersNotFinished is not empty %}
-                    {% for order in ordersNotFinished %}
-                    <ul class="list-disc">
-                        {% if order.status == constant('NEW_ORDER', order) %}
-                            <button type="button"
-                                    class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                Nouvelle commande
-                            </button>
-                        {% endif %}
-                        <li>Numéro de commande : {{ order.number }}</li>
-                        <li>{{ order.isValid ? "Validé par l'administration" : "En cours de validation par l'administration" }}</li>
-                    </ul>
-
-                    <h2 class="text-lg">Cadavre(s)</h2>
-                    <div class="grid grid-cols-3 gap-2">
-                        {% for corpse in order.corpses|slice(0, 3) %}
-                            <a href="#"
-                               class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ corpse.firstname }} {{ corpse.lastname }}</h5>
-
-                                <ul class="list-disc">
-                                    <li>Anniversaire - Mort : {{ corpse.birthdate | date('d/m/y') }}
-                                        - {{ corpse.dayOfDeath | date('d/m/y H:i:s') }} </li>
-                                    <li>Sexe de la personne : {{ corpse.sex }}</li>
-                                    <li>Taille - poids : {{ corpse.height }}m - {{ corpse.weight }}Kg</li>
-                                </ul>
-
-                            </a>
-                        {% endfor %}
-                        {% if order.corpses|length > 3 %}<i>et plus</i> {% endif %}
-                    </div>
-                    <h2 class="text-lg">Adresse</h2>
-                    <div class="grid grid-cols-3 gap-2">
-                        {% for addressOrder in order.addressOrders %}
-                            {% set address = addressOrder.address %}
-                            <a href="#"
-                               class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ address.number }} {{ address.street }} {{ address.city }} {{ address.postcode }}</h5>
-                            </a>
-                        {% endfor %}
-
-                    </div>
-
-                    <br>
-                    <a href="{{ path('user_order_id', {id: order.id} ) }}">
-                        <button type="button"
-                                class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900">
-                            Voir le détail
-                        </button>
-                    </a>
-
-                {% endfor %}
-                {% else %}
-                    <p>Aucune commande en cours</p>
-                {% endif %}
-
-            </div>
-            <div class="bg-yellow-800 rounded text-white p-3">
-                <h1 class="text-xl">Mes anciennes commandes</h1>
-
-                {% if ordersFinished is not empty %}
-
-                    {% for order in ordersFinished %}
-
-                        <a href="#"
-                           class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Commande
-                                n°{{ order.number }}</h5>
-                            <ul class="list-disc">
-
-                                <li>
-                                    {{ order.corpses|length }} Cadavre(s)
-                                </li>
-                            </ul>
-                        </a>
-                    {% endfor %}
-
-                {% else %}
-                    <p>Aucune ancienne commande</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
 {% endblock %}

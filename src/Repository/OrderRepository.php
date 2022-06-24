@@ -51,11 +51,13 @@ class OrderRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
-    public function findAllOrderWhenTypeIsType($type)
+    public function FindAllOrder()
     {
         $qb = $this->createQueryBuilder('o')
             ->where('o.types = :types')
+            ->where('o.status = :status')
             ->setParameter('types', $type)
+            ->setParameter('status', $status)
             ->orderBy('o.updatedAt','DESC');
         $query = $qb->getQuery();
         return $query->execute();
@@ -99,6 +101,16 @@ class OrderRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('o')
             ->where('o.status = :status')
+            ->setParameter('status', $status)
+            ->orderBy('o.updatedAt','DESC');
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
+    public function findAllOrderWithoutStatus($status)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.status != :status')
             ->setParameter('status', $status)
             ->orderBy('o.updatedAt','DESC');
         $query = $qb->getQuery();
