@@ -28,6 +28,7 @@ use App\Repository\ThemeRepository;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Stripe\Exception\ApiErrorException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -400,6 +401,36 @@ class OrderController extends AbstractController
             'material' => $modelMaterial->getMaterial(),
             'total' => $total
         ]);
+    }
+
+    /**
+     * @throws ApiErrorException
+     */
+    #[Route('/commander-un-service/payement', name: 'user_order_payment', methods: ['POST', 'GET'])]
+    public function orderServicePayement(Request $request): Response
+    {
+
+        \Stripe\Stripe::setApiKey('sk_test_51LEFJKGgCa17kbBHCAKgMmy1rc3ejVSHavpJzqAEBWfcSnnOOgQFotT7EaeAK7J3DxEnVcTf4EiHvQW1GtDTkCwc00scCYxSKL');
+
+        header('Content-Type: application/json');
+
+        $YOUR_DOMAIN = 'http://localhost/commander-un-service/payement';
+
+        $checkout_session = \Stripe\Checkout\Session::create([
+            'line_items' => [[
+                # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
+                'price' => 'price_1LEG2AGgCa17kbBHKGCT7fK6',
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => $YOUR_DOMAIN . '/success.html',
+            'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
+        ]);
+
+        header("HTTP/1.1 303 See Other");
+        header("Location: " . $checkout_session->url);
+
+        return $this->render('front/user/orderService/orderPayment.html.twig');
     }
 
     #[Route('/commander-un-service/confirmation', name: 'user_order_success', methods: ['POST', 'GET'])]
