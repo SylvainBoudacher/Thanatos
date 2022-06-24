@@ -1,28 +1,54 @@
 <section class="bg-white white:bg-gray-900 pb-11">
     <div class="container px-6 mx-auto">
 
-            {% if orderTRy is not empty %}
-                {% for order in orderTRy %}
+            {% if orderNotClose is not empty %}
+                {% for order in orderNotClose %}
                     <div class="py-2">
                         <div class="container px-9 py-3 mx-auto rounded-b-lg border border-slate-200 rounded-lg shadow-sm">
-                            <div class="flex flex-row">
+                            <div class="flex flex-row justify-between">
                                 <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Commande #{{ order.number}}</p>
+                                <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">
+                                    {% if order.types == 'DRIVER' %}
+                                        Prise en charge / Livraison
+                                    {% elseif order.types == 'FUNERAL' %}
+                                        Commande d'une préparation
+                                    {% endif %}
+                                </p>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
                                 <div class="bg-blue-600 h-2.5 rounded-full"
-                                {% if order.status == 'NEW' %} style="width: 7% ">{% endif %}
-                                {% if order.status == 'DELIVERY_REACH' %} style="width: 31% ">{% endif %}
-                                {% if order.status == 'PROCESSING' %} style="width: 53% ">{% endif %}
-                                {% if order.status == 'SHIPPED' %} style="width: 78% ">{% endif %}
-                                {% if order.status == 'DELIVERED' %} style="width: 100% ">{% endif %}
+                                    {% if order.types == 'DRIVER' %}
+                                        {% if order.status == 'NEW' %} style="width: 5% ">{% endif %}
+                                        {% if order.status == 'DELIVERY_REACH' %} style="width: 31% ">{% endif %}
+                                        {% if order.status == 'PROCESSING' %} style="width: 53% ">{% endif %}
+                                        {% if order.status == 'SHIPPED' %} style="width: 78% ">{% endif %}
+                                        {% if order.status == 'DELIVERED' %} style="width: 100% ">{% endif %}
+                                    {% endif %}
+
+                                    {% if order.types == 'FUNERAL' %}
+                                        {% if order.status == 'NEW' %} style="width: 5% ">{% endif %}
+                                        {% if order.status == 'DELIVERY_REACH' %} style="width: 33% ">{% endif %}
+                                        {% if order.status == 'PROCESSING' %} style="width: 55% ">{% endif %}
+                                        {% if order.status == 'SHIPPED' %} style="width: 74% ">{% endif %}
+                                        {% if order.status == 'DELIVERED' %} style="width: 100% ">{% endif %}
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
-                                <p>Recherche de livreur</p>
-                                <p>Conducteur arriver</p>
-                                <p>Traitement des données</p>
-                                <p>Corps en acheminement</p>
-                                <p>Arriver</p>
+                                {% if order.types == 'DRIVER' %}
+                                    <p class="text-sm">Recherche de livreur</p>
+                                    <p class="text-sm">Conducteur arriver</p>
+                                    <p class="text-sm">Validation de la commande</p>
+                                    <p class="text-sm">Corps en acheminement</p>
+                                    <p class="text-sm">Commande arriver</p>
+                                {% elseif order.types == 'FUNERAL' %}
+                                    <p class="text-sm">Acheminement du corps</p>
+                                    <p class="text-sm">Cerceuil en cours de préparation</p>
+                                    <p class="text-sm">Livraison</p>
+                                    <p class="text-sm">commande arrive</p>
+                                    <p class="text-sm">Commande arriver</p>
+                                {% endif %}
+
                             </div>
                         </div>
                     </div>
