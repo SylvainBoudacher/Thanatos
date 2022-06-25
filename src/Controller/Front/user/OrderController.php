@@ -352,57 +352,6 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/commander-un-service/recapitulatif', name: 'user_order_recap', methods: ['POST', 'GET'])]
-    public function orderServiceRecap(Request $request): Response
-    {
-        $session = $request->getSession();
-        $cartSession = $session->get('cartSession');
-        $em = $this->getDoctrine()->getManager();
-        $total = 0;
-
-        $corpse = $em->getRepository(Corpse::class)->find($cartSession['corpse']);
-        $theme = $em->getRepository(Theme::class)->find($cartSession['theme']);
-        $company = $em->getRepository(Company::class)->find($cartSession['company']);
-        $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
-        $model = $em->getRepository(Model::class)->find($cartSession['model']);
-        $modelExtra = $cartSession['modelExtra'] ? $em->getRepository(ModelExtra::class)->find($cartSession['modelExtra']) : null;
-        $modelMaterial = $em->getRepository(ModelMaterial::class)->find($cartSession['modelMaterial']);
-
-        /* ADDITION TOTAL */
-        $total += $modelExtra ? $modelExtra->getExtra()->getPrice() : 0;
-        $total += $theme->getPrice();
-        $total += $model->getPrice();
-        $total += $modelMaterial->getMaterial()->getPrice();
-
-        if($request->query->get('confirm'))
-        {
-            $preparation = new Preparation();
-            $preparation->setPrice($total);
-            $preparation->setCorpse($corpse);
-            $preparation->setTheme($theme);
-            $preparation->setModelMaterial($modelMaterial);
-            $corpse->setPreparation($preparation);
-
-            $em->persist($preparation);
-            $em->flush();
-
-            $session->remove('cartSession');
-
-            return $this->redirectToRoute('user_order_success');
-        }
-
-        return $this->render('front/user/orderService/recap.html.twig', [
-            'corpse' => $corpse,
-            'theme' => $theme,
-            'company' => $company,
-            'burial' => $burial,
-            'model' => $model,
-            'extra' => $modelExtra ? $modelExtra->getExtra() : [],
-            'material' => $modelMaterial->getMaterial(),
-            'total' => $total
-        ]);
-    }
-
     /**
      * @throws ApiErrorException
      */
@@ -411,32 +360,34 @@ class OrderController extends AbstractController
     {
 
         \Stripe\Stripe::setApiKey('sk_test_51LEFJKGgCa17kbBHCAKgMmy1rc3ejVSHavpJzqAEBWfcSnnOOgQFotT7EaeAK7J3DxEnVcTf4EiHvQW1GtDTkCwc00scCYxSKL');
-
-        header('Content-Type: application/json');
-
-        $YOUR_DOMAIN = 'http://localhost/commander-un-service/payement';
-
         $checkout_session = \Stripe\Checkout\Session::create([
             'line_items' => [[
                 # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                'price' => 'price_1LEG2AGgCa17kbBHKGCT7fK6',
+                'price' => 'price_1LEG1xGgCa17kbBHj4M43fIX',
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => $YOUR_DOMAIN . '/success.html',
-            'cancel_url' => $YOUR_DOMAIN . '/cancel.html',
+            'success_url' => 'http://localhost' . $this->generateUrl('user_order_success'),
+            'cancel_url' => 'http://localhost' . $this->generateUrl('user_order_cancel'),
         ]);
 
-        header("HTTP/1.1 303 See Other");
         header("Location: " . $checkout_session->url);
 
-        return $this->render('front/user/orderService/orderPayment.html.twig');
+        return $this->render('front/user/payment/payment.html.twig', [
+            'checkout_session' => $checkout_session,
+        ]);
+
     }
 
-    #[Route('/commander-un-service/confirmation', name: 'user_order_success', methods: ['POST', 'GET'])]
+    #[Route('/commander-un-service/payement/confirmation', name: 'user_order_success', methods: ['POST', 'GET'])]
     public function orderServiceSuccess(Request $request): Response
     {
-        
-        return $this->render('front/user/orderService/successOrder.html.twig');
+        return $this->render('front/user/payment/success.html.twig');
+    }
+
+    #[Route('/commander-un-service/payement/annulation', name: 'user_order_cancel', methods: ['POST', 'GET'])]
+    public function orderServiceCancel(Request $request): Response
+    {
+        return $this->render('front/user/payment/cancel.html.twig');
     }
 }
