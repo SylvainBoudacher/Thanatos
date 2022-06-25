@@ -8,7 +8,6 @@
             {% endblock %}
         </title>
 
-
         {% block stylesheets %}
             {#{{ encore_entry_link_tags('app') }}#}
             <script src="https://cdn.tailwindcss.com"></script>
@@ -21,7 +20,7 @@
     </head>
 
     <body class="min-h-screen">
-    {{ include('components/navBar/navBar.html.twig') }}
+    {{ include('components/navBar/navBarAdmi.html.twig') }}
         {# ALERTS  #}
         {% for message in app.flashes('failed') %}
             <div class="flex w-full  mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">

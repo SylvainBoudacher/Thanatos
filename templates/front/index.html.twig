@@ -1,8 +1,6 @@
 {% extends 'base_front.html.twig' %}
 
 {% block body %}
-
-
     {% if is_granted('ROLE_COMPANY') %}
         {{ include('front/user/index/companyIndex.html.twig') }}
     {% elseif is_granted('ROLE_DRIVER') %}
