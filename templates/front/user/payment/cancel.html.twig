@@ -1,0 +1,23 @@
+{% extends 'base_front.html.twig' %}
+
+    {% block body %}
+        <section class=" m-32 lg:flex lg:justify-center">
+            <div class="bg-white dark:bg-gray-800 lg:mx-8 lg:flex lg:max-w-4xl lg:shadow-lg lg:rounded-lg">
+                <div class="lg:w-1/2">
+                    <img class=" bg-cover lg:rounded-lg lg:h-[20rem]" src="{{ asset('images/orderCancelimg.svg') }}" </img>
+                </div>
+
+
+                <div class="max-w-xl px-6 py-12 lg:max-w-5xl lg:w-1/2">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white md:text-3xl">Votre achat est <span class="text-blue-600 dark:text-red-400">Annulé</span></h2>
+                    <p class="mt-4 text-gray-600 dark:text-gray-400">
+                        Oublie d'un article ? Ou d'une option top génial à mettre sur le corps de mami ? Ne vous inquiétez pas, vous pouvez tout de même continuer votre commande.
+                    </p>
+                    <div class="mt-20">
+                        <a href="{{ path('homepage') }}" class="px-5 py-2 font-semibold text-gray-100 transition-colors duration-200 transform bg-gray-900 rounded-md hover:bg-gray-700">Retourner vers le menu</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
