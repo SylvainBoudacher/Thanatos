@@ -359,7 +359,7 @@ class OrderController extends AbstractController
     public function orderServicePayement(Request $request): Response
     {
 
-        \Stripe\Stripe::setApiKey('sk_test_51LEFJKGgCa17kbBHCAKgMmy1rc3ejVSHavpJzqAEBWfcSnnOOgQFotT7EaeAK7J3DxEnVcTf4EiHvQW1GtDTkCwc00scCYxSKL');
+        \Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
         $checkout_session = \Stripe\Checkout\Session::create([
             'line_items' => [[
                 # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
