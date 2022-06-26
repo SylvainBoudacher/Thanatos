@@ -17,10 +17,4 @@ class AdminController extends AbstractController
         return $this->render('back/admin/index.html.twig',);
     }
 
-    #[Route('/users/list', name: 'admin_users_list')]
-    public function users(): Response
-    {
-        return $this->render('back/admin/usersList.html.twig',);
-    }
-
 }

@@ -1,0 +1,90 @@
+{% extends 'base_back.html.twig' %}
+
+{% block body %}
+
+    <div class="container flex flex-row min-h-100">
+
+        {{ include('/components/sideBarAdmin.html.twig') }}
+
+        {% if users is empty %}
+
+        {% else %}
+        <div class="relative overflow-x-auto  sm:rounded-lg ml-32 pt-12">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            #ID
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            @Email
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Prénom
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Date de naissance
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Role
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Vérifier?
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% for user in users %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                        {{ user.id }}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{ user.email }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ user.lastname }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ user.firstname }}
+                    </td>
+                    <td class="px-6 py-4">
+                        Datime to string
+                    </td>
+                    <td class="px-6 py-4">
+                        Pas encore fetchable
+                    </td>
+                    <td class="px-6 py-4">
+                        {% if user.isVerified %}
+                            <span class="text-green-500">
+                                Vérifié
+                            </span>
+                        {% else %}
+                            <span class="text-red-500">
+                                Non vérifié
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <td class="px-6 py-4 text-right">
+                        <a href="#" class="font-medium text-blue-300  hover:underline">Editer</a>
+                        <a href="#" class="font-medium text-red-300  hover:underline">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+
+
+
+{% endblock %}
+
