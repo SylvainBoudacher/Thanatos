@@ -2,13 +2,21 @@
 
 {% block body %}
 
-    <div class="h-screen px-10 py-4 flex flex-col justify-between">
+<div class="container flex flex-row min-h-100">
 
-        <div>
+    {{ include('/components/sideBarAdmin.html.twig') }}
+
+
+
+    <div class="flex flex-col w-1/2 ml-32 pt-12">
 
             <h1 class="text-3xl text-slate-800 mb-4 font-bold ">Gestion des thèmes Thanatos</h1>
 
-            <a href="{{ path("create_theme") }}" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Ajouter</a>
+            <a href="{{ path("create_theme") }}">
+                <button  type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    Ajouter un thème
+                </button>
+            </a>
 
             <div class="flex flex-col mt-6">
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
@@ -60,19 +68,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
-        <div class="flex flex-row-reverse">
-            <a href="{{ path("admin_dashboard") }}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
-        </div>
-
-
-
     </div>
-
-
-
 
 
 {% endblock %}

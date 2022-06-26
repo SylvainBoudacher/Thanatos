@@ -4,13 +4,19 @@
 
     <div class="container flex flex-row min-h-100">
 
+
+
         {{ include('/components/sideBarAdmin.html.twig') }}
+
+        <div class="flex flex-col mx-auto h-full mt-12">
+
+            <h1 class="text-3xl font-semibold text-gray-700  pb-8">Liste des l'utilisateurs</h1>
 
         {% if users is empty %}
 
         {% else %}
-        <div class="relative overflow-x-auto  sm:rounded-lg ml-32 pt-12">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <div class="  overflow-x-auto sm:rounded-lg ">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
@@ -93,7 +99,7 @@
         </div>
         {% endif %}
     </div>
-
+    </div>
 
 
 {% endblock %}
