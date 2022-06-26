@@ -58,7 +58,17 @@
                         Datime to string
                     </td>
                     <td class="px-6 py-4">
-                        Pas encore fetchable
+                        {% for i in 0..0 %}
+                            {% if user.roles[i] == 'ROLE_ADMIN' %}
+                                Admin
+                            {% elseif user.roles[i] == 'ROLE_DRIVER' %}
+                                Conducteur
+                            {% elseif user.roles[i] == 'ROLE_COMPANY' %}
+                                Entreprise
+                            {% endif %}
+                        {% endfor %}
+
+
                     </td>
                     <td class="px-6 py-4">
                         {% if user.isVerified %}
@@ -73,8 +83,8 @@
                     </td>
 
                     <td class="px-6 py-4 text-right">
-                        <a href="#" class="font-medium text-blue-300  hover:underline">Editer</a>
-                        <a href="#" class="font-medium text-red-300  hover:underline">Supprimer</a>
+                        <a href="{{ path('admin_user_edit' , {"id" : user.id}) }}" class="font-medium text-blue-300  hover:underline">Editer</a>
+                        <a href="{{ path('admin_user_delete' , {"id" : user.id}) }}" class="font-medium text-red-300  hover:underline">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}

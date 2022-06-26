@@ -24,6 +24,29 @@ class AdminUserController extends AbstractController
         ]);
     }
 
+    #[Route('/users/edit/{id}', name: 'admin_user_edit')]
+    public function edit(UserRepository $userRepository, $id): Response
+    {
+        $user = $userRepository->find($id);
+        $userRole = $user->getRoles();
+
+
+        return $this->render('back/admin/users/edit.html.twig', [
+            'user' => $user,
+            'userRole' => $userRole,
+        ]);
+    }
+
+    #[Route('/users/delete/{id}', name: 'admin_user_delete')]
+    public function delete(UserRepository $userRepository, $id): Response
+    {
+        $user = $userRepository->find($id);
+
+        return $this->render('back/admin/users/delete.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
 
 
 }
