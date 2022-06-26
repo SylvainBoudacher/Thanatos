@@ -19,6 +19,19 @@ class CompanyRepository extends ServiceEntityRepository
         parent::__construct($registry, Company::class);
     }
 
+    public function findByType(string $type): array
+    {
+        // automatically knows to select Products
+        // the "p" is an alias you'll use in the rest of the query
+        $qb = $this->createQueryBuilder('c')
+            ->where('c.type = :type')
+            ->setParameter('type', $type)
+            ->orderBy('c.id', 'ASC');
+
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
     // /**
     //  * @return Company[] Returns an array of Company objects
     //  */
