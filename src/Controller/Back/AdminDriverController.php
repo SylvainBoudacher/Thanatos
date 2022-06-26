@@ -9,18 +9,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted("ROLE_ADMIN")]
 #[Route("/admin")]
-class AdminController extends AbstractController
-{
-    #[Route('/', name: 'admin_dashboard')]
-    public function index(): Response
-    {
-        return $this->render('back/admin/index.html.twig',);
-    }
 
+class AdminDriverController extends AbstractController
+{
     #[Route('/users/list', name: 'admin_users_list')]
     public function users(): Response
     {
-        return $this->render('back/admin/usersList.html.twig',);
+        return $this->render('back/admin/driver/list.html.twig',);
     }
 
 }
