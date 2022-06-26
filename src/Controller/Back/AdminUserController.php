@@ -2,7 +2,9 @@
 
 namespace App\Controller\Back;
 
+use App\Form\UserAccountUpdateFormType;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,16 +26,27 @@ class AdminUserController extends AbstractController
         ]);
     }
 
-    #[Route('/users/edit/{id}', name: 'admin_user_edit')]
-    public function edit(UserRepository $userRepository, $id): Response
+    #[Route('/users/edit/{id}', name: 'admin_user_edit', methods: ['POST', 'GET'])]
+    public function edit(Request $request , UserRepository $userRepository , int $id): Response
     {
         $user = $userRepository->find($id);
-        $userRole = $user->getRoles();
+        $form = $this->createForm(UserAccountUpdateFormType::class, $user);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->get('session')->migrate();
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash(
+                'success',
+                'Vos données ont bien été changer'
+            );
+
+            return $this->redirectToRoute('admin_user_edit', ['id' => $id]);
+        }
 
         return $this->render('back/admin/users/edit.html.twig', [
+            'AdminUserUpdateForm' => $form->createView(),
             'user' => $user,
-            'userRole' => $userRole,
         ]);
     }
 
