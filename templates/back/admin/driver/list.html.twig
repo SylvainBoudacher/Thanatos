@@ -8,8 +8,63 @@
 
         <div class="flex flex-col mx-auto h-full mt-12 ml-32">
 
-            <h1 class="text-3xl text-slate-800 mb-4 font-bold pb-5">Liste des Drivers</h1>
+            <h1 class="text-3xl text-slate-800 mb-4 font-bold pb-5">Liste des conducteurs</h1>
 
+            {% if companies is empty %}
+
+            {% else %}
+                <div class="  overflow-x-auto sm:rounded-lg ">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                #ID
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                @Email
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Nom
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Prénom
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Date de naissance
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Role
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Vérifier?
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Actions
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for company in companies %}
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                    {{ company.id }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ company.name }}
+                                </td>
+                                <td class="px-6 py-4">
+
+
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ company.siret }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
         </div>
     </div>
 

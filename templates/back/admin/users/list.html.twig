@@ -1,17 +1,11 @@
 {% extends 'base_back.html.twig' %}
 
 {% block body %}
-
     <div class="container flex flex-row min-h-100">
-
         {{ include('/components/sideBarAdmin.html.twig') }}
-
         <div class="flex flex-col mx-auto h-full mt-12 ml-32">
-
             <h1 class="text-3xl text-slate-800 mb-4 font-bold pb-5">Liste des l'utilisateurs</h1>
-
             {% if users is empty %}
-
             {% else %}
                 <div class="  overflow-x-auto sm:rounded-lg ">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -95,7 +89,5 @@
             {% endif %}
         </div>
     </div>
-
-
 {% endblock %}
 

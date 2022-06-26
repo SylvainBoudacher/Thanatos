@@ -5,6 +5,7 @@ namespace App\Controller\Back;
 use App\Repository\CompanyRepository;
 use App\Repository\DriverOrderRepository;
 use App\Repository\UserRepository;
+use phpDocumentor\Reflection\Type;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +19,10 @@ class AdminDriverController extends AbstractController
     #[Route('/users/driver', name: 'admin_driver_list')]
     public function driversList(CompanyRepository $companyRepository , UserRepository $userRepository): Response
     {
+        $companies = $companyRepository->findByType('DRIVER');
 
         return $this->render('back/admin/driver/list.html.twig', [
+            'companies' => $companies,
 
         ]);
     }

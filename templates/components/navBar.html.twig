@@ -1,5 +1,4 @@
 {% if app.user %}
-
         <nav class="bg-white shadow white:bg-gray-800">
             <div class="container px-6 py-4 mx-auto">
                 <div class="md:flex md:items-center md:justify-between">
@@ -18,8 +17,6 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
 
                     {% if is_granted('ROLE_SUPER_ADMIN') -%}
 
@@ -78,9 +75,7 @@
                                     <img class="object-cover w-8 h-8 rounded-full" src="{{ vich_uploader_asset(app.user.media) }}">
                                 {% else %}
                                     <img class="object-cover w-8 h-8 rounded-full bg-gray-400" src="{{ asset("images/default.svg") }}">
-
                                 {% endif %}
-
 
                             </button>
                             <!-- Dropdown menu -->
@@ -129,7 +124,6 @@
                                 {% else %}
                                     <img class="object-cover w-8 h-8 rounded-full bg-gray-400" src="{{ asset("images/default.svg") }}">
                                 {% endif %}
-
 
                             </button>
                             <!-- Dropdown menu -->
