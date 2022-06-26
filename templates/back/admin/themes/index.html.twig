@@ -6,9 +6,7 @@
 
     {{ include('/components/sideBarAdmin.html.twig') }}
 
-
-
-    <div class="flex flex-col w-1/2 ml-32 pt-12">
+    <div class="flex flex-col  ml-32 pt-12">
 
             <h1 class="text-3xl text-slate-800 mb-4 font-bold ">Gestion des thèmes Thanatos</h1>
 
@@ -28,7 +26,7 @@
                                     <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
                                         Nom
                                     </th>
-                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                    <th scope="col" class=" py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
                                         Description
                                     </th>
                                     <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
@@ -47,7 +45,7 @@
                                     {% for theme in themes %}
                                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                             <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ theme.name }}</td>
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ theme.description }}</td>
+                                            <td class="max-w-[30rem] truncate py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ theme.description }}</td>
                                             <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ theme.type }}</td>
                                             <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ theme.price }} €</td>
                                             <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
