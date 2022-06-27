@@ -14,7 +14,7 @@ class AddressOrder
 
     use TimestampableTrait;
 
-    public const ADDRESS_DECLARATION_CORPSES = "ADDRESS_DECLARATION_CORPSES";
+    public const DECLARATION_CORPSES = "ADDRESS_DECLARATION_CORPSES";
 
     /**
      * @ORM\Id

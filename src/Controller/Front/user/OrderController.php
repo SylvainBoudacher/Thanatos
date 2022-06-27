@@ -2,6 +2,8 @@
 
 namespace App\Controller\Front\user;
 
+use App\Repository\AddressOrderRepository;
+use App\Utils\Functions;
 use App\Entity\Address;
 use App\Entity\AddressOrder;
 use App\Entity\Burial;
@@ -64,7 +66,6 @@ class OrderController extends AbstractController
         return $this->render('front/user/myCommand/index.html.twig', [
             'orderNotClose' => $orderNotClose,
             'orderClose' => $orderClose,
-
         ]);
     }
 
@@ -93,41 +94,27 @@ class OrderController extends AbstractController
     }
 
     /* DECLARE CORPSE */
-
     #[Route('/declarer-corps', name: 'declare_corpse', methods: ['POST', 'GET'])]
-    public function declareCorpses(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep): Response
+    public function declareCorpses(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, CorpseRepository $corpseRep, Functions $functions): Response
     {
-        $entityManager = $doctrine->getManager();
+        $em = $doctrine->getManager();
 
-        $corpse = new Corpse();
-        $order = $orderRep->find($request->query->get('orderId') ?? 0) ?? null;
+        $corpseId = $request->request->get('corpseId');
+        $corpse = $corpseRep->find($corpseId ?? -1) ?? new Corpse();
+        $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
 
-        if ($order) {
-            if (!$request->request->get('finishExistantCorpse')) {
-                foreach ($order->getCorpses() as $corp) {
-                    dump($corp);
-                }
-                $corpse = $order->getCorpses()[$request->request->get('nextCorpse')] ?? $order->getCorpses()[0];
-            }
-        }
+        $nextCorpse = false;
 
-        dump(!$request->request->get('finishExistantCorpse'));
         // create form
         $form = $this->createForm(CorpseType::class, $corpse);
         $form->handleRequest($request);
-//        dump($corpse);
-//        dd('end');
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             // check data
             $corpse = $form->getData();
 
-
             if ($corpse->checkDateConsistency() && $corpse->isBirthdateValid()) {
-
-//                dump($order);
-//                dump($corpse);
 
                 if (!$order) {
 
@@ -135,72 +122,99 @@ class OrderController extends AbstractController
                     $order = new Order();
                     $order->setIsValid(false);
                     $order->setPossessor($this->getUser());
+                    //TODO Check better number random string
                     $order->setNumber(Carbon::now()->getPreciseTimestamp(-2));
-                    $order->setStatus(Order::DRAFT_ORDER);
+                    $order->setStatus(Order::DRAFT);
+
+                    $corpse->setPosition(0);
+                } else {
+
+                    // get corpses
+                    $corpses = $corpseRep->findBy(
+                        ['command' => $order->getId()],
+                        ['position' => 'ASC']
+                    );
+
+                    if (!$corpseId) $corpse->setPosition($corpses[count($corpses) - 1]->getPosition() + 1);
                 }
 
-                // set corpse
                 $corpse->setCommand($order);
 
                 // persist
-                $entityManager->persist($corpse);
-                $entityManager->persist($order);
-                $entityManager->flush();
+                $em->persist($corpse);
+                $em->persist($order);
+                $em->flush();
 
-                if ($request->request->get('finishDeclaration') !== null) {
-
-                    return $this->redirectToRoute('declare_corpse_address', ['order' => $order]);
-
-                } else if ($request->request->get('draftDeclaration')) {
+                if ($request->request->get('draftDeclaration')) {
 
                     $this->addFlash('success', 'Déclaration de corps bien enregistrée en tant que brouillon');
                     return $this->redirectToRoute('user_order');
 
                 } else {
 
-                    $corpse = new Corpse();
+                    $corpses = $corpseRep->findBy(
+                        ['command' => $order->getId()],
+                        ['position' => 'ASC']
+                    );
+
+                    $indexCurrentCorpse = array_filter($corpses, fn($otherCorpse) => $otherCorpse->getPosition() === $corpse->getPosition()) ?? null;
+                    $indexNextCorpse = is_array($indexCurrentCorpse) && !empty($indexCurrentCorpse) ? array_key_first($indexCurrentCorpse) + 1 : -1;
+
+                    if ($indexNextCorpse) {
+                        $corpse = $corpses[$indexNextCorpse] ?? new Corpse();
+                        $nextCorpse = isset($corpses[$indexNextCorpse++]);
+                    }
+
                     $form = $this->createForm(CorpseType::class, $corpse);
                     $this->addFlash('success', 'Corps bien ajouté');
                 }
             } else {
                 $this->addFlash('failed', 'Les dates ne sont pas coherent');
             }
+        } else {
+            if ($order) {
+                $corpses = $corpseRep->findBy(
+                    ['command' => $order->getId()],
+                    ['position' => 'ASC']
+                );
+
+                $corpse = $corpses[0];
+                $form = $this->createForm(CorpseType::class, $corpse);
+                $nextCorpse = (bool)$corpses[1];
+            }
         }
 
         return $this->renderForm('front/user/declareCorpse/index.html.twig', [
             'form' => $form,
             'order' => $order,
-            'corpse' => $corpse
+            'corpse' => $corpse,
+            'nextCorpse' => $nextCorpse
         ]);
     }
 
     #[Route('/declare-corps-adresse', name: 'declare_corpse_address', methods: ['POST', 'GET'])]
-    public function declareCorpsesAddress(Request $request, Order $order, ManagerRegistry $doctrine): Response
+    public function declareCorpsesAddress(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, AddressOrderRepository $addressOrderRep): Response
     {
+        $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
+        $address = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT) ?? new Address();
 
-        $addressOrder = array_filter(
-            $order->getAddressOrders(),
-            function ($addressOrder) {
-                return $addressOrder->getStatus() === AddressOrder::ADDRESS_DECLARATION_CORPSES;
-            }
-        );
-
-        $address = $addressOrder ? $addressOrder : new Address();
-
+        /* dump($order);
+         dd($order->getAddressOrders()->toArray());*/
         $form = $this->createForm(AddressType::class, $address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $entityManager = $doctrine->getManager();
+            $em = $doctrine->getManager();
 
             // insert address
             $addressOrder = new AddressOrder();
             $addressOrder->setAddress($address);
             $addressOrder->setCommand($order);
 
-            $entityManager->persist($addressOrder);
-            $entityManager->persist($address);
+            $em->persist($addressOrder);
+            $em->persist($address);
+            $em->flush();
 
             return $this->redirectToRoute('declare_corpse_confirmation');
 
@@ -212,70 +226,29 @@ class OrderController extends AbstractController
     }
 
     #[Route('/declare-corps-confirmation', name: 'declare_corpse_confirmation', methods: ['POST', 'GET'])]
-    public function declareCorpsesConfirmation(Request $request, ManagerRegistry $doctrine): Response
+    public function declareCorpsesConfirmation(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep): Response
     {
-        $session = $request->getSession();
-        $declareCorpses = $session->get('declareCorpses');
+        $order = $orderRep->findOneBy(['status' => Order::DRAFT]);
 
-        if ($declareCorpses === null || !isset($declareCorpses['corpses'])) {
-            $session->remove('declareCorpses');
-            return $this->redirectToRoute('homepage');
-        }
-        $corpses = $declareCorpses['corpses'];
-        $address = $declareCorpses['address'];
+        if ($order) {
 
-        // declare corpses officially
-        if ($request->query->get('confirmation') === 'true') {
+            $em = $doctrine->getManager();
 
-            $entityManager = $doctrine->getManager();
-
-            // create order
-            $order = new Order();
-            $order->setIsValid(false);
-            $order->setPossessor($this->getUser());
-
-            // insert corpses
-            foreach ($corpses as $corpse) {
-                if ($corpse instanceof Corpse) {
-                    $corpse->setCommand($order);
-                    $entityManager->persist($corpse);
-                }
-            }
-
-            // insert addresses
-            if ($address instanceof Address) {
-
-                // insert address-order
-                $addressOrder = new AddressOrder();
-                $addressOrder->setAddress($address);
-                $addressOrder->setCommand($order);
-
-                $entityManager->persist($addressOrder);
-                $entityManager->persist($address);
+            if ($this->request->get('confirm') || $this->request->get('cancel')) {
+                $this->request->get('confirm') ?? $order->setStatus(Order::DRIVER_NEW);
+                $this->request->get('cancel') ?? $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
 
             }
-            $entityManager->persist($order);
-            $order->setNumber($order->getId() . Carbon::now()->format('Ymd'));
-            $order->setStatus('NEW');
-            $order->setTypes('DRIVER');
+            dd('hello');
 
-            $entityManager->flush();
-            $session->remove('declareCorpses');
-
-            return $this->render('front/user/declareCorpse/success.html.twig');
+            return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
+                'order' => $order,
+                'address' => $order->getAddressOrders()[0]->get
+            ]);
         }
 
-        // cancel declare corpses
-        if ($request->query->get('confirmation') === 'false') {
-            $session->remove('declareCorpses');
+        $this->redirectToRoute('user_order');
 
-            $this->redirectToRoute('user_order');
-        }
-
-        return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
-            'corpses' => $corpses,
-            'address' => $address
-        ]);
     }
 
     /* ORDER SERVICE */

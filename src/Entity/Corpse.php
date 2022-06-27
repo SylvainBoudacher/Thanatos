@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Carbon\Carbon;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CorpseRepository;
 use App\Entity\Traits\TimestampableTrait;
@@ -117,6 +118,11 @@ class  Corpse
      */
     private $preparation;
 
+    /**
+     * @ORM\Column(type="integer", options={"default": "0"})
+     */
+    private $position;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -146,24 +152,24 @@ class  Corpse
         return $this;
     }
 
-    public function getBirthdate(): ?\DateTimeInterface
+    public function getBirthdate(): ?DateTimeInterface
     {
         return $this->birthdate;
     }
 
-    public function setBirthdate(?\DateTimeInterface $birthdate): self
+    public function setBirthdate(?DateTimeInterface $birthdate): self
     {
         $this->birthdate = $birthdate;
 
         return $this;
     }
 
-    public function getDayOfDeath(): ?\DateTimeInterface
+    public function getDayOfDeath(): ?DateTimeInterface
     {
         return $this->dayOfDeath;
     }
 
-    public function setDayOfDeath(?\DateTimeInterface $dayOfDeath): self
+    public function setDayOfDeath(?DateTimeInterface $dayOfDeath): self
     {
         $this->dayOfDeath = $dayOfDeath;
 
@@ -256,15 +262,15 @@ class  Corpse
 
     public function checkDateConsistency(): bool
     {
-        $dayOfdeath =  new Carbon($this->dayOfDeath);
-        $birthdate =  new Carbon($this->birthdate);
+        $dayOfdeath = new Carbon($this->dayOfDeath);
+        $birthdate = new Carbon($this->birthdate);
 
-        return $dayOfdeath->gte($birthdate) ;
+        return $dayOfdeath->gte($birthdate);
     }
 
     public function isBirthdateValid(): bool
     {
-        $birthdate =  new Carbon($this->birthdate);
+        $birthdate = new Carbon($this->birthdate);
         return $birthdate->lt(Carbon::now());
     }
 
@@ -277,6 +283,18 @@ class  Corpse
     {
 //        $preparation->setCorpse($this);
         $this->preparation = $preparation;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
 
         return $this;
     }

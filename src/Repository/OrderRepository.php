@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @method Order|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +15,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class OrderRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private Security $security;
+
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, Order::class);
+        $this->security = $security;
     }
 
     public function findLastFinishedLimitByUser(int $id, int $limit = 3): array
@@ -26,10 +30,10 @@ class OrderRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('o')
             ->where('o.status = :status')
             ->andWhere('o.possessor = :user')
-            ->setParameter('status',Order::FINISHED)
+            ->setParameter('status', Order::FINISHED)
             ->setParameter('user', $id)
             ->orderBy('o.updatedAt', 'DESC')
-            ->setMaxResults( $limit );
+            ->setMaxResults($limit);
 
         $query = $qb->getQuery();
         return $query->execute();
@@ -42,7 +46,7 @@ class OrderRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('o')
             ->where('o.status != :status')
             ->andWhere('o.possessor = :user')
-            ->setParameter('status',Order::FINISHED)
+            ->setParameter('status', Order::FINISHED)
             ->setParameter('user', $user)
             ->orderBy('o.updatedAt', 'DESC');
 //            ->setMaxResults( 1 );
@@ -58,31 +62,31 @@ class OrderRepository extends ServiceEntityRepository
             ->where('o.status = :status')
             ->setParameter('types', $type)
             ->setParameter('status', $status)
-            ->orderBy('o.updatedAt','DESC');
+            ->orderBy('o.updatedAt', 'DESC');
         $query = $qb->getQuery();
         return $query->execute();
     }
 
-    public function findAllOrderWhenTypeWhitStatus($type , $status)
+    public function findAllOrderWhenTypeWhitStatus($type, $status)
     {
         $qb = $this->createQueryBuilder('o')
             ->where('o.types = :types')
             ->where('o.status = :status')
             ->setParameter('types', $type)
             ->setParameter('status', $status)
-            ->orderBy('o.updatedAt','DESC');
+            ->orderBy('o.updatedAt', 'DESC');
         $query = $qb->getQuery();
         return $query->execute();
     }
 
-    public function findAllOrderWhenTypeWithoutStatus($type , $status)
+    public function findAllOrderWhenTypeWithoutStatus($type, $status)
     {
         $qb = $this->createQueryBuilder('o')
             ->where('o.types = :types')
             ->where('o.status != :status')
             ->setParameter('types', $type)
             ->setParameter('status', $status)
-            ->orderBy('o.updatedAt','DESC');
+            ->orderBy('o.updatedAt', 'DESC');
         $query = $qb->getQuery();
         return $query->execute();
     }
@@ -92,7 +96,7 @@ class OrderRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('o')
             ->where('o.types = :types')
             ->setParameter('types', $type)
-            ->orderBy('o.updatedAt','DESC');
+            ->orderBy('o.updatedAt', 'DESC');
         $query = $qb->getQuery();
         return $query->execute();
     }
@@ -102,7 +106,7 @@ class OrderRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('o')
             ->where('o.status = :status')
             ->setParameter('status', $status)
-            ->orderBy('o.updatedAt','DESC');
+            ->orderBy('o.updatedAt', 'DESC');
         $query = $qb->getQuery();
         return $query->execute();
     }
@@ -112,12 +116,22 @@ class OrderRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('o')
             ->where('o.status != :status')
             ->setParameter('status', $status)
-            ->orderBy('o.updatedAt','DESC');
+            ->orderBy('o.updatedAt', 'DESC');
         $query = $qb->getQuery();
         return $query->execute();
     }
 
+    public function findOneOwnedOrderByStatus($status)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->andWhere('o.status = :status')
+            ->andWhere('o.possessor = :possessor')
+            ->setParameter('status', $status)
+            ->setParameter('possessor', $this->security->getUser());
 
+        $query = $qb->getQuery();
+        return $query->getOneOrNullResult();
+    }
 
 
 }
