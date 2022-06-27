@@ -20,3 +20,6 @@ bdd:
 
 cache:
 	docker-compose exec php bin/console cache:clear --no-warmup
+
+fixture:
+	docker-compose exec php bin/console doctrine:fixtures:load --no-interaction

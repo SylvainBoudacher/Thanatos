@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+/*namespace App\DataFixtures;
 
 use App\Entity\Material;
 use Doctrine\Persistence\ObjectManager;
@@ -33,4 +33,4 @@ class MaterialFixtures extends Fixture implements FixtureGroupInterface
     {
         return ['group1'];
     }
-}
+}*/

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+/*namespace App\DataFixtures;
 
 
 use App\Entity\Media;
@@ -89,4 +89,4 @@ class MediaFixtures extends Fixture
         $this->addReference("MEDIA_PAINTING_DEFAULT", $mediaPainting);
         $this->addReference("MEDIA_MODEL_DEFAULT", $mediaModel);
     }
-}
+}*/
