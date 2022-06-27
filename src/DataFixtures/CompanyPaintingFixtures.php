@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+/*namespace App\DataFixtures;
 
 use App\Entity\Company;
 use App\Entity\CompanyPainting;
@@ -41,4 +41,4 @@ class CompanyPaintingFixtures extends Fixture implements FixtureGroupInterface
     {
         return ['group1'];
     }
-}
+}*/

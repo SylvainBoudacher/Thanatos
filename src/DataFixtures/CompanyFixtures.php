@@ -1,5 +1,6 @@
 <?php
 
+/*
 namespace App\DataFixtures;
 
 use App\Entity\Company;
@@ -42,4 +43,4 @@ class CompanyFixtures extends Fixture
         $this->addReference("COMPANY_DRIVER", $driver);
         
     }
-}
+}*/

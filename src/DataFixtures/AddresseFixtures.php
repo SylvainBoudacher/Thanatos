@@ -1,5 +1,6 @@
 <?php
 
+/*
 namespace App\DataFixtures;
 
 
@@ -30,3 +31,4 @@ class AddresseFixtures extends Fixture
         
     }
 }
+*/

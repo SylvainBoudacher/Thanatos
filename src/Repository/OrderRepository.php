@@ -49,8 +49,6 @@ class OrderRepository extends ServiceEntityRepository
             ->setParameter('status', Order::FINISHED)
             ->setParameter('user', $user)
             ->orderBy('o.updatedAt', 'DESC');
-//            ->setMaxResults( 1 );
-
         $query = $qb->getQuery();
         return $query->execute();
     }

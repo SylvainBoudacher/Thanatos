@@ -1,5 +1,5 @@
 <?php
-
+/*
 namespace App\DataFixtures;
 
 use App\Entity\Extra;
@@ -38,4 +38,4 @@ class ModelMaterialFixtures extends Fixture implements FixtureGroupInterface
     {
         return ['group1'];
     }
-}
+}*/

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\DataFixtures;
+/*
+ *
+ namespace App\DataFixtures;
 
 use App\Entity\Burial;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -35,3 +37,4 @@ class BurialFixtures extends Fixture implements FixtureGroupInterface
         return ['group1'];
     }
 }
+*/

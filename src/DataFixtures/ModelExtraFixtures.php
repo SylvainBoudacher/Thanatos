@@ -1,5 +1,6 @@
 <?php
 
+/*
 namespace App\DataFixtures;
 
 use App\Entity\Burial;
@@ -40,4 +41,4 @@ class ModelExtraFixtures extends Fixture implements FixtureGroupInterface
     {
         return ['group1'];
     }
-}
+}*/

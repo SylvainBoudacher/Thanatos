@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+/*namespace App\DataFixtures;
 
 use App\Entity\Company;
 use App\Entity\Extra;
@@ -33,4 +33,4 @@ class ExtraFixtures extends Fixture implements FixtureGroupInterface
     {
         return ['group1'];
     }
-}
+}*/
