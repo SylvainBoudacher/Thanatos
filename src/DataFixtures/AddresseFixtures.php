@@ -11,6 +11,8 @@ use Faker;
 
 class AddresseFixtures extends Fixture
 {
+    public const ADDRESS_REFERENCE = 'address-reference';
+
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create("fr-FR");
@@ -27,7 +29,7 @@ class AddresseFixtures extends Fixture
             $manager->flush();
         }
 
-        $this->addReference("address", $address);
-        
+        /*$this->addReference("address", $address);*/
+        $this->addReference(self::ADDRESS_REFERENCE, $address);
     }
 }

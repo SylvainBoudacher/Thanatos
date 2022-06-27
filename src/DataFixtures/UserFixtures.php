@@ -33,6 +33,7 @@ class UserFixtures extends Fixture
         $user->setPassword($password);
         $user->setRoles(["ROLE_ADMIN"]);
 
+
         $manager->persist($user);
         $manager->flush();
 
@@ -44,9 +45,8 @@ class UserFixtures extends Fixture
                 ->setLastname($faker->lastName)
                 ->setEmail($faker->email)
                 ->setPassword($faker->password)
-                ->setRoles([$roles[mt_rand(0, 2)]]);
-
-
+                ->setRoles([$roles[mt_rand(0, 2)]])
+                ->setAddress($this->getReference(AddresseFixtures::ADDRESS_REFERENCE));
             $manager->persist($user);
             $manager->flush();
         }
@@ -54,7 +54,6 @@ class UserFixtures extends Fixture
         $this->addReference("user", $user);
 
 
-        /*->setRoles(["ROLE_USER"]);*/
 
 
 
