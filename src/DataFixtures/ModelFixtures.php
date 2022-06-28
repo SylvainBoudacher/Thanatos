@@ -14,7 +14,6 @@ use Faker;
 
 class ModelFixtures extends Fixture implements FixtureGroupInterface
 {
-  
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create("fr-FR");
@@ -29,12 +28,9 @@ class ModelFixtures extends Fixture implements FixtureGroupInterface
                 ->setPrice($faker->numberBetween(1000, 10000))
                 ->setCompany($faker->randomElement(array_column($users, 'company')))
                 ->setBurial($faker->randomElement($burials));
-
             $manager->persist($model);
         }
-
         $manager->flush();
-
     }
 
     public function getDependencies()
@@ -44,7 +40,6 @@ class ModelFixtures extends Fixture implements FixtureGroupInterface
             BurialFixtures::class
         ];
     }
-
     public static function getGroups(): array
     {
         return ['group1'];

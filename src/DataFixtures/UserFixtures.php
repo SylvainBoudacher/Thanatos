@@ -66,7 +66,6 @@ class UserFixtures extends Fixture
         $user->setPassword($password);
         $user->setRoles(["ROLE_COMPANY"]);
 
-        
         $manager->persist($user);
         $manager->flush();
 
@@ -85,13 +84,5 @@ class UserFixtures extends Fixture
         }
 
         $this->addReference("user", $user);
-
-
-
-
-
-
-
-
     }
 }

@@ -33,7 +33,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->get('session')->migrate();
+            //$this->get('session')->migrate();
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash(
                 'success',
