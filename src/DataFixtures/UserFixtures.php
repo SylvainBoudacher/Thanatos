@@ -31,7 +31,40 @@ class UserFixtures extends Fixture
         $user->setEmail('test@test.com');
         $password = $this->hasher->hashPassword($user, '@Test123');
         $user->setPassword($password);
+        $user->setRoles([]);
+
+        $manager->persist($user);
+        $manager->flush();
+
+        $user = new User();
+        $user->setFirstname('Test');
+        $user->setLastname('Testouille');
+        $user->setEmail('admin@test.com');
+        $password = $this->hasher->hashPassword($user, '@Test123');
+        $user->setPassword($password);
         $user->setRoles(["ROLE_ADMIN"]);
+
+        $manager->persist($user);
+        $manager->flush();
+
+        $user = new User();
+        $user->setFirstname('Test');
+        $user->setLastname('Testouille');
+        $user->setEmail('driver@test.com');
+        $password = $this->hasher->hashPassword($user, '@Test123');
+        $user->setPassword($password);
+        $user->setRoles(["ROLE_DRIVER"]);
+
+        $manager->persist($user);
+        $manager->flush();
+
+        $user = new User();
+        $user->setFirstname('Test');
+        $user->setLastname('Testouille');
+        $user->setEmail('company@test.com');
+        $password = $this->hasher->hashPassword($user, '@Test123');
+        $user->setPassword($password);
+        $user->setRoles(["ROLE_COMPANY"]);
 
         $manager->persist($user);
         $manager->flush();
@@ -44,22 +77,12 @@ class UserFixtures extends Fixture
                 ->setLastname($faker->lastName)
                 ->setEmail($faker->email)
                 ->setPassword($faker->password)
-                ->setRoles([$roles[mt_rand(0, 2)]]);
-
-
+                ->setRoles([$roles[mt_rand(0, 2)]])
+                ->setAddress($this->getReference(AddresseFixtures::ADDRESS_REFERENCE));
             $manager->persist($user);
             $manager->flush();
         }
 
         $this->addReference("user", $user);
-
-
-        /*->setRoles(["ROLE_USER"]);*/
-
-
-
-
-
-
     }
 }
