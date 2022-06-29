@@ -20,17 +20,29 @@ class DriverController extends AbstractController
     */
     
     #[Route('/', name: 'driver_orders')]
-    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository, DriverOrderRepository $driverOrderRepository): Response
+    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository): Response
     {
         $company = $companyRepository->find($this->getUser()->getCompany());
 
-        $orders = $orderRepository->findAllNewOrder();
+        $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'NEW');
 
         $getDriverOrders = $company->getDriverOrders();
-
+        
+        if(!empty($getDriverOrders)){
+            foreach($getDriverOrders as $driverOrder){
+                $driverOrders[] = $driverOrder->getCommand();
+                foreach($driverOrders as $order){
+                    if($order->getStatus() !== 'NEW' || $order->getStatus() !== 'DRIVER_CLOSE'){
+                        $currentOrder = $order;
+                    }
+                }
+            }
+        }
+        
         return $this->render('front/driver/orders/index.html.twig', [
             'controller_name' => 'DriverController',
             'orders' => $orders,
+            'currentOrder' => $currentOrder,
         ]);
     }
 
@@ -41,7 +53,7 @@ class DriverController extends AbstractController
         $company = $companyRepository->find($this->getUser()->getCompany());
 
         $entityManager = $this->getDoctrine()->getManager();
-        $order->setStatus('DRIVER_ASCERTAINMENT');
+        $order->setStatus('DRIVER_ACCEPT');
         $entityManager->persist($order);
         $entityManager->flush();
 
