@@ -258,12 +258,22 @@ class OrderController extends AbstractController
             $em = $doctrine->getManager();
 
             if ($request->query->get('confirm') || $request->query->get('cancel')) {
-                $request->query->get('confirm') ?? $order->setStatus(Order::DRIVER_NEW);
-                $request->query->get('cancel') ?? $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
+
+                if ($request->query->get('confirm')) {
+                    $order->setStatus(Order::DRIVER_NEW);
+                    $this->addFlash('error', "Votre déclaration de corps s'est bien enregistrée");
+                }
+
+                if ($request->query->get('cancel')) {
+                    $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
+                    $this->addFlash('error', "Votre déclaration de corps s'est bien annulée");
+                }
+
                 $em->persist($order);
                 $em->flush();
 
-                dd('either you confirm or cancel, congrats');
+                return $this->redirectToRoute('user_order');
+
             }
 
             return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
