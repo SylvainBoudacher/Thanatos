@@ -3,7 +3,6 @@
 namespace App\Controller\Front\user;
 
 use App\Repository\AddressOrderRepository;
-use App\Utils\Functions;
 use App\Entity\Address;
 use App\Entity\AddressOrder;
 use App\Entity\Burial;
@@ -13,8 +12,6 @@ use App\Entity\Model;
 use App\Entity\ModelExtra;
 use App\Entity\ModelMaterial;
 use App\Entity\Order;
-use App\Entity\Preparation;
-use App\Entity\Theme;
 use App\Form\AddressType;
 use App\Form\CorpseType;
 use App\Form\NewPreparationType;
@@ -30,7 +27,9 @@ use App\Repository\ThemeRepository;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -96,15 +95,25 @@ class OrderController extends AbstractController
 
     /* DECLARE CORPSE */
     #[Route('/declarer-corps', name: 'declare_corpse', methods: ['POST', 'GET'])]
-    public function declareCorpses(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, CorpseRepository $corpseRep, Functions $functions): Response
+    public function declareCorpses(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, CorpseRepository $corpseRep): Response
     {
         $em = $doctrine->getManager();
 
         $corpseId = $request->request->get('corpseId');
-        $corpse = $corpseRep->find($corpseId ?? -1) ?? new Corpse();
+        $corpse = is_numeric($corpseId) ? $corpseRep->find($corpseId) : new Corpse();  //TODO check if this verification is enough
         $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
 
         $nextCorpse = false;
+
+        // if corpse exist, check if it's owned
+        if ($corpse instanceof Corpse && $corpse->getId()) {
+
+            if (!$order) dd('crash error : no corpse exist without order');
+
+            $corpseIsOwned = $order->getId() == $corpse->getCommand()->getId();
+
+            if (!$corpseIsOwned) dd('crash error : no corpse exist without order');
+        }
 
         // create form
         $form = $this->createForm(CorpseType::class, $corpse);
@@ -126,6 +135,7 @@ class OrderController extends AbstractController
                     //TODO Check better number random string
                     $order->setNumber(Carbon::now()->getPreciseTimestamp(-2));
                     $order->setStatus(Order::DRAFT);
+                    $order->setTypes(Order::DRIVER);
 
                     $corpse->setPosition(0);
                 } else {
@@ -136,15 +146,18 @@ class OrderController extends AbstractController
                         ['position' => 'ASC']
                     );
 
-                    if (!$corpseId) $corpse->setPosition($corpses[count($corpses) - 1]->getPosition() + 1);
+                    if (!$corpse->getId()) $corpse->setPosition($corpses[count($corpses) - 1]->getPosition() + 1);
                 }
 
                 $corpse->setCommand($order);
+                $order->addCorpse($corpse);
 
                 // persist
                 $em->persist($corpse);
                 $em->persist($order);
                 $em->flush();
+
+                $order = $orderRep->find($order->getId());
 
                 if ($request->request->get('draftDeclaration')) {
 
@@ -181,7 +194,7 @@ class OrderController extends AbstractController
 
                 $corpse = $corpses[0];
                 $form = $this->createForm(CorpseType::class, $corpse);
-                $nextCorpse = (bool)$corpses[1];
+                $nextCorpse = isset($corpses[1]);
             }
         }
 
@@ -197,21 +210,25 @@ class OrderController extends AbstractController
     public function declareCorpsesAddress(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, AddressOrderRepository $addressOrderRep): Response
     {
         $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
-        $address = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT) ?? new Address();
+        $address = new Address();
 
-        /* dump($order);
-         dd($order->getAddressOrders()->toArray());*/
+        // get address if already exist
+        $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
+        if ($addressOrder instanceof AddressOrder) $address = $addressOrder->getAddress();
+        else $addressOrder = new AddressOrder();
+
         $form = $this->createForm(AddressType::class, $address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $em = $doctrine->getManager();
+            $address = $form->getData();
 
             // insert address
-            $addressOrder = new AddressOrder();
             $addressOrder->setAddress($address);
             $addressOrder->setCommand($order);
+            $addressOrder->setStatus(AddressOrder::DECLARATION_CORPSES);
 
             $em->persist($addressOrder);
             $em->persist($address);
@@ -227,29 +244,80 @@ class OrderController extends AbstractController
     }
 
     #[Route('/declare-corps-confirmation', name: 'declare_corpse_confirmation', methods: ['POST', 'GET'])]
-    public function declareCorpsesConfirmation(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep): Response
+    public function declareCorpsesConfirmation(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, AddressOrderRepository $addressOrderRep): Response
     {
         $order = $orderRep->findOneBy(['status' => Order::DRAFT]);
+        $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
 
-        if ($order) {
+        if ($order && $addressOrder) {
 
+            $address = $addressOrder->getAddress();
             $em = $doctrine->getManager();
 
-            if ($this->request->get('confirm') || $this->request->get('cancel')) {
-                $this->request->get('confirm') ?? $order->setStatus(Order::DRIVER_NEW);
-                $this->request->get('cancel') ?? $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
+            if ($request->query->get('confirm') || $request->query->get('cancel')) {
+                $request->query->get('confirm') ?? $order->setStatus(Order::DRIVER_NEW);
+                $request->query->get('cancel') ?? $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
+                $em->persist($order);
+                $em->flush();
 
+                dd('either you confirm or cancel, congrats');
             }
-            dd('hello');
 
             return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
                 'order' => $order,
-                'address' => $order->getAddressOrders()[0]->get
+                'address' => $address
             ]);
         }
 
-        $this->redirectToRoute('user_order');
+        return $this->redirectToRoute('user_order');
+    }
 
+    #[Route('/supprimer-corps-declaration/{id}', name: 'delete_corpse_declaration')]
+    public function delete_corpse_declaration(Corpse $corpse, OrderRepository $orderRep)
+    {
+
+        $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
+
+        if (array_filter($order->getCorpses()->toArray(), fn($c) => $c->getId() == $corpse->getId())) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($corpse);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('declare_corpse_confirmation');
+    }
+
+    #[Route('/modifier-corps-declaration/{id}', name: 'edit_corpse_declaration')]
+    public function edit_corpse_declaration(Request $request, Corpse $corpse, OrderRepository $orderRep)
+    {
+        $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
+
+        if (array_filter($order->getCorpses()->toArray(), fn($c) => $c->getId() == $corpse->getId())) {
+
+            $form = $this->createForm(CorpseType::class, $corpse);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($corpse);
+                $em->flush();
+
+                return $this->redirectToRoute('declare_corpse_confirmation');
+            }
+
+            return $this->renderForm('front/user/declareCorpse/index.html.twig', [
+                'form' => $form,
+                'order' => $order,
+                'corpse' => $corpse,
+                'nextCorpse' => false,
+                'editVersion' => true
+            ]);
+
+        }
+
+        return $this->redirectToRoute('declare_corpse_confirmation');
     }
 
     /* ORDER SERVICE */
@@ -380,8 +448,8 @@ class OrderController extends AbstractController
     public function orderServicePayement(Request $request): Response
     {
 
-        \Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
-        $checkout_session = \Stripe\Checkout\Session::create([
+        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+        $checkout_session = Session::create([
             'line_items' => [[
                 # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
                 'price' => 'price_1LEG1xGgCa17kbBHj4M43fIX',

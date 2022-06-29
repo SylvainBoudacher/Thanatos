@@ -3,134 +3,152 @@
 {% block body %}
 
     {% form_theme form 'form_table_layout.html.twig' %}
-<div class="w-full max-w-lg p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 my-12">
-    <h1 class="text-3xl font-semibold text-center text-gray-700 dark:text-white">Déclarer un corps</h1>
+    <div class="w-full max-w-lg p-6 m-auto bg-white rounded-md shadow-md dark:bg-gray-800 my-12">
+        <h1 class="text-3xl font-semibold text-center text-gray-700 dark:text-white">Déclarer un corps</h1>
 
-    <div class="flex items-center justify-center mt-4">
-        <span class="w-1/4 border-b dark:border-gray-500"></span>
-    </div>
+        <div class="flex items-center justify-center mt-4">
+            <span class="w-1/4 border-b dark:border-gray-500"></span>
+        </div>
 
-    {{ form_start(form, {'action': path('declare_corpse'), 'attr': {'autocomplete': 'off'} }) }}
+        {% if editVersion is not defined %}
+            {{ form_start(form, {'action': path('declare_corpse'), 'attr': {'autocomplete': 'off'} }) }}
+        {% else %}
+            {{ form_start(form, {'action': path('edit_corpse_declaration', {id: corpse.id}), 'attr': {'autocomplete': 'off'} }) }}
+        {% endif %}
 
-    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+        <input name="corpseId" value="{{ corpse.id }}" type="hidden"/>
 
-        <div class="text-gray-700 dark:text-gray-300">
-            <label class="text-gray-700 dark:text-gray-200" for="username">Prénom</label>
-            {{ form_widget(form.firstname , {'attr':
-                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+        <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
 
-            {{ form_errors(form.firstname) }}
+            <div class="text-gray-700 dark:text-gray-300">
+                <label class="text-gray-700 dark:text-gray-200" for="username">Prénom</label>
+                {{ form_widget(form.firstname , {'attr':
+                    {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
 
+                {{ form_errors(form.firstname) }}
+
+            </div>
+
+            <div class="text-gray-700 dark:text-gray-300">
+                <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Nom</label>
+                {{ form_widget(form.lastname , {'attr':
+                    {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                {{ form_errors(form.lastname) }}
+
+            </div>
+
+            <div class="text-gray-700 dark:text-gray-300">
+                <label class="text-gray-700 dark:text-gray-200">Date de naissance</label>
+                {{ form_widget(form.birthdate , {'attr':
+                    {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                {{ form_errors(form.birthdate) }}
+            </div>
+
+            <div class="text-gray-700 dark:text-gray-300">
+                <label class="text-gray-700 dark:text-gray-200">Sexe de la personne</label>
+                {{ form_widget(form.sex , {'attr':
+                    {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                {{ form_errors(form.sex) }}
+            </div>
         </div>
 
         <div class="text-gray-700 dark:text-gray-300">
-            <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Nom</label>
-            {{ form_widget(form.lastname , {'attr':
-                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
-            {{ form_errors(form.lastname) }}
-
+            <label class="text-gray-700 dark:text-gray-200">Sa taille (en mètre)</label>
+            {{ form_widget(form.height , {'attr':
+                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring', 'placeholder' : 'ex: 1.75'}} ) }}
+            {{ form_errors(form.height) }}
         </div>
 
         <div class="text-gray-700 dark:text-gray-300">
-            <label class="text-gray-700 dark:text-gray-200">Date de naissance</label>
-            {{ form_widget(form.birthdate , {'attr':
-                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
-            {{ form_errors(form.birthdate) }}
+            <label class="text-gray-700 dark:text-gray-200" for="username">Son poids (en kg)</label>
+            {{ form_widget(form.weight , {'attr':
+                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring', 'placeholder' : 'ex: 74.13'}} ) }}
+            {{ form_errors(form.weight) }}
         </div>
 
         <div class="text-gray-700 dark:text-gray-300">
-            <label class="text-gray-700 dark:text-gray-200">Sexe de la personne</label>
-            {{ form_widget(form.sex , {'attr':
+            <label class="text-gray-700 dark:text-gray-200" for="username">La date de sa mort</label>
+            {{ form_widget(form.dayOfDeath , {'attr':
                 {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
-            {{ form_errors(form.sex) }}
+            {{ form_errors(form.dayOfDeath) }}
         </div>
-    </div>
 
-    <div class="text-gray-700 dark:text-gray-300">
-        <label class="text-gray-700 dark:text-gray-200">Sa taille</label>
-        {{ form_widget(form.height , {'attr':
-            {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring', 'placeholder' : 'ex: 1.75'}} ) }}
-        {{ form_errors(form.height) }}
-    </div>
+        <div class="text-gray-700 dark:text-gray-300">
+            <label class="text-gray-700 dark:text-gray-200" for="username">La cause de sa mort</label>
+            {{ form_widget(form.causeOfDeath , {'attr':
+                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+            {{ form_errors(form.causeOfDeath) }}
+        </div>
 
-    <div class="text-gray-700 dark:text-gray-300">
-        <label class="text-gray-700 dark:text-gray-200" for="username">Son poids</label>
-        {{ form_widget(form.weight , {'attr':
-            {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring', 'placeholder' : 'ex: 74.13'}} ) }}
-        {{ form_errors(form.weight) }}
-    </div>
+        {# Submit button #}
+        {% if editVersion is not defined %}
 
-    <div class="text-gray-700 dark:text-gray-300">
-        <label class="text-gray-700 dark:text-gray-200" for="username">La date de sa mort</label>
-        {{ form_widget(form.dayOfDeath , {'attr':
-            {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
-        {{ form_errors(form.dayOfDeath) }}
-    </div>
 
-    <div class="text-gray-700 dark:text-gray-300">
-        <label class="text-gray-700 dark:text-gray-200" for="username">La cause de sa mort</label>
-        {{ form_widget(form.causeOfDeath , {'attr':
-            {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
-        {{ form_errors(form.causeOfDeath) }}
-    </div>
-
-    {# Submit button #}
-
-    {% if nextCorpse %}
-<input name="corpseId" value="{{ corpse.id }}" type="hidden"/>
-    <button name="nextCorpse"
-            class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+        {% if nextCorpse %}
+        <button name="nextCorpse"
+                class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
               <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                   Étape suivante
               </span>
-    </button>
-
-{% else %}
-
-    <div class="pt-4">
-        <button name="finishExistantCorpse"
-                class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
-                value="true">
-  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-      Enregistrer et déclarer un autre corps
-  </span>
         </button>
 
+    {% else %}
+        <div class="pt-4">
+            <button name="finishExistantCorpse"
+                    class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
+                    value="true">
+  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+      Enregistrer
+  </span>
+            </button>
+
+            {% endif %}
+
+            <button name="draftDeclaration" class="w-48 h-12 rounded-full text-white
+        bg-gradient-to-r from-purple-500 via-red-500 to-yellow-500" value="true">
+                Enregister en tant que brouillon
+            </button>
+
+
+            {% else %}
+
+                <button
+                        class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
+                        value="true">
+  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+      Enregistrer
+  </span>
+                </button>
+
+            {% endif %}
+
+
+            {{ form_end(form) }}
+
+            <div class="flex items-center justify-between mt-4">
+                <span class="w-full border-b dark:border-gray-500"></span>
+            </div>
+
+        </div>
+
+        {% if order %}
+            Recap :
 
         {% endif %}
 
+        {% if not nextCorpse and editVersion is not defined and order is not null and order.corpses|length >= 1 %}
 
-        <button name="draftDeclaration" class="w-48 h-12 rounded-full text-white
-        bg-gradient-to-r from-purple-500 via-red-500 to-yellow-500" value="true">
-            Enregister en tant que brouillon
-        </button>
+            <div class="pt-4">
+                <a href="{{ path('declare_corpse_address') }}"
+                   class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
+                   value="true">
+              <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                   Étape suivante
+              </span>
+                </a>
+            </div>
+        {% endif %}
 
     </div>
 
-    {{ form_end(form) }}
-
-    <div class="flex items-center justify-between mt-4">
-        <span class="w-full border-b dark:border-gray-500"></span>
-    </div>
-
-</div>
-
-{% if order %}
-    Recap :
-
-{% endif %}
-
-    {% if not nextCorpse %}
-
-<div class="pt-4">
-    <a href="{{ path('declare_corpse_address') }}"
-       class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
-       value="true">
-  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-       Étape suivante
-  </span>
-    </a>
-    {% endif %}
-
-
-    {% endblock %}
+{% endblock %}

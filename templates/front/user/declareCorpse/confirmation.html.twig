@@ -3,10 +3,10 @@
 {% block body %}
 
     <h1 class="text-2xl">Récapitulatif</h1>
-<div class="p-4">
+    <div class="p-4">
 
         <div class="grid grid-cols-4 gaps-3">
-            {% for corpse in corpses %}
+            {% for corpse in order.corpses %}
                 <div class="px-8 py-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
 
                     <div class="mt-2">
@@ -18,6 +18,22 @@
                             mort {{ corpse.dayOfDeath | date("d/m/Y H:s:i") }} <br> Cause de sa
                             mort {{ corpse.causeOfDeath }}</p>
                     </div>
+                    <a href="{{ path('edit_corpse_declaration', {id: corpse.id}) }}">
+                        <button type="button"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            Editer le corps
+                        </button>
+
+                    </a>
+                    {% if order.corpses|length > 1 %}
+
+                        <a href="{{ path('delete_corpse_declaration', {id: corpse.id}) }}">
+
+                            <button class="px-4 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-red-600 text-white-300 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                Supprimer le corps
+                            </button>
+                        </a>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
@@ -35,21 +51,21 @@
         </div>
 
 
-    <div class="mt-2">
+        <div class="mt-2">
 
-        <a href="{{ path('declare_corpse_confirmation', {confirmation: 'false'}) }}">
+            <a href="{{ path('declare_corpse_confirmation', {cancel: 'true'}) }}">
 
-            <button class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 text-white-300 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-                Annuler
-            </button>
-        </a>
+                <button class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 text-white-300 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                    Annuler
+                </button>
+            </a>
 
-        <a href="{{ path('declare_corpse_confirmation', {confirmation: 'true'}) }}">
-            <button class="px-4 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-green-600 text-white-300 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-                Déclarer les corps
-            </button>
-        </a>
+            <a href="{{ path('declare_corpse_confirmation', {confirm: 'true'}) }}">
+                <button class="px-4 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-green-600 text-white-300 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                    Déclarer les corps
+                </button>
+            </a>
+        </div>
+
     </div>
-
-</div>
 {% endblock %}

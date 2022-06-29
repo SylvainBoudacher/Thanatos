@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\AddressOrder;
+use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
@@ -55,12 +56,11 @@ class AddressOrderRepository extends ServiceEntityRepository
     public function findOneOwnedByStatusAndOrder($statusAddress, $statusOrder): ?AddressOrder
     {
         return $this->createQueryBuilder('a')
-            ->select('o')
-            ->from('App:Order', 'o')
-            ->join('a.command')
+            ->select('a')
+            ->innerJoin(Order::class, 'o', 'WITH', 'o.id = a.command')
             ->andWhere('a.status = :statusAddress')
-            ->andWhere('a.command.status= :statusOrder')
-            ->andWhere('a.command.possessor = :possessor')
+            ->andWhere('o.status= :statusOrder')
+            ->andWhere('o.possessor = :possessor')
             ->setParameter('statusAddress', $statusAddress)
             ->setParameter('statusOrder', $statusOrder)
             ->setParameter('possessor', $this->security->getUser())

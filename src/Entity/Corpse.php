@@ -35,7 +35,7 @@ class  Corpse
      *      min = 2,
      *      max = 255,
      * )
-     * @Assert\Regex("/^[a-z ][a-z- ][a-z ]+/i")
+     * @Assert\Regex("/^[a-z][a-z- ]+[a-z]$/i")
      */
     private $firstname;
 
@@ -46,7 +46,7 @@ class  Corpse
      *      min = 2,
      *      max = 255,
      * )
-     * @Assert\Regex("/^[a-z-]+$/i")
+     * @Assert\Regex("/^[a-z][a-z- ]+[a-z]$/i")
      */
     private $lastname;
 
@@ -262,10 +262,10 @@ class  Corpse
 
     public function checkDateConsistency(): bool
     {
-        $dayOfdeath = new Carbon($this->dayOfDeath);
+        $dayOfDeath = new Carbon($this->dayOfDeath);
         $birthdate = new Carbon($this->birthdate);
 
-        return $dayOfdeath->gte($birthdate);
+        return $dayOfDeath->gte($birthdate) && $dayOfDeath->lt(Carbon::now());
     }
 
     public function isBirthdateValid(): bool
