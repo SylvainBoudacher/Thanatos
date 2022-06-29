@@ -7,6 +7,9 @@ start:
 	docker-compose up --detach
 
 stop:
+	docker-compose stop
+
+down:
 	docker-compose down --remove-orphans --volumes --timeout 0
 
 restart:
