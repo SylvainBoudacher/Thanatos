@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CorpseRepository;
 use App\Entity\Traits\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as AcmeAssert;
 
 /**
  * @ORM\Entity(repositoryClass=CorpseRepository::class)
@@ -60,7 +61,7 @@ class  Corpse
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\NotNull
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Assert\LessThanOrEqual("today")
+     * @AcmeAssert\LessThanOrEqual()
      */
     private $dayOfDeath;
 

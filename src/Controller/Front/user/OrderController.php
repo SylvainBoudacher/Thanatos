@@ -119,72 +119,75 @@ class OrderController extends AbstractController
         $form = $this->createForm(CorpseType::class, $corpse);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
 
-            // check data
-            $corpse = $form->getData();
+            if ($form->isValid()) {
+                // check data
+                $corpse = $form->getData();
 
-            if ($corpse->checkDateConsistency() && $corpse->isBirthdateValid()) {
+                if ($corpse->checkDateConsistency() && $corpse->isBirthdateValid()) {
 
-                if (!$order) {
+                    if (!$order) {
 
-                    // create order
-                    $order = new Order();
-                    $order->setIsValid(false);
-                    $order->setPossessor($this->getUser());
-                    //TODO Check better number random string
-                    $order->setNumber(Carbon::now()->getPreciseTimestamp(-2));
-                    $order->setStatus(Order::DRAFT);
-                    $order->setTypes(Order::DRIVER);
+                        // create order
+                        $order = new Order();
+                        $order->setIsValid(false);
+                        $order->setPossessor($this->getUser());
+                        //TODO Check better number random string
+                        $order->setNumber(Carbon::now()->getPreciseTimestamp(-2));
+                        $order->setStatus(Order::DRAFT);
+                        $order->setTypes(Order::DRIVER);
 
-                    $corpse->setPosition(0);
-                } else {
+                        $corpse->setPosition(0);
+                    } else {
 
-                    // get corpses
-                    $corpses = $corpseRep->findBy(
-                        ['command' => $order->getId()],
-                        ['position' => 'ASC']
-                    );
+                        // get corpses
+                        $corpses = $corpseRep->findBy(
+                            ['command' => $order->getId()],
+                            ['position' => 'ASC']
+                        );
 
-                    if (!$corpse->getId()) $corpse->setPosition($corpses[count($corpses) - 1]->getPosition() + 1);
-                }
-
-                $corpse->setCommand($order);
-                $order->addCorpse($corpse);
-
-                // persist
-                $em->persist($corpse);
-                $em->persist($order);
-                $em->flush();
-
-                $order = $orderRep->find($order->getId());
-
-                if ($request->request->get('draftDeclaration')) {
-
-                    $this->addFlash('success', 'Déclaration de corps bien enregistrée en tant que brouillon');
-                    return $this->redirectToRoute('user_order');
-
-                } else {
-
-                    $corpses = $corpseRep->findBy(
-                        ['command' => $order->getId()],
-                        ['position' => 'ASC']
-                    );
-
-                    $indexCurrentCorpse = array_filter($corpses, fn($otherCorpse) => $otherCorpse->getPosition() === $corpse->getPosition()) ?? null;
-                    $indexNextCorpse = is_array($indexCurrentCorpse) && !empty($indexCurrentCorpse) ? array_key_first($indexCurrentCorpse) + 1 : -1;
-
-                    if ($indexNextCorpse) {
-                        $corpse = $corpses[$indexNextCorpse] ?? new Corpse();
-                        $nextCorpse = isset($corpses[$indexNextCorpse++]);
+                        if (!$corpse->getId()) $corpse->setPosition($corpses[count($corpses) - 1]->getPosition() + 1);
                     }
 
-                    $form = $this->createForm(CorpseType::class, $corpse);
-                    $this->addFlash('success', 'Corps bien ajouté');
+                    $corpse->setCommand($order);
+                    $order->addCorpse($corpse);
+
+                    // persist
+                    $em->persist($corpse);
+                    $em->persist($order);
+                    $em->flush();
+
+                    $order = $orderRep->find($order->getId());
+
+                    if ($request->request->get('draftDeclaration')) {
+
+                        $this->addFlash('success', 'Déclaration de corps bien enregistrée en tant que brouillon');
+                        return $this->redirectToRoute('user_order');
+
+                    } else {
+
+                        $corpses = $corpseRep->findBy(
+                            ['command' => $order->getId()],
+                            ['position' => 'ASC']
+                        );
+
+                        $indexCurrentCorpse = array_filter($corpses, fn($otherCorpse) => $otherCorpse->getPosition() === $corpse->getPosition()) ?? null;
+                        $indexNextCorpse = is_array($indexCurrentCorpse) && !empty($indexCurrentCorpse) ? array_key_first($indexCurrentCorpse) + 1 : -1;
+
+                        if ($indexNextCorpse) {
+                            $corpse = $corpses[$indexNextCorpse] ?? new Corpse();
+                            $nextCorpse = isset($corpses[$indexNextCorpse++]);
+                        }
+
+                        $form = $this->createForm(CorpseType::class, $corpse);
+                        $this->addFlash('success', 'Corps bien ajouté');
+                    }
+                } else {
+                    $this->addFlash('failed', 'Les dates ne sont pas coherent');
                 }
-            } else {
-                $this->addFlash('failed', 'Les dates ne sont pas coherent');
             }
+
         } else {
             if ($order) {
                 $corpses = $corpseRep->findBy(
