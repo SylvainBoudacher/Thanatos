@@ -14,6 +14,8 @@ class AddressOrder
 
     use TimestampableTrait;
 
+    public const DECLARATION_CORPSES = "ADDRESS_DECLARATION_CORPSES";
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -30,6 +32,11 @@ class AddressOrder
      * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="addressOrders")
      */
     private $command;
+
+    /**
+     * @ORM\Column(type="string", length=30, options={"default" : "ADDRESS_DECLARATION_CORPSES"})
+     */
+    private $status;
 
     public function getId(): ?int
     {
@@ -56,6 +63,18 @@ class AddressOrder
     public function setCommand(?Order $command): self
     {
         $this->command = $command;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

@@ -16,6 +16,9 @@ class Order
 {
     use TimestampableTrait;
 
+    public const DRIVER = "DRIVER";
+    public const FUNERAL = "FUNERAL";
+
     public const DRAFT = "DRAFT";
     public const DRIVER_NEW = "DRIVER_NEW";
     public const DRIVER_ACCEPT = "DRIVER_ACCEPT";

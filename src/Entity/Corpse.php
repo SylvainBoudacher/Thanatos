@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use Carbon\Carbon;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CorpseRepository;
 use App\Entity\Traits\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as AcmeAssert;
 
 /**
  * @ORM\Entity(repositoryClass=CorpseRepository::class)
@@ -34,7 +36,7 @@ class  Corpse
      *      min = 2,
      *      max = 255,
      * )
-     * @Assert\Regex("/^[a-z ][a-z- ][a-z ]+/i")
+     * @Assert\Regex("/^[a-z][a-z- ]+[a-z]$/i")
      */
     private $firstname;
 
@@ -45,7 +47,7 @@ class  Corpse
      *      min = 2,
      *      max = 255,
      * )
-     * @Assert\Regex("/^[a-z-]+$/i")
+     * @Assert\Regex("/^[a-z][a-z- ]+[a-z]$/i")
      */
     private $lastname;
 
@@ -59,7 +61,7 @@ class  Corpse
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\NotNull
      * @var string A "Y-m-d H:i:s" formatted value
-     * @Assert\LessThanOrEqual("today")
+     * @AcmeAssert\LessThanOrEqual()
      */
     private $dayOfDeath;
 
@@ -117,6 +119,11 @@ class  Corpse
      */
     private $preparation;
 
+    /**
+     * @ORM\Column(type="integer", options={"default": "0"})
+     */
+    private $position;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -146,24 +153,24 @@ class  Corpse
         return $this;
     }
 
-    public function getBirthdate(): ?\DateTimeInterface
+    public function getBirthdate(): ?DateTimeInterface
     {
         return $this->birthdate;
     }
 
-    public function setBirthdate(?\DateTimeInterface $birthdate): self
+    public function setBirthdate(?DateTimeInterface $birthdate): self
     {
         $this->birthdate = $birthdate;
 
         return $this;
     }
 
-    public function getDayOfDeath(): ?\DateTimeInterface
+    public function getDayOfDeath(): ?DateTimeInterface
     {
         return $this->dayOfDeath;
     }
 
-    public function setDayOfDeath(?\DateTimeInterface $dayOfDeath): self
+    public function setDayOfDeath(?DateTimeInterface $dayOfDeath): self
     {
         $this->dayOfDeath = $dayOfDeath;
 
@@ -256,15 +263,15 @@ class  Corpse
 
     public function checkDateConsistency(): bool
     {
-        $dayOfdeath =  new Carbon($this->dayOfDeath);
-        $birthdate =  new Carbon($this->birthdate);
+        $dayOfDeath = new Carbon($this->dayOfDeath);
+        $birthdate = new Carbon($this->birthdate);
 
-        return $dayOfdeath->gte($birthdate) ;
+        return $dayOfDeath->gte($birthdate) && $dayOfDeath->lt(Carbon::now());
     }
 
     public function isBirthdateValid(): bool
     {
-        $birthdate =  new Carbon($this->birthdate);
+        $birthdate = new Carbon($this->birthdate);
         return $birthdate->lt(Carbon::now());
     }
 
@@ -277,6 +284,18 @@ class  Corpse
     {
 //        $preparation->setCorpse($this);
         $this->preparation = $preparation;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
 
         return $this;
     }

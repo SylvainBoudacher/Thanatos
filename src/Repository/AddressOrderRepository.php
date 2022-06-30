@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\AddressOrder;
+use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @method AddressOrder|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +16,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AddressOrderRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private Security $security;
+
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, AddressOrder::class);
+        $this->security = $security;
+
     }
 
     // /**
@@ -47,4 +53,19 @@ class AddressOrderRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findOneOwnedByStatusAndOrder($statusAddress, $statusOrder): ?AddressOrder
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a')
+            ->innerJoin(Order::class, 'o', 'WITH', 'o.id = a.command')
+            ->andWhere('a.status = :statusAddress')
+            ->andWhere('o.status= :statusOrder')
+            ->andWhere('o.possessor = :possessor')
+            ->setParameter('statusAddress', $statusAddress)
+            ->setParameter('statusOrder', $statusOrder)
+            ->setParameter('possessor', $this->security->getUser())
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 }
