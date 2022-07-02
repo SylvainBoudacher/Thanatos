@@ -2,7 +2,6 @@
 
 <section class="bg-white white:bg-gray-900 pb-11">
     <div class="container px-6 mx-auto">
-
             {% if orderNotClose is not empty %}
                 {% for order in orderNotClose %}
                     <div class="py-2">
@@ -17,7 +16,46 @@
                                     {% endif %}
                                 </p>
                             </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                            <div class=" py-3 mx-auto rounded-b-lg w-full">
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                                    <div class="bg-blue-600 h-2.5 rounded-full"
+                                        {% if order.types == 'DRIVER' %}
+                                            {% if order.status == 'DRIVER_NEW' %} style="width: 5% ">{% endif %}
+                                            {% if order.status == 'DRIVER_ACCEPT' %} style="width: 23% ">{% endif %}
+                                            {% if order.status == 'DRIVER_ARRIVES' %} style="width: 40% ">{% endif %}
+                                            {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %} style="width: 58% ">{% endif %}
+                                            {% if order.status == 'DRIVER_BRINGS_TO_WAREHOUSE' %} style="width: 78% ">{% endif %}
+                                            {% if order.status == 'DRIVER_CLOSE' %} style="width: 100% ">{% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                                    {% if order.types == 'DRIVER' %}
+                                        <p class="text-sm">Recherche de livreur</p>
+                                        <p class="text-sm">Conducteur accepter</p>
+                                        <p class="text-sm">Conducteur arriver</p>
+                                        <p class="text-sm">Validation de la commande</p>
+                                        <p class="text-sm">Corps en acheminement</p>
+                                        <p class="text-sm">Commande arriver</p>
+                                    {% elseif order.types == 'FUNERAL' %}
+                                        <p class="text-sm">Acheminement du corps</p>
+                                        <p class="text-sm">Cerceuil en cours de préparation</p>
+                                        <p class="text-sm">Livraison</p>
+                                        <p class="text-sm">commande arrive</p>
+                                        <p class="text-sm">Commande arriver</p>
+                                    {% endif %}
+
+                                    {#
+                                    public const DRIVER_NEW = "DRIVER_NEW";
+                                    public const DRIVER_ACCEPT = "DRIVER_ACCEPT";
+                                    public const DRIVER_ARRIVES = "DRIVER_ARRIVES";
+                                    public const DRIVER_PROCESSING_ACCEPT = "DRIVER_PROCESSING_ACCEPT";
+                                    public const DRIVER_BRINGS_TO_WAREHOUSE = "DRIVER_BRINGS_TO_WAREHOUSE";
+                                    public const DRIVER_CLOSE = "DRIVER_CLOSE";
+                                    #}
+                                </div>
+                            </div>
+                            {#<div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
                                 <div class="bg-blue-600 h-2.5 rounded-full"
                                     {% if order.types == 'DRIVER' %}
                                         {% if order.status == 'NEW' %} style="width: 5% ">{% endif %}
@@ -50,25 +88,11 @@
                                     <p class="text-sm">commande arrive</p>
                                     <p class="text-sm">Commande arriver</p>
                                 {% endif %}
-
-                            </div>
+                            </div>#}
                         </div>
                     </div>
                 {% endfor %}
             {% endif %}
-
-        {#* Order status :
-        *  *NEW
-        *  *DELIVERY_REACH
-        *  *PROCESSING
-        *  *SHIPPED
-        *  *DELIVERED
-        */
-
-        /*
-        * Order type:
-        *  *DRIVE
-        *  *FUNERAL#}
 
         <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
             <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
