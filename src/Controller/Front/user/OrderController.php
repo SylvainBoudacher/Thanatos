@@ -40,22 +40,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
 
-    /*
-         * Order status :
-         *  *NEW
-         *  *DELIVERY_REACH
-         *  *PROCESSING
-         *  *SHIPPED
-         *  *CLOSE
-        */
-
-    /*
-     * Order type:
-     *  *DRIVER
-     *  *FUNERAL
-     */
-
-
     #[Route('/commande', name: 'user_order', methods: ['GET'])]
     public function dashboard(OrderRepository $orderRepository): Response
     {
@@ -107,14 +91,10 @@ class OrderController extends AbstractController
 
         // if corpse exist, check if it's owned
         if ($corpse instanceof Corpse && $corpse->getId()) {
-
             if (!$order) dd('crash error : no corpse exist without order');
-
             $corpseIsOwned = $order->getId() == $corpse->getCommand()->getId();
-
             if (!$corpseIsOwned) dd('crash error : no corpse exist without order');
         }
-
         // create form
         $form = $this->createForm(CorpseType::class, $corpse);
         $form->handleRequest($request);
@@ -128,7 +108,6 @@ class OrderController extends AbstractController
                 if ($corpse->checkDateConsistency() && $corpse->isBirthdateValid()) {
 
                     if (!$order) {
-
                         // create order
                         $order = new Order();
                         $order->setIsValid(false);
@@ -140,7 +119,6 @@ class OrderController extends AbstractController
 
                         $corpse->setPosition(0);
                     } else {
-
                         // get corpses
                         $corpses = $corpseRep->findBy(
                             ['command' => $order->getId()],
@@ -149,7 +127,6 @@ class OrderController extends AbstractController
 
                         if (!$corpse->getId()) $corpse->setPosition($corpses[count($corpses) - 1]->getPosition() + 1);
                     }
-
                     $corpse->setCommand($order);
                     $order->addCorpse($corpse);
 
@@ -161,7 +138,6 @@ class OrderController extends AbstractController
                     $order = $orderRep->find($order->getId());
 
                     if ($request->request->get('draftDeclaration')) {
-
                         $this->addFlash('success', 'Déclaration de corps bien enregistrée en tant que brouillon');
                         return $this->redirectToRoute('user_order');
 
@@ -179,7 +155,6 @@ class OrderController extends AbstractController
                             $corpse = $corpses[$indexNextCorpse] ?? new Corpse();
                             $nextCorpse = isset($corpses[$indexNextCorpse++]);
                         }
-
                         $form = $this->createForm(CorpseType::class, $corpse);
                         $this->addFlash('success', 'Corps bien ajouté');
                     }
@@ -194,7 +169,6 @@ class OrderController extends AbstractController
                     ['command' => $order->getId()],
                     ['position' => 'ASC']
                 );
-
                 $corpse = $corpses[0];
                 $form = $this->createForm(CorpseType::class, $corpse);
                 $nextCorpse = isset($corpses[1]);
@@ -238,7 +212,6 @@ class OrderController extends AbstractController
             $em->flush();
 
             return $this->redirectToRoute('declare_corpse_confirmation');
-
         }
 
         return $this->renderForm('front/user/declareCorpse/address.html.twig', [
@@ -247,7 +220,12 @@ class OrderController extends AbstractController
     }
 
     #[Route('/declare-corps-confirmation', name: 'declare_corpse_confirmation', methods: ['POST', 'GET'])]
-    public function declareCorpsesConfirmation(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, AddressOrderRepository $addressOrderRep): Response
+    public function declareCorpsesConfirmation(
+        Request $request,
+        ManagerRegistry $doctrine,
+        OrderRepository $orderRep,
+        AddressOrderRepository $addressOrderRep,
+    ): Response
     {
         $order = $orderRep->findOneBy(['status' => Order::DRAFT]);
         $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
@@ -257,23 +235,21 @@ class OrderController extends AbstractController
             $address = $addressOrder->getAddress();
             $em = $doctrine->getManager();
 
-            if ($request->query->get('confirm') || $request->query->get('cancel')) {
-
+            if ($request->query->get('confirm') === 'true') {
                 if ($request->query->get('confirm')) {
-                    $order->setStatus(Order::DRIVER_NEW);
-                    $this->addFlash('error', "Votre déclaration de corps s'est bien enregistrée");
+                    /*$order->setStatus(Order::DRIVER_NEW);*/
+                    // Driver dois payer la commande
+                    return $this->redirectToRoute('user_order_payment');
                 }
 
                 if ($request->query->get('cancel')) {
                     $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
                     $this->addFlash('error', "Votre déclaration de corps s'est bien annulée");
                 }
-
                 $em->persist($order);
                 $em->flush();
 
                 return $this->redirectToRoute('user_order');
-
             }
 
             return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
@@ -525,9 +501,11 @@ class OrderController extends AbstractController
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
         $checkout_session = Session::create([
+            'customer_email' => $this->getUser()->getEmail(),
+            'submit_type' => 'pay',
             'line_items' => [[
                 # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                'price' => 'price_1LEG1xGgCa17kbBHj4M43fIX',
+                'price' => 'price_1LH6P2GgCa17kbBHIR6gSl2k',
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
@@ -544,8 +522,14 @@ class OrderController extends AbstractController
     }
 
     #[Route('/commander-un-service/payement/confirmation', name: 'user_order_success', methods: ['POST', 'GET'])]
-    public function orderServiceSuccess(Request $request): Response
+    public function orderServiceSuccess(Request $request, OrderRepository $orderRep,): Response
     {
+        $em = $this->getDoctrine()->getManager();
+        $order = $orderRep->findOneBy(['status' => Order::DRAFT]);
+        $order->setStatus(Order::DRIVER_NEW);
+        $em->persist($order);
+        $em->flush();
+
         return $this->render('front/user/payment/success.html.twig');
     }
 
