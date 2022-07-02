@@ -25,6 +25,7 @@
 ###> IDE/OS ###
 .idea
 **/.DS_Store
+.vscode
 ###< IDE/OS ###
 
 ### JS Dependencies ###
