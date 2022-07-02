@@ -99,13 +99,45 @@
                                 on March, 2021</p>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
-                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
+                            <div class="bg-blue-600 h-2.5 rounded-full" {% if order.types == 'DRIVER' %}
+                                    {% if order.status == 'DRIVER_NEW' %} style="width: 5% ">{% endif %}
+                                {% if order.status == 'DRIVER_ACCEPT' %} style="width: 23% ">{% endif %}
+                                {% if order.status == 'DRIVER_ARRIVES' %} style="width: 40% ">{% endif %}
+                                {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %} style="width: 58% ">{% endif %}
+                                {% if order.status == 'DRIVER_BRINGS_TO_WAREHOUSE' %} style="width: 78% ">{% endif %}
+                                {% if order.status == 'DRIVER_CLOSE' %} style="width: 100% ">{% endif %}
+                                {% endif %}
+
+                                {% if order.types == 'FUNERAL' %}
+                                {% if order.status == 'FUNERAL_NEW' %} style="width: 5% ">{% endif %}
+                                {% if order.status == 'FUNERAL_ACCEPT' %} style="width: 23% ">{% endif %}
+                                {% if order.status == 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' %} style="width: 32% ">{% endif %}
+                                {% if order.status == 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' %} style="width: 41% ">{% endif %}
+                                {% if order.status == 'FUNERAL_IN_PROGRESS_PROCESSING' %} style="width: 58% ">{% endif %}
+                                {% if order.status == 'FUNERAL_CLOSE_PROCESSING' %} style="width: 70% ">{% endif %}
+                                {% if order.status == 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' %} style="width: 82% ">{% endif %}
+                                {% if order.status == 'FUNERAL_DRIVER_CLOSE_BRING' %} style="width: 100% ">{% endif %}
+
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
-                            <p>Order placed</p>
-                            <p>Processing</p>
-                            <p>Shipped</p>
-                            <p>Delivered</p>
+                            {% if order.types == 'DRIVER' %}
+                                <p class="text-sm">Recherche de livreur</p>
+                                <p class="text-sm">Conducteur accepter</p>
+                                <p class="text-sm">Conducteur arriver</p>
+                                <p class="text-sm">Validation de la commande</p>
+                                <p class="text-sm">Corps en acheminement</p>
+                                <p class="text-sm">Commande arriver</p>
+                            {% elseif order.types == 'FUNERAL' %}
+                                <p class="text-sm">En attente de validation</p>
+                                <p class="text-sm">Commande accepté</p>
+                                <p class="text-sm">Corps en transit</p>
+                                <p class="text-sm">En préparation</p>
+                                <p class="text-sm">Préparation terminé</p>
+                                <p class="text-sm">En livraison</p>
+                                <p class="text-sm">Commande arriver</p>
+                            {% endif %}
                         </div>
                     </div>
                 </section>
