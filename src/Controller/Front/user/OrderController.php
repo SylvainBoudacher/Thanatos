@@ -120,15 +120,11 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-
             if ($form->isValid()) {
                 // check data
                 $corpse = $form->getData();
-
                 if ($corpse->checkDateConsistency() && $corpse->isBirthdateValid()) {
-
                     if (!$order) {
-
                         // create order
                         $order = new Order();
                         $order->setIsValid(false);
@@ -137,49 +133,36 @@ class OrderController extends AbstractController
                         $order->setNumber(Carbon::now()->getPreciseTimestamp(-2));
                         $order->setStatus(Order::DRAFT);
                         $order->setTypes(Order::DRIVER);
-
                         $corpse->setPosition(0);
                     } else {
-
                         // get corpses
                         $corpses = $corpseRep->findBy(
                             ['command' => $order->getId()],
                             ['position' => 'ASC']
                         );
-
                         if (!$corpse->getId()) $corpse->setPosition($corpses[count($corpses) - 1]->getPosition() + 1);
                     }
-
                     $corpse->setCommand($order);
                     $order->addCorpse($corpse);
-
                     // persist
                     $em->persist($corpse);
                     $em->persist($order);
                     $em->flush();
-
                     $order = $orderRep->find($order->getId());
-
                     if ($request->request->get('draftDeclaration')) {
-
                         $this->addFlash('success', 'Déclaration de corps bien enregistrée en tant que brouillon');
                         return $this->redirectToRoute('user_order');
-
                     } else {
-
                         $corpses = $corpseRep->findBy(
                             ['command' => $order->getId()],
                             ['position' => 'ASC']
                         );
-
                         $indexCurrentCorpse = array_filter($corpses, fn($otherCorpse) => $otherCorpse->getPosition() === $corpse->getPosition()) ?? null;
                         $indexNextCorpse = is_array($indexCurrentCorpse) && !empty($indexCurrentCorpse) ? array_key_first($indexCurrentCorpse) + 1 : -1;
-
                         if ($indexNextCorpse) {
                             $corpse = $corpses[$indexNextCorpse] ?? new Corpse();
                             $nextCorpse = isset($corpses[$indexNextCorpse++]);
                         }
-
                         $form = $this->createForm(CorpseType::class, $corpse);
                         $this->addFlash('success', 'Corps bien ajouté');
                     }
@@ -187,20 +170,17 @@ class OrderController extends AbstractController
                     $this->addFlash('failed', 'Les dates ne sont pas coherent');
                 }
             }
-
         } else {
             if ($order) {
                 $corpses = $corpseRep->findBy(
                     ['command' => $order->getId()],
                     ['position' => 'ASC']
                 );
-
                 $corpse = $corpses[0];
                 $form = $this->createForm(CorpseType::class, $corpse);
                 $nextCorpse = isset($corpses[1]);
             }
         }
-
         return $this->renderForm('front/user/declareCorpse/index.html.twig', [
             'form' => $form,
             'order' => $order,
@@ -224,21 +204,16 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em = $doctrine->getManager();
             $address = $form->getData();
-
             // insert address
             $addressOrder->setAddress($address);
             $addressOrder->setCommand($order);
             $addressOrder->setStatus(AddressOrder::DECLARATION_CORPSES);
-
             $em->persist($addressOrder);
             $em->persist($address);
             $em->flush();
-
-            return $this->redirectToRoute('declare_corpse_confirmation');
-
+            return $this->redirectToRoute('user_order_payment');
         }
 
         return $this->renderForm('front/user/declareCorpse/address.html.twig', [
@@ -452,10 +427,14 @@ class OrderController extends AbstractController
     {
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+
         $checkout_session = Session::create([
+            'customer_email' => $this->getUser()->getEmail(),
+            'submit_type' => 'pay',
+            'payment_method_types' => ['card'],
             'line_items' => [[
                 # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                'price' => 'price_1LEG1xGgCa17kbBHj4M43fIX',
+                'price' => 'price_1LH328GgCa17kbBH3P8ybu94',
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
