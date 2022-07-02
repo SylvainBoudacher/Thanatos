@@ -39,30 +39,11 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted("ROLE_USER")]
 class OrderController extends AbstractController
 {
-
-    /*
-         * Order status :
-         *  *NEW
-         *  *DELIVERY_REACH
-         *  *PROCESSING
-         *  *SHIPPED
-         *  *CLOSE
-        */
-
-    /*
-     * Order type:
-     *  *DRIVER
-     *  *FUNERAL
-     */
-
-
     #[Route('/commande', name: 'user_order', methods: ['GET'])]
     public function dashboard(OrderRepository $orderRepository): Response
     {
-
         $orderNotClose = $orderRepository->findAllOrderWithoutStatus('CLOSE');
         $orderClose = $orderRepository->findAllOrderWhenStatus('CLOSE');
-
         return $this->render('front/user/myCommand/index.html.twig', [
             'orderNotClose' => $orderNotClose,
             'orderClose' => $orderClose,
@@ -72,7 +53,6 @@ class OrderController extends AbstractController
     #[Route('/commande/{id}', name: 'user_order_id', methods: ['GET'])]
     public function show(Order $order, int $id, PreparationRepository $preparationRepository): Response
     {
-
         if ($order->getPossessor() != $this->getUser()) {
             throw $this->createNotFoundException(
                 'Aucune commande pour l\'id: ' . $id . ' vous appartient'
@@ -111,7 +91,6 @@ class OrderController extends AbstractController
             if (!$order) dd('crash error : no corpse exist without order');
 
             $corpseIsOwned = $order->getId() == $corpse->getCommand()->getId();
-
             if (!$corpseIsOwned) dd('crash error : no corpse exist without order');
         }
 
@@ -213,7 +192,7 @@ class OrderController extends AbstractController
             $em->persist($addressOrder);
             $em->persist($address);
             $em->flush();
-            return $this->redirectToRoute('user_order_payment');
+            return $this->redirectToRoute('user_order_recap');
         }
 
         return $this->renderForm('front/user/declareCorpse/address.html.twig', [
@@ -228,25 +207,19 @@ class OrderController extends AbstractController
         $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
 
         if ($order && $addressOrder) {
-
             $address = $addressOrder->getAddress();
             $em = $doctrine->getManager();
-
             if ($request->query->get('confirm') || $request->query->get('cancel')) {
                 $request->query->get('confirm') ?? $order->setStatus(Order::DRIVER_NEW);
                 $request->query->get('cancel') ?? $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
                 $em->persist($order);
                 $em->flush();
-
-                dd('either you confirm or cancel, congrats');
             }
-
             return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
                 'order' => $order,
                 'address' => $address
             ]);
         }
-
         return $this->redirectToRoute('user_order');
     }
 
@@ -270,21 +243,15 @@ class OrderController extends AbstractController
     public function edit_corpse_declaration(Request $request, Corpse $corpse, OrderRepository $orderRep)
     {
         $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
-
         if (array_filter($order->getCorpses()->toArray(), fn($c) => $c->getId() == $corpse->getId())) {
-
             $form = $this->createForm(CorpseType::class, $corpse);
             $form->handleRequest($request);
-
             if ($form->isSubmitted() && $form->isValid()) {
-
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($corpse);
                 $em->flush();
-
                 return $this->redirectToRoute('declare_corpse_confirmation');
             }
-
             return $this->renderForm('front/user/declareCorpse/index.html.twig', [
                 'form' => $form,
                 'order' => $order,
@@ -292,9 +259,7 @@ class OrderController extends AbstractController
                 'nextCorpse' => false,
                 'editVersion' => true
             ]);
-
         }
-
         return $this->redirectToRoute('declare_corpse_confirmation');
     }
 
@@ -302,27 +267,23 @@ class OrderController extends AbstractController
     #[Route('/commander-un-service/1', name: 'user_order_theme', methods: ['POST', 'GET'])]
     public function orderServiceTheme(Request $request, ThemeRepository $themeRepository, CorpseRepository $corpseRepository): Response
     {
-
         $themes = $themeRepository->findAll();
         $session = $request->getSession();
 
         if (is_numeric($request->query->get('corpse'))) {
             $cartSession['corpse'] = $request->query->get('corpse');
             $session->set('cartSession', $cartSession);
-
         }
         if ($request->query->get('nextStep') && $request->query->get('theme')) {
             $cartSession = $session->get('cartSession');
             $cartSession['theme'] = $request->query->get('theme');
             $session->set('cartSession', $cartSession);
-
             return $this->redirectToRoute('user_order_company', ['themeId' => $request->query->get('theme')]);
         }
 
         return $this->render('front/user/orderService/index.html.twig', [
             'themes' => $themes,
             'referer' => $request->headers->get('referer')
-
         ]);
     }
 
