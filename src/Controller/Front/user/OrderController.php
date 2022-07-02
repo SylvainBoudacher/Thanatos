@@ -382,76 +382,73 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/commander-un-service/3', name: 'user_order_product', methods: ['POST', 'GET'])]
-    public function orderServiceProduct(Request $request, ModelMaterialRepository $modelMaterialRepository): Response
+    #[Route('/commander-un-service/3/company/{id}', name: 'user_order_product', methods: ['POST', 'GET'])]
+    public function orderServiceProduct(Request $request, Company $company = null): Response
     {
-        $session = $request->getSession();
-        $cartSession = $session->get('cartSession');
+        /*  $session = $request->getSession();
+          $cartSession = $session->get('cartSession');
 
-        if ($request->query->get('nextStep') && $request->query->get('burial')) {
-            $cartSession['burial'] = $request->query->get('burial');
-            $session->set('cartSession', $cartSession);
+          if ($request->query->get('nextStep') && $request->query->get('burial')) {
+              $cartSession['burial'] = $request->query->get('burial');
+              $session->set('cartSession', $cartSession);
 
-            return $this->redirectToRoute('user_order_product_specificity');
-        }
+              return $this->redirectToRoute('user_order_product_specificity');
+          }
 
-        $em = $this->getDoctrine()->getManager();
-        $company = $em->getRepository(Company::class)->find($cartSession['company']);
-        $burials = $modelMaterialRepository->getBurialsByCompany($company);
+          $em = $this->getDoctrine()->getManager();
+          $company = $em->getRepository(Company::class)->find($cartSession['company']);
+          $burials = $modelMaterialRepository->getBurialsByCompany($company);*/
 
-        return $this->render('front/user/orderService/burials.html.twig', ['burials' => $burials]);
+        return $this->render('front/user/orderService/company.html.twig');
     }
 
     #[Route('/commander-un-service/4', name: 'user_order_product_specificity', methods: ['POST', 'GET'])]
     public function orderServiceProductSpecificity(Request $request, PaintingRepository $paintingRepository, ModelRepository $modelRepository): Response
     {
-        $session = $request->getSession();
-        $cartSession = $session->get('cartSession');
+        /*    $session = $request->getSession();
+            $cartSession = $session->get('cartSession');
 
-        $em = $this->getDoctrine()->getManager();
-        $company = $em->getRepository(Company::class)->find($cartSession['company']);
-        $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
-        $paintings = $paintingRepository->getByCompany($company);
-        $models = $modelRepository->getByCompanyAndBurial($company, $burial);
+            $em = $this->getDoctrine()->getManager();
+            $company = $em->getRepository(Company::class)->find($cartSession['company']);
+            $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
+            $paintings = $paintingRepository->getByCompany($company);
+            $models = $modelRepository->getByCompanyAndBurial($company, $burial);
 
-        $submittedToken = $request->request->get('token');
+            $submittedToken = $request->request->get('token');
 
-        if ($this->isCsrfTokenValid('model-item', $submittedToken) && $request->query->get('nextStep') && $request->query->get('model')) {
-            $options = true;
-            $material = $request->request->get('material');
-            $extra = $request->request->get('extra');
-            $model = $em->getRepository(Model::class)->find($request->query->get('model'));
-            $modelExtra = NULL;
+            if ($this->isCsrfTokenValid('model-item', $submittedToken) && $request->query->get('nextStep') && $request->query->get('model')) {
+                $options = true;
+                $material = $request->request->get('material');
+                $extra = $request->request->get('extra');
+                $model = $em->getRepository(Model::class)->find($request->query->get('model'));
+                $modelExtra = NULL;
 
-            if (!empty($extra)) {
-                $modelExtra = $em->getRepository(ModelExtra::class)->findOneBy(['model' => $model, 'extra' => $extra]);
-                if (empty($modelExtra)) $options = false;
-            }
-
-            if ($options) {
-
-                $modelMaterial = $em->getRepository(ModelMaterial::class)->findOneBy(['model' => $model, 'material' => $material]);
-
-                if (!empty($modelMaterial)) {
-
-                    $cartSession = $session->get('cartSession');
-                    $cartSession['model'] = $model->getId();
-                    $cartSession['modelExtra'] = $modelExtra ? $modelExtra->getId() : NULL;
-                    $cartSession['modelMaterial'] = $modelMaterial->getId();
-                    $session->set('cartSession', $cartSession);
-
-                    return $this->redirectToRoute('user_order_recap');
+                if (!empty($extra)) {
+                    $modelExtra = $em->getRepository(ModelExtra::class)->findOneBy(['model' => $model, 'extra' => $extra]);
+                    if (empty($modelExtra)) $options = false;
                 }
 
-            } else {
-                $this->addFlash('error', 'Un soucis avec votre formulaire');
-            }
-        }
+                if ($options) {
 
-        return $this->render('front/user/orderService/products.html.twig', [
-            'models' => $models,
-            'paintings' => $paintings
-        ]);
+                    $modelMaterial = $em->getRepository(ModelMaterial::class)->findOneBy(['model' => $model, 'material' => $material]);
+
+                    if (!empty($modelMaterial)) {
+
+                        $cartSession = $session->get('cartSession');
+                        $cartSession['model'] = $model->getId();
+                        $cartSession['modelExtra'] = $modelExtra ? $modelExtra->getId() : NULL;
+                        $cartSession['modelMaterial'] = $modelMaterial->getId();
+                        $session->set('cartSession', $cartSession);
+
+                        return $this->redirectToRoute('user_order_recap');
+                    }
+
+                } else {
+                    $this->addFlash('error', 'Un soucis avec votre formulaire');
+                }
+            }*/
+
+        return $this->render('front/user/orderService/products.html.twig');
     }
 
     #[Route('/commander-un-service/recapitulatif', name: 'user_order_recap', methods: ['POST', 'GET'])]

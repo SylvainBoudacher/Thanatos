@@ -4,23 +4,50 @@
 {% block body %}
 
     <div class="p-5">
-    <h1 class="text-4xl mb-3">Choisir un contenant</h1>
-<div class="flex gap-3 flex-wrap justify-around">
+        <h1 class="text-4xl mb-3">Choisir un contenant</h1>
+        <div class="flex gap-3 flex-wrap justify-around">
 
-    {% for burial in burials %}
-    <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-        <div class="p-5">
-            <a href="#">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ burial.name }}</h5>
-            </a>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ burial.description }}</p>
-            <a href="{{ path('user_order_product', {burial: burial.id, nextStep: true}) }}" class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                Selectionner
-            </a>
+            <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+                <div class="p-5">
+                    <a href="#">
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Nom du
+                            burial</h5>
+                    </a>
+                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Nullam elementum sed ligula in congue.
+                        Nullam elementum nisl eros, finibus pretium magna iaculis nec. Nulla dictum nisi lacus, in
+                        pretium massa bibendum vitae. Donec venenatis massa purus, suscipit feugiat nisi ornare sit
+                        amet. Integer nec tempor neque. Duis semper justo massa, in molestie diam maximus eu. Vestibulum
+                        ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Mauris eget orci
+                        sed ipsum laoreet lobortis. Praesent finibus urna ac nisl tempus, nec imperdiet elit egestas.
+                        Vestibulum commodo mattis odio, ut cursus diam laoreet in. Sed</p>
+                    <a href="#"
+                       class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Selectionner
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
-    {% endfor %}
-
-</div>
-    </div>
 {% endblock %}
+
+{# <div class="p-5">
+    <h1 class="text-4xl mb-3">Choisir un contenant</h1>
+    <div class="flex gap-3 flex-wrap justify-around">
+
+        {% for burial in burials %}
+            <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+                <div class="p-5">
+                    <a href="#">
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ burial.name }}</h5>
+                    </a>
+                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ burial.description }}</p>
+                    <a href="{{ path('user_order_product', {burial: burial.id, nextStep: true}) }}" class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Selectionner
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div> #}
