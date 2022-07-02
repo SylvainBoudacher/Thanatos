@@ -9,11 +9,7 @@
                             <div class="flex flex-row justify-between">
                                 <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Commande #{{ order.number}}</p>
                                 <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">
-                                    {% if order.types == 'DRIVER' %}
-                                        Prise en charge / Livraison
-                                    {% elseif order.types == 'FUNERAL' %}
-                                        Commande d'une préparation
-                                    {% endif %}
+                                    
                                 </p>
                             </div>
                             <div class=" py-3 mx-auto rounded-b-lg w-full">

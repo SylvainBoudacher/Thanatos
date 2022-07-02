@@ -3,20 +3,19 @@
 {% block body %}
 
     <div class="mx-auto  text-center lg:mb-16 mb-8 pt-8">
-        <h2 class="mb-4 text-3xl lg:text-4xl font-extrabold text-gray-900 ">Mes commandes</h2>
+        <h2 class="mb-3 text-3xl lg:text-4xl font-extrabold text-gray-900 ">Mes commandes</h2>
     </div>
 
     {% if orderNotClose is not empty %}
         {% for order in orderNotClose %}
-            <div class="container px-6 mx-auto py-6 ">
+            <div class="container px-6 mx-auto pb-6 ">
 
                 <div class="flex flex-row  pb-4 justify-start ">
                     <p class="font-bold text-3xl pb-3 text-gray-800">Commande #{{ order.number }}</p>
                     <a href="#">
                         <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir la facture</p>
                     </a>
-                    <svg class="w-6  xmlns=" http:
-                    //www.w3.org/2000/svg" viewBox="0 0 24 24" />
+                    <svg class="w-6  xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 24 24" />
                     <path fill="none" d="M0 0h24v24H0Z"></path>
                     <path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path>
                     </svg>
@@ -95,29 +94,28 @@
                     {# End of the card #}
                     <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
                         <div class="flex flex-row">
-                            <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Preparing to ship
-                                on March, 2021</p>
+
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
-                            <div class="bg-blue-600 h-2.5 rounded-full" {% if order.types == 'DRIVER' %}
+                            <div class="bg-blue-600 h-2.5 rounded-full"
+                                {% if order.types == 'DRIVER' %}
                                     {% if order.status == 'DRIVER_NEW' %} style="width: 5% ">{% endif %}
-                                {% if order.status == 'DRIVER_ACCEPT' %} style="width: 23% ">{% endif %}
-                                {% if order.status == 'DRIVER_ARRIVES' %} style="width: 40% ">{% endif %}
-                                {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %} style="width: 58% ">{% endif %}
-                                {% if order.status == 'DRIVER_BRINGS_TO_WAREHOUSE' %} style="width: 78% ">{% endif %}
-                                {% if order.status == 'DRIVER_CLOSE' %} style="width: 100% ">{% endif %}
+                                    {% if order.status == 'DRIVER_ACCEPT' %} style="width: 23% ">{% endif %}
+                                    {% if order.status == 'DRIVER_ARRIVES' %} style="width: 40% ">{% endif %}
+                                    {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %} style="width: 58% ">{% endif %}
+                                    {% if order.status == 'DRIVER_BRINGS_TO_WAREHOUSE' %} style="width: 78% ">{% endif %}
+                                    {% if order.status == 'DRIVER_CLOSE' %} style="width: 100% ">{% endif %}
                                 {% endif %}
 
                                 {% if order.types == 'FUNERAL' %}
-                                {% if order.status == 'FUNERAL_NEW' %} style="width: 5% ">{% endif %}
-                                {% if order.status == 'FUNERAL_ACCEPT' %} style="width: 23% ">{% endif %}
-                                {% if order.status == 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' %} style="width: 32% ">{% endif %}
-                                {% if order.status == 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' %} style="width: 41% ">{% endif %}
-                                {% if order.status == 'FUNERAL_IN_PROGRESS_PROCESSING' %} style="width: 58% ">{% endif %}
-                                {% if order.status == 'FUNERAL_CLOSE_PROCESSING' %} style="width: 70% ">{% endif %}
-                                {% if order.status == 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' %} style="width: 82% ">{% endif %}
-                                {% if order.status == 'FUNERAL_DRIVER_CLOSE_BRING' %} style="width: 100% ">{% endif %}
-
+                                    {% if order.status == 'FUNERAL_NEW' %} style="width: 5% ">{% endif %}
+                                    {% if order.status == 'FUNERAL_ACCEPT' %} style="width: 23% ">{% endif %}
+                                    {% if order.status == 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' %} style="width: 32% ">{% endif %}
+                                    {% if order.status == 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' %} style="width: 41% ">{% endif %}
+                                    {% if order.status == 'FUNERAL_IN_PROGRESS_PROCESSING' %} style="width: 58% ">{% endif %}
+                                    {% if order.status == 'FUNERAL_CLOSE_PROCESSING' %} style="width: 70% ">{% endif %}
+                                    {% if order.status == 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' %} style="width: 82% ">{% endif %}
+                                    {% if order.status == 'FUNERAL_DRIVER_CLOSE_BRING' %} style="width: 100% ">{% endif %}
                                 {% endif %}
                             </div>
                         </div>
