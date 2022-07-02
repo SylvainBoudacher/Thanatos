@@ -22,10 +22,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ModelController extends AbstractController
 {
     #[Route('/', name: 'view_models')]
-    public function view_models(ModelRepository $modelRep): Response
+    public function view_models(ModelRepository $modelRep, CompanyRepository $companyRep, UserRepository $userRep): Response
     {
+        $company = $companyRep->find($userRep->find($this->getUser())->getCompany()->getId());
+        $models = $modelRep->findBy(["company" => $company]);
         return $this->render("back/company/services/models/index.html.twig", [
-            "models" => $modelRep->findAll(),
+            "models" => $models
         ]);
     }
 

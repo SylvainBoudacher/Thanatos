@@ -1,6 +1,6 @@
 <?php
 
-/*namespace App\DataFixtures;
+namespace App\DataFixtures;
 
 use App\Entity\Company;
 use App\Entity\CompanyMaterial;
@@ -10,36 +10,50 @@ use App\Entity\Material;
 use App\Entity\Model;
 use App\Entity\ModelMaterial;
 use App\Entity\Painting;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
 use Faker;
 
-class CompanyMaterialFixtures extends Fixture implements FixtureGroupInterface
+class CompanyMaterialFixtures extends Fixture implements DependentFixtureInterface
 {
   
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create("fr-FR");
         $materials = $manager->getRepository(Material::class)->findAll();
-        $company = $manager->getRepository(Company::class)->find(3);
+        $companies = $manager->getRepository(Company::class)->findAll();
 
-        for($i = 0; $i < 5; $i++)
-        {
+        foreach ($companies as $company) {
+            foreach ($materials as $material) {
 
-            $entity = new CompanyMaterial();
-            $entity
-                ->setMaterial($faker->randomElement($materials))
-                ->setCompany($company);
-            $manager->persist($entity);
+                if ($faker->numberBetween(0, 1) === 0) {
+
+                    $companyMaterial = new CompanyMaterial();
+                    $companyMaterial
+                        ->setCompany($company)
+                        ->setMaterial($material);
+                    $manager->persist($companyMaterial);
+
+                }
+            }
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            CompanyFixtures::class,
+            MaterialFixtures::class
+        ];
     }
 
     public static function getGroups(): array
     {
         return ['group1'];
     }
-}*/
+}

@@ -1,18 +1,19 @@
 <?php
-/*
+
 namespace App\DataFixtures;
 
 use App\Entity\Extra;
 use App\Entity\Material;
 use App\Entity\Model;
 use App\Entity\ModelMaterial;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
 use Faker;
 
-class ModelMaterialFixtures extends Fixture implements FixtureGroupInterface
+class ModelMaterialFixtures extends Fixture implements DependentFixtureInterface
 {
   
     public function load(ObjectManager $manager)
@@ -21,21 +22,33 @@ class ModelMaterialFixtures extends Fixture implements FixtureGroupInterface
         $materials = $manager->getRepository(Material::class)->findAll();
         $models = $manager->getRepository(Model::class)->findAll();
 
-        for($i = 0; $i < 5; $i++)
-        {
+        foreach ($models as $model) {
+            foreach ($materials as $material) {
 
-            $modelMaterial = new ModelMaterial();
-            $modelMaterial
-                ->setModel($faker->randomElement($models))
-                ->setMaterial($faker->randomElement($materials));
-            $manager->persist($modelMaterial);
+                if ($faker->numberBetween(0, 1) === 0) {
+                    $modelMaterial = new ModelMaterial();
+                    $modelMaterial
+                        ->setModel($model)
+                        ->setMaterial($material);
+
+                    $manager->persist($modelMaterial);
+                }
+            }
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            MaterialFixtures::class,
+            ModelFixtures::class
+        ];
     }
 
     public static function getGroups(): array
     {
         return ['group1'];
     }
-}*/
+}

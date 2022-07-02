@@ -1,45 +1,53 @@
 <?php
 
-/*namespace App\DataFixtures;
+namespace App\DataFixtures;
 
 use App\Entity\Company;
 use App\Entity\CompanyExtra;
-use App\Entity\CompanyPainting;
 use App\Entity\Extra;
-use App\Entity\Material;
-use App\Entity\Model;
-use App\Entity\ModelMaterial;
-use App\Entity\Painting;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
 use Faker;
 
-class CompanyExtraFixtures extends Fixture implements FixtureGroupInterface
+class CompanyExtraFixtures extends Fixture implements DependentFixtureInterface
 {
   
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create("fr-FR");
         $extras = $manager->getRepository(Extra::class)->findAll();
-        $company = $manager->getRepository(Company::class)->find(3);
+        $companies = $manager->getRepository(Company::class)->findAll();
 
-        for($i = 0; $i < 5; $i++)
-        {
+        foreach ($companies as $company) {
+            foreach ($extras as $extra) {
 
-            $entity = new CompanyExtra();
-            $entity
-                ->setExtra($faker->randomElement($extras))
-                ->setCompany($company);
-            $manager->persist($entity);
+                if ($faker->numberBetween(0, 1) === 0) {
+
+                    $companyExtra = new CompanyExtra();
+                    $companyExtra
+                        ->setCompany($company)
+                        ->setExtra($extra);
+                    $manager->persist($companyExtra);
+
+                }
+            }
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            CompanyFixtures::class,
+            ExtraFixtures::class
+        ];
     }
 
     public static function getGroups(): array
     {
         return ['group1'];
     }
-}*/
+}

@@ -14,10 +14,11 @@
                 <div class="flex flex-wrap mt-10">
                     {% for detailedTheme in detailedThemes %}
                         <div class="max-w-2xl mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
-                            {% if vich_uploader_asset(detailedTheme.theme.media) != null %}
+                            {# {% if vich_uploader_asset(detailedTheme.theme.media) %}#}
+                            {% if detailedTheme.theme.media %}
                             <img class="object-cover w-full h-64" src="{{ vich_uploader_asset(detailedTheme.theme.media) }}" alt="Theme de {{ detailedTheme.theme.name }}">
                             {% else %}
-                            <img class="object-cover w-full h-64" src="/images/theme-default.png" alt="Theme de {{ detailedTheme.theme.name }}">
+                            <img class="object-cover w-full h-64" src="/images/theme-default.png" alt="Theme de {{ detailedTheme.theme.name }}"> #}
                             {% endif %}
                             <div class="p-6">
                                 <div>
@@ -59,3 +60,4 @@
         </div>
     </div>
 {% endblock %}
+

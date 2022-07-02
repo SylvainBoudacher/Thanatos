@@ -1,36 +1,56 @@
 <?php
 
-/*namespace App\DataFixtures;
+namespace App\DataFixtures;
 
 use App\Entity\Burial;
 use App\Entity\Company;
 use App\Entity\User;
 use App\Entity\Model;
+use App\Repository\CompanyRepository;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
 use Faker;
 
-class ModelFixtures extends Fixture implements FixtureGroupInterface
+class ModelFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const MODEL_REFERENCE = "model-reference";
+
     public function load(ObjectManager $manager)
     {
+
         $faker = Faker\Factory::create("fr-FR");
-        $users = $manager->getRepository(User::class)->findBy(['id' => 1]);
+        $companies = $manager->getRepository(Company::class)->findBy(["type" => "COMPANY"]);
         $burials = $manager->getRepository(Burial::class)->findAll();
-        for($i = 0; $i < 5; $i++)
-        {
-            $model = new Model();
-            $model
-                ->setName($faker->word())
-                ->setDescription('is sit amet ex mollis mauris congue rhoncus at sed lorem. Nulla facilisi. Nulla non luctus eros. Curabitur a feugiat diam. Duis laoreet porttitor tortor sit amet dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean faucibus sit amet augue quis ullamcorper. V')
-                ->setPrice($faker->numberBetween(1000, 10000))
-                ->setCompany($faker->randomElement(array_column($users, 'company')))
-                ->setBurial($faker->randomElement($burials));
-            $manager->persist($model);
+
+        $modelTypes = ["Rond", "Carré", "Triangle"];
+
+        $count = 0;
+        foreach ($companies as $company) {
+            foreach ($burials as $burial) {
+                foreach ($modelTypes as $modelType) {
+
+                    $burialName = $burial->getName();
+                    $model = new Model();
+                    $model
+                        ->setName( $burialName." ".$modelType)
+                        ->setDescription("Description de ". $burialName." ".$modelType)
+                        ->setPrice($faker->numberBetween(15, 60))
+                        ->setCompany($company)
+                        ->setBurial($burial);
+
+                    $manager->persist($model);
+                    $this->addReference(self::MODEL_REFERENCE."-".$count, $model);
+                    $count++;
+
+                }
+            }
         }
+
         $manager->flush();
+
     }
 
     public function getDependencies()
@@ -44,4 +64,4 @@ class ModelFixtures extends Fixture implements FixtureGroupInterface
     {
         return ['group1'];
     }
-}*/
+}
