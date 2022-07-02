@@ -364,21 +364,21 @@ class OrderController extends AbstractController
     #[Route('/commander-un-service/2', name: 'user_order_company', methods: ['POST', 'GET'])]
     public function orderServiceCompany(Request $request, CompanyThemeRepository $companyThemeRep, CompanyRepository $companyRepository, int $themeId = null): Response
     {
-        $session = $request->getSession();
+        /*  $session = $request->getSession();
 
-        if ($request->query->get('nextStep') && $request->query->get('company')) {
-            $cartSession = $session->get('cartSession');
-            $cartSession['company'] = $request->query->get('company');
-            $session->set('cartSession', $cartSession);
+          if ($request->query->get('nextStep') && $request->query->get('company')) {
+              $cartSession = $session->get('cartSession');
+              $cartSession['company'] = $request->query->get('company');
+              $session->set('cartSession', $cartSession);
 
-            return $this->redirectToRoute('user_order_product');
-        }
+              return $this->redirectToRoute('user_order_product');
+          }
 
-        $themeId = $request->query->get('themeId');
-        $companies = $companyThemeRep->getCompaniesByTheme($themeId);
+          $themeId = $request->query->get('themeId');
+          $companies = $companyThemeRep->getCompaniesByTheme($themeId);*/
 
         return $this->render('front/user/orderService/companies.html.twig', [
-            'companies' => $companies,
+//            'companies' => $companies,
         ]);
     }
 
@@ -451,6 +451,71 @@ class OrderController extends AbstractController
         return $this->render('front/user/orderService/products.html.twig', [
             'models' => $models,
             'paintings' => $paintings
+        ]);
+    }
+
+    #[Route('/commander-un-service/recapitulatif', name: 'user_order_recap', methods: ['POST', 'GET'])]
+    public function orderServiceRecap(Request $request): Response
+    {
+        $session = $request->getSession();
+        $cartSession = $session->get('cartSession');
+        $em = $this->getDoctrine()->getManager();
+        $total = 0;
+
+        $corpse = $em->getRepository(Corpse::class)->find($cartSession['corpse']);
+        $theme = $em->getRepository(Theme::class)->find($cartSession['theme']);
+        $company = $em->getRepository(Company::class)->find($cartSession['company']);
+        $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
+        $model = $em->getRepository(Model::class)->find($cartSession['model']);
+        $modelExtra = $cartSession['modelExtra'] ? $em->getRepository(ModelExtra::class)->find($cartSession['modelExtra']) : null;
+        $modelMaterial = $em->getRepository(ModelMaterial::class)->find($cartSession['modelMaterial']);
+
+        /* ADDITION TOTAL */
+        $total += $modelExtra ? $modelExtra->getExtra()->getPrice() : 0;
+        $total += $theme->getPrice();
+        $total += $model->getPrice();
+        $total += $modelMaterial->getMaterial()->getPrice();
+
+        if ($request->query->get('confirm')) {
+            $preparation = new Preparation();
+            $preparation->setPrice($total);
+            $preparation->setCorpse($corpse);
+            $preparation->setTheme($theme);
+            $preparation->setModelMaterial($modelMaterial);
+            $corpse->setPreparation($preparation);
+
+            $em->persist($preparation);
+            $em->flush();
+
+            $session->remove('cartSession');
+
+            return $this->redirectToRoute('user_order_success');
+        }
+
+        return $this->render('front/user/orderService/recap.html.twig', [
+            'corpse' => $corpse,
+            'theme' => $theme,
+            'company' => $company,
+            'burial' => $burial,
+            'model' => $model,
+            'extra' => $modelExtra ? $modelExtra->getExtra() : [],
+            'material' => $modelMaterial->getMaterial(),
+            'total' => $total
+        ]);
+    }
+
+    #[Route('/pompe-funebre/{id}', name: 'company_details')]
+    public function details_company(Company $company): Response
+    {
+        return $this->render("back/company/services/models/details.html.twig", [
+            "company" => $company,
+        ]);
+    }
+
+    #[Route('/pompe-funebre-temp/{id}', name: 'company_details_temp')]
+    public function details_company_temp(): Response
+    {
+        return $this->render("front/user/orderService/company.html.twig", [
         ]);
     }
 
