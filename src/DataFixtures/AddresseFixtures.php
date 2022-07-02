@@ -25,11 +25,11 @@ class AddresseFixtures extends Fixture
                 ->setPostcode(substr($faker->postcode, 0, 5))
                 ->setNumber($faker->numberBetween($min = 1, $max = 407))
                 ->setStreet($faker->city);
+
             $manager->persist($address);
+            $this->addReference(self::ADDRESS_REFERENCE."-".$i, $address);
             $manager->flush();
         }
 
-        /*$this->addReference("address", $address);*/
-        $this->addReference(self::ADDRESS_REFERENCE, $address);
     }
 }

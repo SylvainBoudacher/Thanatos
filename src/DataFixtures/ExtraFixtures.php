@@ -1,6 +1,6 @@
 <?php
 
-/*namespace App\DataFixtures;
+namespace App\DataFixtures;
 
 use App\Entity\Company;
 use App\Entity\Extra;
@@ -11,20 +11,36 @@ use Faker;
 
 class ExtraFixtures extends Fixture implements FixtureGroupInterface
 {
+
+    public const EXTRA_REFERENCE = "extra-reference";
   
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create("fr-FR");
 
-        for($i = 0; $i < 20; $i++)
-        {
-            $extra = new Extra();
-            $extra
-                ->setName($faker->word())
-                ->setDescription('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ut feugiat elit, vitae tempor ligula. Suspendisse volutpat enim nec commodo lobortis. Ut et eleifend nulla. Proin dignissim elementum sollicitudin. Aliquam gravida vel mi euismod auctor. Ut vel rutrum enim, eget feugiat nunc. Sed aliquet ante si')
-                ->setPrice($faker->numberBetween(10, 500));
-            $manager->persist($extra);
-        }
+        $extraHat = new Extra();
+        $extraHat
+            ->setName("Chapi Chapeau")
+            ->setDescription('Description du chapi chapeau')
+            ->setPrice($faker->numberBetween(10, 500));
+        $manager->persist($extraHat);
+        $this->addReference(self::EXTRA_REFERENCE."-hat", $extraHat);
+
+        $extraSombrero = new Extra();
+        $extraSombrero
+            ->setName("Sombrero")
+            ->setDescription('Description du Sombrero')
+            ->setPrice($faker->numberBetween(10, 500));
+        $manager->persist($extraSombrero);
+        $this->addReference(self::EXTRA_REFERENCE."-sombrero", $extraSombrero);
+
+        $extraMedal = new Extra();
+        $extraMedal
+            ->setName("Medal")
+            ->setDescription('Description de la médaille')
+            ->setPrice($faker->numberBetween(10, 500));
+        $manager->persist($extraMedal);
+        $this->addReference(self::EXTRA_REFERENCE."-medal", $extraMedal);
 
         $manager->flush();
     }
@@ -33,4 +49,4 @@ class ExtraFixtures extends Fixture implements FixtureGroupInterface
     {
         return ['group1'];
     }
-}*/
+}

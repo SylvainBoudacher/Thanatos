@@ -1,44 +1,55 @@
 <?php
 
-/*
 namespace App\DataFixtures;
 
-use App\Entity\Burial;
 use App\Entity\Extra;
-use App\Entity\Material;
 use App\Entity\Model;
 use App\Entity\ModelExtra;
-use App\Entity\User;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
-
 use Faker;
 
-class ModelExtraFixtures extends Fixture implements FixtureGroupInterface
+class ModelExtraFixtures extends Fixture implements DependentFixtureInterface
 {
+
+    public const MODEL_EXTRA_REFERENCE = "model-extra-reference";
   
     public function load(ObjectManager $manager)
     {
-        $faker = Faker\Factory::create("fr-FR");
         $extras = $manager->getRepository(Extra::class)->findAll();
         $models = $manager->getRepository(Model::class)->findAll();
+        $faker = Faker\Factory::create("fr-FR");
 
-        for($i = 0; $i < 5; $i++)
-        {
+        foreach ($models as $model) {
+            foreach ($extras as $extra) {
 
-            $modelExtra = new ModelExtra();
-            $modelExtra
-                ->setExtra($faker->randomElement($extras))
-                ->setModel($faker->randomElement($models));
-            $manager->persist($modelExtra);
+                if ($faker->numberBetween(0, 1) === 0) {
+                    $modelExtra = new ModelExtra();
+                    $modelExtra
+                        ->setModel($model)
+                        ->setExtra($extra);
+
+                    $manager->persist($modelExtra);
+
+                }
+            }
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            ModelFixtures::class,
+            ExtraFixtures::class
+        ];
     }
 
     public static function getGroups(): array
     {
         return ['group1'];
     }
-}*/
+}

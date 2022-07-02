@@ -1,8 +1,6 @@
 <?php
 
-/*
- *
- namespace App\DataFixtures;
+namespace App\DataFixtures;
 
 use App\Entity\Burial;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -12,23 +10,34 @@ use Faker;
 
 class BurialFixtures extends Fixture implements FixtureGroupInterface
 {
+    public const BURIAL_REFERENCE = "burial-reference";
 
     public function load(ObjectManager $manager)
     {
-        $faker = Faker\Factory::create("fr-FR");
 
-        for($i = 0; $i < 5; $i++)
-        {
+        $burialTomb = new Burial();
+        $burialTomb
+           ->setName("Tombe")
+           ->setDescription("Description de la tombe");
+        $manager->persist($burialTomb);
 
-            $burial = new Burial();
-            $burial
-                ->setName($faker->word())
-                ->setDescription(' eros. Nullam eget ligula in nunc feugiat facilisis. Phasellus scelerisque gravida enim sed mattis. Nam non elit at libero cursus tempus sed eu felis');
+        $burialUrn = new Burial();
+        $burialUrn
+            ->setName("Urne")
+            ->setDescription("Description de l'urne");
+        $manager->persist($burialUrn);
 
-            $manager->persist($burial);
-        }
+        $burialTinCan = new Burial();
+        $burialTinCan
+            ->setName("Boite de conserve")
+            ->setDescription("Description de la boite de conserve");
+        $manager->persist($burialTinCan);
 
         $manager->flush();
+
+        $this->addReference(self::BURIAL_REFERENCE."-tomb", $burialTomb);
+        $this->addReference(self::BURIAL_REFERENCE."-urn", $burialUrn);
+        $this->addReference(self::BURIAL_REFERENCE."-tin-can", $burialTinCan);
 
     }
 
@@ -37,4 +46,3 @@ class BurialFixtures extends Fixture implements FixtureGroupInterface
         return ['group1'];
     }
 }
-*/

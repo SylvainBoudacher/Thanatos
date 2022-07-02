@@ -1,5 +1,5 @@
 <?php
-/*
+
 namespace App\DataFixtures;
 
 use App\Entity\Painting;
@@ -10,6 +10,8 @@ use Faker;
 
 class PaintingFixtures extends Fixture implements FixtureGroupInterface
 {
+
+    public const PAINTING_REFERENCE = "painting-reference";
   
     public function load(ObjectManager $manager)
     {
@@ -22,8 +24,10 @@ class PaintingFixtures extends Fixture implements FixtureGroupInterface
             $painting
                 ->setName($faker->safeColorName())
                 ->setPrice($faker->numberBetween(100, 1000))
-                ->setHexaCode(ltrim($hexColor, $hexColor[0]));
+                ->setHexaCode("#".ltrim($hexColor, $hexColor[0]));
+            $this->addReference(self::PAINTING_REFERENCE."-".$i, $painting);
             $manager->persist($painting);
+
         }
 
         $manager->flush();
@@ -33,4 +37,4 @@ class PaintingFixtures extends Fixture implements FixtureGroupInterface
     {
         return ['group1'];
     }
-}*/
+}
