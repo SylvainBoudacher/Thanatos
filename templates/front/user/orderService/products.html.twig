@@ -1,55 +1,66 @@
 {% extends 'base_front.html.twig' %}
 
-
 {% block body %}
 
     <div class="p-5">
-        <h1 class="text-4xl mb-3">Choisir le modèle avec ses options</h1>
+        <h1 class="text-4xl mb-3">
+            Choisir le modèle avec ses options
+        </h1>
         <div class="flex flex-row flex-wrap justify-center">
 
-
-            <form action="{{ path('user_order_product_specificity') }}"
-                  method="post">
+            <form action="{{ path('user_order_product_specificity') }}" method="post">
                 <input type="hidden" name="token" value=""/>
 
-                <div
-                        class="flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row dark:border-gray-700 dark:bg-gray-800">
                     <img class="object-cover w-full h-96 rounded-t-lg md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
                          src="https://picsum.photos/seed/picsum/200/300" alt="">
 
                     <div class="flex flex-col justify-between p-4 leading-normal">
-                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Modèle</h5>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"> maximus vitae lectus quis,
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                            Modèle
+                        </h5>
+                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                            maximus vitae lectus quis,
                             sagittis pharetra sapien. Aenean a luctus augue. Aenean nibh purus, eleifend pulvinar
                             finibus sed, imperdiet nec risus. Vestibulum faucibus tellus efficitur aliquam tincidunt.
-                            Nullam maximus nunc sed rutrum imperdiet. Duis lobortis mi eu nisi malesuad</p>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">100€</p>
+                            Nullam maximus nunc sed rutrum imperdiet. Duis lobortis mi eu nisi malesuad
+                        </p>
+                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                            100€
+                        </p>
 
-                        <h1 class="text-3xl  text-gray-900 dark:text-white">Les matériaux</h1>
+                        <h1 class="text-3xl  text-gray-900 dark:text-white">
+                            Les matériaux
+                        </h1>
                         <div class="flex flex-wrap gap-3 w-full h-fit bg-blue-800 rounded p-4">
 
                             <img class="rounded-t-lg" src="https://picsum.photos/seed/picsum/200/300
-"
-                                 alt="Image de ">
+                                    " alt="Image de ">
                             Material name
-                            <br> 100€
-                            <input type="radio" name="material" value="2">
-                        </div>
+
+                            <br>
+                            100€
+
+                            <input type="radio" name="material" value="2"></div>
                     </div>
 
-                    <h1 class="text-3xl  text-gray-900 dark:text-white">Les extras</h1>
+                    <h1 class="text-3xl  text-gray-900 dark:text-white">
+                        Les extras
+                    </h1>
                     <div class="flex flex-wrap gap-3 w-full h-fit bg-blue-800 rounded p-4">
-                        <img class="rounded-t-lg" src="https://picsum.photos/seed/picsum/200/300"
-                             alt="Image de ">
+                        <img class="rounded-t-lg" src="https://picsum.photos/seed/picsum/200/300" alt="Image de ">
                         Extra name
-                        <br> 100€
-                        <input type="radio" name="extra" value="">
-                    </div>
+
+                        <br>
+                        100€
+
+                        <input type="radio" name="extra" value=""></div>
                 </div>
 
                 <button type="submit"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                     Selection
+
                 </button>
             </form>
         </div>

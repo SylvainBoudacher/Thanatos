@@ -382,7 +382,7 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/commander-un-service/3/company/{id}', name: 'user_order_product', methods: ['POST', 'GET'])]
+    #[Route('/commander-un-service/3/pompe-funebre/{id}', name: 'user_order_product', methods: ['POST', 'GET'])]
     public function orderServiceProduct(Request $request, Company $company = null): Response
     {
         /*  $session = $request->getSession();

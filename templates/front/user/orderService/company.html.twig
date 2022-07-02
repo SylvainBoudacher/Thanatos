@@ -1,12 +1,10 @@
 {% extends 'base_front.html.twig' %}
 
-
 {% block body %}
+
     <div class="p-3 h-full grid place-items-center">
-
         <h1 class="text-3xl mb-3">Nom de la pompe funèbre</h1>
-
-        <section class="grid grid-cols-3 h-40 w-full gap-2 ">
+        <section class="grid grid-cols-3 w-full gap-2 ">
             <article class="bg-violet-200 rounded">
 
                 <div id="default-carousel" class="relative" data-carousel="static">
@@ -50,24 +48,30 @@
                     <button type="button"
                             class="flex absolute top-0 left-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
                             data-carousel-prev="">
-        <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-            <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor"
-                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round"
-                                                                              stroke-linejoin="round" stroke-width="2"
-                                                                              d="M15 19l-7-7 7-7"></path></svg>
-            <span class="hidden">Previous</span>
-        </span>
+                                        <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                                            <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
+                                                 stroke="currentColor"
+                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15 19l-7-7 7-7"></path></svg>
+                                            <span class="hidden">Previous</span>
+                                        </span>
                     </button>
                     <button type="button"
                             class="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
                             data-carousel-next="">
-        <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-            <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor"
-                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round"
-                                                                              stroke-linejoin="round" stroke-width="2"
-                                                                              d="M9 5l7 7-7 7"></path></svg>
-            <span class="hidden">Next</span>
-        </span>
+                                    <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                                        <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
+                                             stroke="currentColor"
+                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M9 5l7 7-7 7"></path></svg>
+                                        <span class="hidden">Next</span>
+                                    </span>
                     </button>
                 </div>
 
@@ -89,7 +93,21 @@
                 </div>
             </article>
         </section>
+        <div>
+            <div class="burial flex flex-col justify-center  ">
+                <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                    Choisir un
+                    contenant</h1>
 
+                <div class="burials flex flex-wrap justify-center gap-3">
+                    {% for i in 0..4 %}
+                        <div class="min-h-full w-60 bg-purple-600 rounded p-7 text-center">
+                            Cercueil
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
