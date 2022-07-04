@@ -1,0 +1,20 @@
+
+* {
+    box-sizing: border-box;
+}
+
+#formBurialOrderProduct input[type=radio].radioOrderService {
+    display: none;
+}
+
+#formBurialOrderProduct input[type=radio].radioOrderService:checked + label {
+    border: 5px solid black;
+}
+
+#formBurialOrderProduct label:hover span {
+    transform: scale(1.25);
+}
+
+#formBurialOrderProduct label span {
+    transition: transform 0.2s ease-in-out;
+}

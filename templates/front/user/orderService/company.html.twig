@@ -5,7 +5,7 @@
     <div class="p-3 h-full grid place-items-center">
         <h1 class="text-3xl mb-3">Nom de la pompe funèbre</h1>
         <section class="grid grid-cols-3 w-full gap-2 ">
-            <article class="bg-violet-200 rounded">
+            {# <article class="bg-violet-200 rounded">
 
                 <div id="default-carousel" class="relative" data-carousel="static">
                     <!-- Carousel wrapper -->
@@ -75,7 +75,7 @@
                     </button>
                 </div>
 
-            </article>
+            </article> #}
             <article class="bg-violet-200 col-span-2 rounded p-3 grid grid-rows-2">
                 <div class="row-span-2">Description : Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Suspendisse vehicula
@@ -93,20 +93,125 @@
                 </div>
             </article>
         </section>
-        <div>
-            <div class="burial flex flex-col justify-center  ">
-                <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
-                    Choisir un
-                    contenant</h1>
 
-                <div class="burials flex flex-wrap justify-center gap-3">
-                    {% for i in 0..4 %}
-                        <div class="min-h-full w-60 bg-purple-600 rounded p-7 text-center">
-                            Cercueil
-                        </div>
-                    {% endfor %}
+        <div>
+            <form action="{{ path('temp') }}" method="POST" id="formBurialOrderProduct" name="formOrderService">
+
+                {# BURIAL #}
+                <div id="burial" class="burial flex flex-col justify-center">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un
+                        contenant</h1>
+
+                    <div class="burials flex flex-wrap justify-center gap-9">
+                        {% for i in 0..4 %}
+                            <input id="burial-{{ i }}" type="radio" value="{{ i }}" name="burial"
+                                   class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioBurial"
+                                   data-burial-version="{{ i }}"
+                            />
+                            <label for="burial-{{ i }}" class="inline-block cursor-pointer"><span
+                                        class="bg-purple-600 p-9 block w-full h-full">Cercueil</span></label>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+
+                {# MODEL #}
+                <div id="model" class="model flex flex-col justify-center hidden">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un
+                        modèle</h1>
+
+                    <div class="models flex flex-wrap justify-center gap-9">
+
+                        {% for i in 0..4 %}
+                            <div class="flex flex-col modelItem hidden"
+                                 data-burial-version="{{ i }}">
+
+                                <input id="model-{{ i }}" type="radio" value="{{ i }}" name="model"
+                                       class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioModel"
+                                       data-model-version="{{ i }}"
+
+                                />
+                                <label for="model-{{ i }}" class="inline-block cursor-pointer"><span
+                                            class="bg-purple-600 p-9 block w-full h-full">Modèle{{ i }}</span></label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {# MATERIAL #}
+                <div id="material" class="flex flex-col justify-center hidden">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un
+                        matériau</h1>
+
+                    <div class="materials flex flex-wrap justify-center gap-9">
+                        {% for i in 0..4 %}
+
+                            <div class="flex flex-col materialItem hidden" data-model-version="{{ i }}">
+                                <input id="material-{{ i }}" type="radio" value="{{ i }}" name="material"
+                                       class="radioOrderService radioMaterial"
+
+                                />
+                                <label for="material-{{ i }}" class="inline-block cursor-pointer">
+                                    <img src="https://picsum.photos/200/300?random={{ i }}" alt=""
+                                         class="w-52 h-52"/>
+
+                                </label>
+                                <span class="w-full h-full">Cercueil</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {# COLOR #}
+                <div id="color" class="flex flex-col justify-center hidden">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir une
+                        couleur</h1>
+
+                    <div class="colors flex flex-wrap justify-center gap-9">
+                        {% for i in 0..4 %}
+
+                            <div class="flex flex-col colorItem hidden">
+                                <input id="color-{{ i }}" type="radio" value="{{ i }}" name="color"
+                                       class="radioOrderService radioColor"
+                                />
+                                <label for="color-{{ i }}" class="inline-block cursor-pointer">
+                                    <img src="https://picsum.photos/200/300" alt="" class="w-52	h-52"/>
+
+                                </label>
+                                <span class="w-full h-full">Cercueil</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {# EXTRAS #}
+                <div id="extra" class="flex flex-col justify-center hidden">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un
+                        extra</h1>
+
+                    <div class="extras flex flex-wrap justify-center gap-9">
+                        {% for i in 0..4 %}
+
+                            <div class="flex flex-col extraItem hidden" data-model-version="{{ i }}">
+                                <input id="extra-{{ i }}" type="radio" value="{{ i }}" name="extra"
+                                       class="radioOrderService radioExtra"
+                                />
+                                <label for="extra-{{ i }}" class="inline-block cursor-pointer">
+                                    <img src="https://picsum.photos/200/300?random={{ i }}" alt="" class="w-52 h-52"/>
+
+                                </label>
+                                <span class="w-full h-full">Cercueil</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <input type="submit" value="submit"/>
+            </form>
         </div>
     </div>
 

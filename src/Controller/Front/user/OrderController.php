@@ -221,9 +221,9 @@ class OrderController extends AbstractController
 
     #[Route('/declare-corps-confirmation', name: 'declare_corpse_confirmation', methods: ['POST', 'GET'])]
     public function declareCorpsesConfirmation(
-        Request $request,
-        ManagerRegistry $doctrine,
-        OrderRepository $orderRep,
+        Request                $request,
+        ManagerRegistry        $doctrine,
+        OrderRepository        $orderRep,
         AddressOrderRepository $addressOrderRep,
     ): Response
     {
@@ -399,7 +399,7 @@ class OrderController extends AbstractController
                 $model = $em->getRepository(Model::class)->find($request->query->get('model'));
                 $modelExtra = NULL;
 
-                if (!empty($extra)) {
+                if (!empty($extra))
                     $modelExtra = $em->getRepository(ModelExtra::class)->findOneBy(['model' => $model, 'extra' => $extra]);
                     if (empty($modelExtra)) $options = false;
                 }
@@ -426,6 +426,14 @@ class OrderController extends AbstractController
 
         return $this->render('front/user/orderService/products.html.twig');
     }
+
+    #[Route('/commander-un-service/1000', name: 'temp', methods: ['POST', 'GET'])]
+    public function temp(Request $request, PaintingRepository $paintingRepository, ModelRepository $modelRepository): Response
+    {
+        dd($request->request->all());
+
+    }
+
 
     #[Route('/commander-un-service/recapitulatif', name: 'user_order_recap', methods: ['POST', 'GET'])]
     public function orderServiceRecap(Request $request): Response
