@@ -431,9 +431,7 @@ class OrderController extends AbstractController
     public function temp(Request $request, PaintingRepository $paintingRepository, ModelRepository $modelRepository): Response
     {
         dd($request->request->all());
-
     }
-
 
     #[Route('/commander-un-service/recapitulatif', name: 'user_order_recap', methods: ['POST', 'GET'])]
     public function orderServiceRecap(Request $request): Response
@@ -484,6 +482,15 @@ class OrderController extends AbstractController
             'total' => $total
         ]);
     }
+
+    #[Route('/tempHere', name: 'user_order_recaptemp', methods: ['POST', 'GET'])]
+    public function orderServiceRecapTemp(Request $request): Response
+    {
+
+        return $this->render('front/user/orderService/recap.html.twig', [
+        ]);
+    }
+
 
     #[Route('/pompe-funebre/{id}', name: 'company_details')]
     public function details_company(Company $company): Response
