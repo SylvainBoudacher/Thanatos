@@ -2,7 +2,164 @@
 
 {% block body %}
 
-	<div class="p-5">
+    <div class="p-3 h-full grid place-items-center">
+
+        <h1 class="text-4xl mb-3">
+            Récapitulatif
+        </h1>
+
+        <div class="flex flex-row gap-4 justify-around items-start">
+            <div class="p-4 w-1/4 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex items-baseline text-gray-900 dark:text-white">
+					<span class="text-5xl font-extrabold tracking-tight">
+						Corps
+					</span>
+                </div>
+
+                <ul role="list" class="my-7 space-y-5">
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"> Firstname Lastname
+						</span>
+                    </li>
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+							Année de naissance 12/24/1242
+						</span>
+                    </li>
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+							Année de mort 12/24/1242
+						</span>
+                    </li>
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+							Sexe de la personne FEMME
+						</span>
+                    </li>
+                    <li class="flex space-x-3">
+                        <p class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+                            Cause de la mort : <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima obcaecati quasi quidem similique ut voluptate. Accusantium animi architecto assumenda cum ipsum ratione, voluptates. Cum enim facilis ipsam quidem sunt. Ducimus?</span>
+                        </p>
+                    </li>
+
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+							Taille / Poids : 1.50m / 10Kg
+						</span>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="p-4 w-1/4 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex items-baseline text-gray-900 dark:text-white">
+					<span class="text-5xl font-extrabold tracking-tight">
+						Theme
+					</span>
+                </div>
+
+                <ul role="list" class="my-7 space-y-5">
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"> Nom
+						</span>
+                    </li>
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+							Prix : Prix
+						</span>
+                    </li>
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+							Description :
+							<br> <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam commodi cupiditate error iusto nesciunt voluptas? A architecto asperiores cupiditate dolor dolore eaque incidunt magni maiores nam pariatur, quae sunt voluptatum.</span>
+						</span>
+                    </li>
+
+                    <li class="flex space-x-3">
+                        <img class="rounded-t-lg" src="{{ asset('images/theme-default.png') }}"
+                             alt="Image de ">
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 w-1/4 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex items-baseline text-gray-900 dark:text-white">
+					<span class="text-5xl font-extrabold tracking-tight">
+						Morgue
+					</span>
+                </div>
+
+                <ul role="list" class="my-7 space-y-5">
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"> Company Name
+						</span>
+                    </li>
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+							Description :
+							<br> <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores, assumenda atque delectus deleniti est harum hic id ipsa ipsam magni maiores minima quidem quod ratione reprehenderit suscipit temporibus unde vero.</span><span>Assumenda blanditiis dignissimos doloremque error, eum excepturi fuga illo nisi, obcaecati porro quaerat quidem quod tempora! Adipisci cupiditate eos inventore non obcaecati. Earum exercitationem laudantium obcaecati omnis perferendis quidem vitae.</span>
+						</span>
+                    </li>
+
+                    <li class="flex space-x-3">
+                        <img class="rounded-t-lg" src="{{ asset('images/company-default.png') }}"
+                             alt="Image de">
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 w-1/4 bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex items-baseline text-gray-900 dark:text-white">
+					<span class="text-5xl font-extrabold tracking-tight">
+						Cercueil
+					</span>
+                </div>
+
+                <ul role="list" class="my-7 space-y-5">
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400"> Model name
+						</span>
+                    </li>
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+							Description :
+							<br> <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam aperiam beatae blanditiis cum doloribus, eaque eos esse est harum iste mollitia odio perspiciatis possimus rem saepe sunt temporibus velit, vitae!</span><span>Aspernatur at dolorem, doloremque libero necessitatibus quos? Aliquam atque deserunt distinctio dolorum, ex fugiat inventore iure, iusto minima nesciunt obcaecati provident quasi quod ratione, repudiandae similique suscipit totam ut voluptates?</span><span>Animi deserunt dolores eos labore quae qui quia sunt vero vitae voluptas? Aliquid architecto atque doloribus est ex illo impedit magnam, magni modi nulla obcaecati sed tempore unde, velit, vero!</span>
+						</span>
+                    </li>
+
+                    <li class="flex space-x-3">
+                        <img class="rounded-t-lg" src="{{ asset('images/model-default.png') }}"
+                             alt="Image de">
+                    </li>
+
+                    <li class="flex space-x-3">
+						<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+							Matériel : Material name
+						</span>
+                    </li>
+                    <li class="flex space-x-3">
+                        <img class="rounded-t-lg" src="{{ asset('images/material-default.png') }}"
+                             alt="Image de">
+                    </li>
+                    <li class="flex space-x-3">
+							<span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">
+								Extra : Extra name
+							</span>
+                    </li>
+                    <li class="flex space-x-3">
+                        <img class="rounded-t-lg" src="{{ asset('images/extra-default.png') }}"
+                             alt="Image de">
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <a href="{{ path('user_order_recap', {confirm: true}) }}">
+            <button type="button"
+                    class="mt-4 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center">
+                Confirmer la commande
+            </button>
+        </a>
+    </div>
+{% endblock %}
+{# <div class="p-5">
 		<h1 class="text-4xl mb-3">
 			Récapitulatif
 
@@ -179,5 +336,4 @@
 			</button>
 		</a>
 	</div>
-
-{% endblock %}
+#}
