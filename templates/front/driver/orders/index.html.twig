@@ -27,10 +27,74 @@
             </div>
         </tr>
     {% else %}
-        <tr>
-            <td colspan="7">no records found</td>
-            
-        </tr>
+        <div class="example-wrapper">
+    <section class="w-full max-w-2xl px-6 py-4 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
+        <h2 class="text-3xl font-semibold text-center text-gray-800 dark:text-white">Validation de la déclaration du cadavre</h2>
+        <h4 class="text-3xl font-semibold text-center dark:text-white">Commande de : {{ currentOrder.possessor.lastname }} {{ currentOrder.possessor.firstname }}</h3>
+        <p class="mt-3 text-center text-gray-600 dark:text-gray-400">Nombre corps : {{ currentOrder.corpses.count() }}</p>
+        
+        <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
+            <a href="#" class="flex flex-col items-center px-4 py-3 text-gray-700 transition-colors duration-200 transform rounded-md dark:text-gray-200 hover:bg-blue-200 dark:hover:bg-blue-500">
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                </svg>
+                    {% for addressOrder in currentOrder.addressOrders %}
+                        {% set address = addressOrder.address %}
+                        <span class="mt-2">{{ address.number }} {{ address.street }} {{ address.city }}, {{ address.postcode }}</span>
+                    {% endfor %}
+            </a>
+
+            <div href="#" class="flex flex-col items-center px-4 py-3 text-gray-700 dark:text-gray-200">
+                <img class="w-[10rem] object-fit rounded-xl aspect-square max-w-[10rem]"
+                src="{{ asset('images/contract.svg') }}">
+            </div>
+
+            <a href="#" class="flex flex-col items-center px-4 py-3 text-gray-700 transition-colors duration-200 transform rounded-md dark:text-gray-200 hover:bg-blue-200 dark:hover:bg-blue-500">
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+
+                <span class="mt-2">{{ currentOrder.possessor.email }}</span>
+            </a>
+        </div>
+
+        <div class="mt-6 ">
+            {% if currentOrder.status == 'DRIVER_ARRIVES' %}
+            <p class="font-semibold center dark:text-white">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            {% endif %}
+        </div>
+
+        {% if currentOrder.status == 'DRIVER_ARRIVES' %}
+            <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
+                <a href="{{ path('order_invalid', {order_id: currentOrder.id} ) }}">
+                    <button type="button"
+                            class="text-white bg-red-400 hover:bg-red-500 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-red-900">
+                        Refuser
+                    </button>
+                </a>
+                <a href="{{ path('order_valid', {order_id: currentOrder.id} ) }}">
+                    <button type="button"
+                            class="text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-green-900">
+                        Accepter/Déclarer
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+
+        {% if currentOrder.status == 'DRIVER_ACCEPT' %}
+            <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
+                <a href="{{ path('order_arrive_to_client', {order_id: currentOrder.id} ) }}">
+                    <button type="button"
+                            class="text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-blue-900">
+                        Arrivée chez le client
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+        
+    </section>
+</div>
     {% endfor %}
 
 </div>

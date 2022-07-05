@@ -20,17 +20,31 @@ class DriverController extends AbstractController
     */
     
     #[Route('/', name: 'driver_orders')]
-    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository, DriverOrderRepository $driverOrderRepository): Response
+    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository): Response
     {
         $company = $companyRepository->find($this->getUser()->getCompany());
 
-        $orders = $orderRepository->findAllNewOrder();
+        $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'DRIVER_NEW');
 
         $getDriverOrders = $company->getDriverOrders();
 
+        $currentOrder = null;
+        
+        if(!empty($getDriverOrders)){
+            foreach($getDriverOrders as $driverOrder){
+                $driverOrders[] = $driverOrder->getCommand();
+                foreach($driverOrders as $order){
+                    if($order->getStatus() !== 'DRIVER_NEW' || $order->getStatus() !== 'DRIVER_CLOSE'){
+                        $currentOrder = $order;
+                    }
+                }
+            }
+        }
+        
         return $this->render('front/driver/orders/index.html.twig', [
             'controller_name' => 'DriverController',
             'orders' => $orders,
+            'currentOrder' => $currentOrder,
         ]);
     }
 
@@ -41,7 +55,7 @@ class DriverController extends AbstractController
         $company = $companyRepository->find($this->getUser()->getCompany());
 
         $entityManager = $this->getDoctrine()->getManager();
-        $order->setStatus('DRIVER_ASCERTAINMENT');
+        $order->setStatus('DRIVER_ACCEPT');
         $entityManager->persist($order);
         $entityManager->flush();
 
@@ -49,6 +63,22 @@ class DriverController extends AbstractController
         $driverOrder->setDriver($company);
         $driverOrder->setCommand($order);
         $entityManager->persist($driverOrder);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
+    }
+
+    #[Route('/order_arrive_to_client/{order_id}', name: 'order_arrive_to_client')]
+    public function arriveDriverOrder(OrderRepository $orderRepository,  $order_id): Response
+    {
+
+        $order = $orderRepository->find($order_id);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $order->setStatus('DRIVER_ARRIVES');
+
+        $entityManager->persist($order);
         $entityManager->flush();
 
         return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
@@ -62,7 +92,7 @@ class DriverController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
 
-        $order->setStatus('DRIVER_VALIDATE');
+        $order->setStatus('DRIVER_PROCESSING_ACCEPT');
 
         $entityManager->persist($order);
         $entityManager->flush();
@@ -77,7 +107,7 @@ class DriverController extends AbstractController
         $order = $orderRepository->find($order_id);
         $entityManager = $this->getDoctrine()->getManager();
 
-        $order->setStatus('INVALID');
+        $order->setStatus('DRIVER_PROCESSING_REFUSED');
         $order->setDeletedAt(new \DateTime());
 
         $entityManager->persist($order);

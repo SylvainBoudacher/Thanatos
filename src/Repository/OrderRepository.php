@@ -41,14 +41,25 @@ class OrderRepository extends ServiceEntityRepository
 
     public function findMyCurrentOrder(int $user)
     {
-        // automatically knows to select Products
-        // the "p" is an alias you'll use in the rest of the query
         $qb = $this->createQueryBuilder('o')
             ->where('o.status != :status')
             ->andWhere('o.possessor = :user')
             ->setParameter('status', Order::FINISHED)
             ->setParameter('user', $user)
             ->orderBy('o.updatedAt', 'DESC');
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
+    public function findMyCurrentOrderDriver(int $user, array $arrayStatus)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->where("o.status IN(:status)")
+            ->andWhere('o.possessor = :user')
+            ->setParameter('status', array_values($arrayStatus))
+            ->setParameter('user', $user)
+            ->orderBy('o.updatedAt', 'DESC')
+            ->setMaxResults( 1 );
         $query = $qb->getQuery();
         return $query->execute();
     }
@@ -69,7 +80,7 @@ class OrderRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('o')
             ->where('o.types = :types')
-            ->where('o.status = :status')
+            ->andwhere('o.status = :status')
             ->setParameter('types', $type)
             ->setParameter('status', $status)
             ->orderBy('o.updatedAt', 'DESC');

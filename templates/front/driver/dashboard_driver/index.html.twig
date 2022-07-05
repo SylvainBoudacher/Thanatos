@@ -1,12 +1,134 @@
 {% extends 'base_front.html.twig' %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<section class="bg-white white:bg-gray-900 pb-11">
+    <div class="container px-6 mx-auto">
+            {% if currentOrder is not empty %}
+                <div class="py-2">
+                    <div class="container px-9 py-3 mx-auto rounded-b-lg border border-slate-200 rounded-lg shadow-sm">
+                        <div class="flex flex-row justify-between">
+                            <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Commande #{{ currentOrder.number}}</p>
+                            <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">
+                                {% if currentOrder.types == 'DRIVER' %}
+                                    Prise en charge / Livraison
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                            <div class="bg-blue-600 h-2.5 rounded-full"
+                                {% if currentOrder.types == 'DRIVER' %}
+                                    {% if currentOrder.status == 'DRIVER_ACCEPT' %} style="width: 5% ">{% endif %}
+                                    {% if currentOrder.status == 'DRIVER_ARRIVES' %} style="width: 31% ">{% endif %}
+                                    {% if currentOrder.status == 'DRIVER_PROCESSING_ACCEPT' %} style="width: 53% ">{% endif %}
+                                    {% if currentOrder.status == 'DRIVER_BRINGS_TO_WAREHOUSE' %} style="width: 78% ">{% endif %}
+                                    {% if currentOrder.status == 'DRIVER_CLOSE' %} style="width: 100% ">{% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                            {% if currentOrder.types == 'DRIVER' %}
+                                <p class="text-sm">Commande accepter</p>
+                                <p class="text-sm">Arriver chez le client</p>
+                                <p class="text-sm">Validation de la commande</p>
+                                <p class="text-sm">Corps en acheminement</p>
+                                <p class="text-sm">Commande arriver</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
 
-<div class="example-wrapper">
-    <h1>Page d'accueil Driver connecté</h1>
-</div>
+        {#* Order status :
+        *  *NEW
+        *  *DELIVERY_REACH
+        *  *PROCESSING
+        *  *SHIPPED
+        *  *DELIVERED
+        */
+
+        /*
+        * Order type:
+        *  *DRIVE
+        *  *FUNERAL#}
+        {% if currentOrder is not empty %}
+        <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
+            <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
+                        <span class="inline-block text-dark-500 white:text-dark-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                            </svg>
+                        </span>
+
+                <h1 class="text-2xl font-semibold text-gray-700 capitalize white:text-white">Commande en cours...</h1>
+
+                <p class="text-gray-500 white:text-gray-300">
+                    Du petit Gregory à mamie, nos chauffeurs sont toujours prêts à prendre en charge votre commande le plus rapidement possible.
+                </p>
+
+                <a href="{{ path('driver_orders') }}" class="inline-flex p-2 text-dark-500 capitalize transition-colors duration-200 transform bg-dark-100 rounded-full white:bg-dark-500 white:text-white hover:underline hover:text-dark-600 white:hover:text-dark-500">
+                    <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Consulter</button>
+                </a>
+            </div>
+
+            {% else %}
+
+            <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
+                <span class="inline-block text-dark-500 white:text-dark-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                    </svg>
+                </span>
+
+                <h1 class="text-2xl font-semibold text-gray-700 capitalize white:text-white">Trouver une commande</h1>
+
+                <p class="text-gray-500 white:text-gray-300">
+                    Du petit Gregory à mamie, nos chauffeurs sont toujours prêts à prendre en charge votre commande le plus rapidement possible.
+                </p>
+
+                <a href="{{ path('declare_corpse') }}" class="inline-flex p-2 text-dark-500 capitalize transition-colors duration-200 transform bg-dark-100 rounded-full white:bg-dark-500 white:text-white hover:underline hover:text-dark-600 white:hover:text-dark-500">
+                    <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Déclarer</button>
+                </a>
+            </div>
+            {% endif %}
+
+            <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
+                        <span class="inline-block text-dark-500 white:text-dark-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                            </svg>
+                        </span>
+
+                <h1 class="text-2xl font-semibold text-gray-700 capitalize white:text-white">Sélectionner une pompe funèbre</h1>
+
+                <p class="text-gray-500 white:text-gray-300">
+                    Vous avez déjà déclarer un corps ou vous souhaitez simplement regarder nos pompes funèbre, choisissez un theme et regarder bien nos produits.
+                </p>
+
+                <a href="#" class="inline-flex p-2 text-dark-500 capitalize transition-colors duration-200 transform bg-dark-100 rounded-full white:bg-dark-500 white:text-white hover:underline hover:text-dark-600 white:hover:text-dark-500">
+                    <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Sélectionner</button>
+                </a>
+            </div>
+
+            <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
+                        <span class="inline-block text-dark-500 white:text-dark-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                        </span>
+
+                <h1 class="text-2xl font-semibold text-gray-700 capitalize white:text-white">Voir mes commandes</h1>
+
+                <p class="text-gray-500 white:text-gray-300">
+                    En cours de commande ou déjà commander avant, regarder où en est votre commande et retrouver et télécharger vos factures ici !
+                </p>
+
+                <a href="{{ path('driver_orders') }}" class="inline-flex p-2 text-dark-500 capitalize transition-colors duration-200 transform bg-dark-100 rounded-full white:bg-dark-500 white:text-white hover:underline hover:text-dark-600 white:hover:text-dark-500">
+                    <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Mes commandes</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

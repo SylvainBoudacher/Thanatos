@@ -4,7 +4,7 @@
     {% if is_granted('ROLE_COMPANY') %}
         {{ include('front/user/index/companyIndex.html.twig') }}
     {% elseif is_granted('ROLE_DRIVER') %}
-        {{ include('front/user/index/driverIndex.html.twig') }}
+        {{ include('front/driver/dashboard_driver/index.html.twig') }}
     {% elseif is_granted('ROLE_USER') %}
         {{ include('front/user/index/userIndex.html.twig') }}
     {% else %}
