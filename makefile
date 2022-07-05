@@ -1,5 +1,11 @@
 .PHONY: start stop restart install composer bdd
 
+ultraTurboStart:
+	docker-compose build --pull --no-cache && docker-compose up --detach && rm -rf vendor/* && docker-compose exec php composer install && docker-compose exec php bin/console d:s:u --force && docker-compose exec php bin/console doctrine:fixtures:load --no-interaction && docker-compose exec php bin/console cache:clear --no-warmup
+
+turbostart:
+	docker-compose up --detach && rm -rf vendor/* && docker-compose exec php composer install && docker-compose exec php bin/console d:s:u --force && docker-compose exec php bin/console doctrine:fixtures:load --no-interaction && docker-compose exec php bin/console cache:clear --no-warmup
+
 build:
 	docker-compose build --pull --no-cache
 
