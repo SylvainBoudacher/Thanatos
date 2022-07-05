@@ -24,15 +24,17 @@ class DriverController extends AbstractController
     {
         $company = $companyRepository->find($this->getUser()->getCompany());
 
-        $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'NEW');
+        $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'DRIVER_NEW');
 
         $getDriverOrders = $company->getDriverOrders();
+
+        $currentOrder = null;
         
         if(!empty($getDriverOrders)){
             foreach($getDriverOrders as $driverOrder){
                 $driverOrders[] = $driverOrder->getCommand();
                 foreach($driverOrders as $order){
-                    if($order->getStatus() !== 'NEW' || $order->getStatus() !== 'DRIVER_CLOSE'){
+                    if($order->getStatus() !== 'DRIVER_NEW' || $order->getStatus() !== 'DRIVER_CLOSE'){
                         $currentOrder = $order;
                     }
                 }
@@ -66,6 +68,22 @@ class DriverController extends AbstractController
         return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
     }
 
+    #[Route('/order_arrive_to_client/{order_id}', name: 'order_arrive_to_client')]
+    public function arriveDriverOrder(OrderRepository $orderRepository,  $order_id): Response
+    {
+
+        $order = $orderRepository->find($order_id);
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $order->setStatus('DRIVER_ARRIVES');
+
+        $entityManager->persist($order);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
+    }
+
     #[Route('/order_valid/{order_id}', name: 'order_valid')]
     public function validOrder(OrderRepository $orderRepository,  $order_id): Response
     {
@@ -74,7 +92,7 @@ class DriverController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
 
-        $order->setStatus('DRIVER_VALIDATE');
+        $order->setStatus('DRIVER_PROCESSING_ACCEPT');
 
         $entityManager->persist($order);
         $entityManager->flush();
@@ -89,7 +107,7 @@ class DriverController extends AbstractController
         $order = $orderRepository->find($order_id);
         $entityManager = $this->getDoctrine()->getManager();
 
-        $order->setStatus('INVALID');
+        $order->setStatus('DRIVER_PROCESSING_REFUSED');
         $order->setDeletedAt(new \DateTime());
 
         $entityManager->persist($order);

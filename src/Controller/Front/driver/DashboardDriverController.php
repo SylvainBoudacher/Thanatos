@@ -24,11 +24,13 @@ class DashboardDriverController extends AbstractController
         $company = $companyRepository->find($this->getUser()->getCompany());
         $getDriverOrders = $company->getDriverOrders();
         
+        $currentOrder = null;
+
         if(!empty($getDriverOrders)){
             foreach($getDriverOrders as $driverOrder){
                 $driverOrders[] = $driverOrder->getCommand();
                 foreach($driverOrders as $order){
-                    if($order->getStatus() !== 'NEW' || $order->getStatus() !== 'DRIVER_CLOSE'){
+                    if($order->getStatus() !== 'DRIVER_NEW' || $order->getStatus() !== 'DRIVER_CLOSE'){
                         $currentOrder = $order;
                     }
                 }
