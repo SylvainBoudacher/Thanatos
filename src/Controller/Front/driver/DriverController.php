@@ -29,6 +29,8 @@ class DriverController extends AbstractController
         $getDriverOrders = $company->getDriverOrders();
 
         $currentOrder = null;
+
+        
         
         if(!empty($getDriverOrders)){
             foreach($getDriverOrders as $driverOrder){
