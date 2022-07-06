@@ -13,6 +13,18 @@ class Preparation
 {
     use TimestampableTrait;
 
+    public const FUNERAL_DRAFT = "FUNERAL_DRAFT";
+    public const FUNERAL_NEW = "FUNERAL_NEW";
+    public const FUNERAL_ACCEPT = "FUNERAL_ACCEPT";
+    public const FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL = "FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL";
+    public const FUNERAL_DRIVER_BRINGS_TO_FUNERAL = "FUNERAL_DRIVER_BRINGS_TO_FUNERAL";
+    public const FUNERAL_CORPSE_ARRIVES_TO_FUNERAL = "FUNERAL_CORPSE_ARRIVES_TO_FUNERAL";
+    public const FUNERAL_WAITING_PROCESSING = "FUNERAL_WAITING_PROCESSING";
+    public const FUNERAL_IN_PROGRESS_PROCESSING = "FUNERAL_IN_PROGRESS_PROCESSING";
+    public const FUNERAL_CLOSE_PROCESSING = "FUNERAL_CLOSE_PROCESSING";
+    public const FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER = "FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER";
+    public const FUNERAL_DRIVER_CLOSE_BRING = "FUNERAL_DRIVER_CLOSE_BRING";
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -41,15 +53,27 @@ class Preparation
      */
     private $painting;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=ModelMaterial::class, inversedBy="preparations")
-     */
-    private $modelMaterial;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ModelExtra::class, inversedBy="preparations")
+     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="preparations")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $modelExtra;
+    private $command;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $status;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Material::class, inversedBy="preparations")
+     */
+    private $material;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Extra::class, inversedBy="preparations")
+     */
+    private $extra;
 
     public function getId(): ?int
     {
@@ -104,26 +128,50 @@ class Preparation
         return $this;
     }
 
-    public function getModelMaterial(): ?ModelMaterial
+    public function getCommand(): ?Order
     {
-        return $this->modelMaterial;
+        return $this->command;
     }
 
-    public function setModelMaterial(?ModelMaterial $modelMaterial): self
+    public function setCommand(?Order $command): self
     {
-        $this->modelMaterial = $modelMaterial;
+        $this->command = $command;
 
         return $this;
     }
 
-    public function getModelExtra(): ?ModelExtra
+    public function getStatus(): ?string
     {
-        return $this->modelExtra;
+        return $this->status;
     }
 
-    public function setModelExtra(?ModelExtra $modelExtra): self
+    public function setStatus(?string $status): self
     {
-        $this->modelExtra = $modelExtra;
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getMaterial(): ?Material
+    {
+        return $this->material;
+    }
+
+    public function setMaterial(?Material $material): self
+    {
+        $this->material = $material;
+
+        return $this;
+    }
+
+    public function getExtra(): ?Extra
+    {
+        return $this->extra;
+    }
+
+    public function setExtra(?Extra $extra): self
+    {
+        $this->extra = $extra;
 
         return $this;
     }
