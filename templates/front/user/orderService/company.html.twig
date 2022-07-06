@@ -3,9 +3,9 @@
 {% block body %}
 
     <div class="p-3 h-full grid place-items-center">
-        <h1 class="text-3xl mb-3">Nom de la pompe funèbre</h1>
+        <h1 class="text-3xl mb-3">{{ company.name }}</h1>
         <section class="grid grid-cols-3 w-full gap-2 ">
-            {# <article class="bg-violet-200 rounded">
+            <article class="bg-violet-200 rounded">
 
                 <div id="default-carousel" class="relative" data-carousel="static">
                     <!-- Carousel wrapper -->
@@ -13,7 +13,8 @@
                         <!-- Item 1 -->
                         <div class="duration-700 ease-in-out absolute inset-0 transition-all transform translate-x-0 z-20"
                              data-carousel-item="">
-                            <span class="absolute top-1/2 left-1/2 text-2xl font-semibold text-white -translate-x-1/2 -translate-y-1/2 sm:text-3xl dark:text-gray-800">First Slide</span>
+                            <span class="absolute top-1/2 left-1/2 text-2xl font-semibold text-white -translate-x-1/2 -translate-y-1/2 sm:text-3xl dark:text-gray-800">First
+                                Slide</span>
                             <img src="https://picsum.photos/id/1/200/300"
                                  class="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2"
                                  alt="...">
@@ -48,42 +49,40 @@
                     <button type="button"
                             class="flex absolute top-0 left-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
                             data-carousel-prev="">
-                                        <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                            <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
-                                                 stroke="currentColor"
-                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M15 19l-7-7 7-7"></path></svg>
-                                            <span class="hidden">Previous</span>
-                                        </span>
+                        <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                            <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            <span class="hidden">Previous</span>
+                        </span>
                     </button>
                     <button type="button"
                             class="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
                             data-carousel-next="">
-                                    <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                        <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
-                                             stroke="currentColor"
-                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M9 5l7 7-7 7"></path></svg>
-                                        <span class="hidden">Next</span>
-                                    </span>
+                        <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                            <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 5l7 7-7 7"></path>
+                            </svg>
+                            <span class="hidden">Next</span>
+                        </span>
                     </button>
                 </div>
 
-            </article> #}
+            </article>
             <article class="bg-violet-200 col-span-2 rounded p-3 grid grid-rows-2">
-                <div class="row-span-2">Description : Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Suspendisse vehicula
-                    enim
-                    tortor, vel interdum leo dignissim non. In maximus ex metus, eu vehicula quam molestie eu. Etiam
-                    vitae lacus diam. Vestibulum blandit, urna facilisis scelerisque consequat, massa magna condimentum
-                    felis, elementum blandit sem quam id ex. Nunc sapien tellus, porta id turpis nec, lobortis eleifend
-                    felis. Pellentesque odio urna, tincidunt laoreet nibh in, porttitor gravida sapien. In hac habit
+                <div class="row-span-2">{{ company.description }}
                 </div>
                 <div class="info">
                     <p class="text-zinc-400	">Contact : Praesent a ornare ipsum. Phasellus vitae ipsum sit amet leo
@@ -95,7 +94,8 @@
         </section>
 
         <div>
-            <form action="{{ path('temp') }}" method="POST" id="formBurialOrderProduct" name="formOrderService">
+            <form action="{{ path('temp') }}" method="POST" id="formBurialOrderProduct" name="formOrderService"
+                  class="flex flex-col justify-center">
 
                 {# BURIAL #}
                 <div id="burial" class="burial flex flex-col justify-center">
@@ -104,13 +104,13 @@
                         contenant</h1>
 
                     <div class="burials flex flex-wrap justify-center gap-9">
-                        {% for i in 0..4 %}
-                            <input id="burial-{{ i }}" type="radio" value="{{ i }}" name="burial"
+                        {% for burial in burials %}
+                            <input id="burial-{{ burial.id }}" type="radio" value="{{ burial.id }}" name="burial"
                                    class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioBurial"
-                                   data-burial-version="{{ i }}"
+                                   data-burial-version="{{ burial.id }}"
                             />
-                            <label for="burial-{{ i }}" class="inline-block cursor-pointer"><span
-                                        class="bg-purple-600 p-9 block w-full h-full">Cercueil</span></label>
+                            <label for="burial-{{ burial.id }}" class="inline-block cursor-pointer itemContent"><span
+                                        class="bg-purple-600 p-9 block w-auto h-auto itemContent rounded">{{ burial.name }}</span></label>
                         {% endfor %}
                     </div>
                 </div>
@@ -123,17 +123,24 @@
 
                     <div class="models flex flex-wrap justify-center gap-9">
 
-                        {% for i in 0..4 %}
+                        {% for model in models %}
                             <div class="flex flex-col modelItem hidden"
-                                 data-burial-version="{{ i }}">
+                                 data-burial-version="{{ model.burial.id }}">
 
-                                <input id="model-{{ i }}" type="radio" value="{{ i }}" name="model"
+                                <input id="model-{{ model.id }}" type="radio" value="{{ model.id }}" name="model"
                                        class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioModel"
-                                       data-model-version="{{ i }}"
+                                       data-model-version="{{ model.id }}"
 
                                 />
-                                <label for="model-{{ i }}" class="inline-block cursor-pointer"><span
-                                            class="bg-purple-600 p-9 block w-full h-full">Modèle{{ i }}</span></label>
+                                <label for="model-{{ model.id }}" class="inline-block cursor-pointer">
+
+                                    <img src="{{ company.media ? vich_uploader_asset(company.media) : asset('images/model-default.png') }}"
+                                         alt="modele"
+                                         class="w-52 h-52 itemContent"/>
+
+                                </label>
+                                <span class="w-full h-full"> {{ model.name }}<br>{{ model.price }}€</span>
+
                             </div>
                         {% endfor %}
                     </div>
@@ -146,19 +153,26 @@
                         matériau</h1>
 
                     <div class="materials flex flex-wrap justify-center gap-9">
-                        {% for i in 0..4 %}
+                        {% for modelMaterial in modelsMaterial %}
+                            <div class="flex flex-col materialItem hidden"
+                                 data-model-version="{{ modelMaterial.model.id }}">
 
-                            <div class="flex flex-col materialItem hidden" data-model-version="{{ i }}">
-                                <input id="material-{{ i }}" type="radio" value="{{ i }}" name="material"
+                                <input id="material-{{ modelMaterial.material.id }}-model-{{ modelMaterial.model.id }}"
+                                       type="radio"
+                                       value="{{ modelMaterial.material.id }}" name="material"
                                        class="radioOrderService radioMaterial"
 
                                 />
-                                <label for="material-{{ i }}" class="inline-block cursor-pointer">
-                                    <img src="https://picsum.photos/200/300?random={{ i }}" alt=""
-                                         class="w-52 h-52"/>
+                                <label for="material-{{ modelMaterial.material.id }}-model-{{ modelMaterial.model.id }}"
+                                       class="inline-block cursor-pointer">
+
+                                    <img src="{{ modelMaterial.material.media ? vich_uploader_asset(modelMaterial.material.media) : asset('images/material-default.png') }}"
+                                         alt="Materiau {{ modelMaterial.material.name }}"
+                                         class="w-52 h-52 itemContent"/>
 
                                 </label>
-                                <span class="w-full h-full">Cercueil</span>
+                                <span class="w-full h-full">{{ modelMaterial.material.name }}
+                                    <br>{{ modelMaterial.material.price }}€</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -171,17 +185,21 @@
                         couleur</h1>
 
                     <div class="colors flex flex-wrap justify-center gap-9">
-                        {% for i in 0..4 %}
+                        {% for companyPainting in companiesPainting %}
 
                             <div class="flex flex-col colorItem hidden">
-                                <input id="color-{{ i }}" type="radio" value="{{ i }}" name="color"
+                                <input id="color-{{ companyPainting.painting.id }}" type="radio"
+                                       value="{{ companyPainting.painting.id }}" name="color"
                                        class="radioOrderService radioColor"
                                 />
-                                <label for="color-{{ i }}" class="inline-block cursor-pointer">
-                                    <img src="https://picsum.photos/200/300" alt="" class="w-52	h-52"/>
+                                <label for="color-{{ companyPainting.painting.id }}"
+                                       class="inline-block cursor-pointer">
+                                    <div style="background-color:{{ companyPainting.painting.hexaCode }}" alt=""
+                                         class="w-52 h-52 itemContent rounded"></div>
 
                                 </label>
-                                <span class="w-full h-full">Cercueil</span>
+                                <span class="w-full h-full">{{ companyPainting.painting.name }}
+                                    <br>{{ companyPainting.painting.price }}€</span>
                             </div>
                         {% endfor %}
                     </div>
@@ -194,136 +212,33 @@
                         extra</h1>
 
                     <div class="extras flex flex-wrap justify-center gap-9">
-                        {% for i in 0..4 %}
+                        {% for modelExtra in modelsExtra %}
 
-                            <div class="flex flex-col extraItem hidden" data-model-version="{{ i }}">
-                                <input id="extra-{{ i }}" type="radio" value="{{ i }}" name="extra"
+                            <div class="flex flex-col extraItem hidden" data-model-version="{{ modelExtra.model.id }}">
+                                <input id="extra-{{ modelExtra.extra.id }}-model-{{ modelExtra.model.id }}" type="radio"
+                                       value="{{ modelExtra.extra.id }}" name="extra"
                                        class="radioOrderService radioExtra"
                                 />
-                                <label for="extra-{{ i }}" class="inline-block cursor-pointer">
-                                    <img src="https://picsum.photos/200/300?random={{ i }}" alt="" class="w-52 h-52"/>
+                                <label for="extra-{{ modelExtra.extra.id }}-model-{{ modelExtra.model.id }}"
+                                       class="inline-block cursor-pointer">
+
+                                    <img src="{{ modelExtra.extra.media ? vich_uploader_asset(modelExtra.extra.media) : asset('images/extra-default.png') }}"
+                                         alt="Extra {{ modelExtra.extra.name }}"
+                                         class="w-52 h-52 itemContent"/>
 
                                 </label>
-                                <span class="w-full h-full">Cercueil</span>
+                                <span class="w-full h-full">{{ modelExtra.extra.name }}<br>{{ modelExtra.extra.price }}€</span>
                             </div>
+
                         {% endfor %}
                     </div>
                 </div>
-
-                <input type="submit" value="submit"/>
+                <button type="submit"
+                        class="mt-3 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                    Confirmer le choix de ses produits
+                </button>
             </form>
         </div>
     </div>
 
 {% endblock %}
-
-{# <div class="p-3 h-full">
-
-        <h1 class="text-5xl mb-3">Selection d'une morgue</h1>
-
-        <div class="flex gap-3">
-            <div class="w-1/4 h-fit bg-emerald-400 rounded p-4">
-                <h1 class="text-xl">Filtres</h1>
-            </div>
-            <div class="flex flex-col grow bg-emerald-600 rounded p-4">
-
-                <div class="grid grid-cols-3 gap-3">
-                    {% if companies is not empty %}
-
-                    {% for company in companies %}
-                        <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-                            <a href="#">
-                                {% if company.media %}
-                                    <img class="rounded-t-lg" src="{{ vich_uploader_asset(company.media) }}"
-                                         alt="Image de {{ company.name }}">
-                                {% else %}
-                                    <img class="rounded-t-lg" src="{{ asset('images/company-default.png') }}"
-                                         alt="Image de {{ company.name }}">
-
-                                {% endif %}
-                            </a>
-                            <div class="p-5">
-                                <a href="#">
-                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ company.name }}</h5>
-                                </a>
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ company.description }}</p>
-                                <a href="#"
-                                   class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    Plus de détail
-                                    <svg class="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                              clip-rule="evenodd"></path>
-                                    </svg>
-                                </a>
-                                <a href="{{ path('user_order_company', {nextStep: true, company: company.id}) }}"
-                                   class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    Selectionner
-                                    <svg class="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                              clip-rule="evenodd"></path>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% else %}
-                        Aucune morgues disponible
-                    {% endif %}
-                </div>
-
-                <nav aria-label="Page navigation example" class="self-end">
-                    <ul class="inline-flex items-center -space-x-px">
-                        <li>
-                            <a href="#"
-                               class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                <span class="sr-only">Previous</span>
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                          clip-rule="evenodd"></path>
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                               class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                               class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-                        </li>
-                        <li>
-                            <a href="#" aria-current="page"
-                               class="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                               class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                               class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                               class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                <span class="sr-only">Next</span>
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                          clip-rule="evenodd"></path>
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-
-            </div>
-        </div>
-    </div> #}

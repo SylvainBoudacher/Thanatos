@@ -4,7 +4,11 @@ namespace App\Repository;
 
 use App\Entity\Burial;
 use App\Entity\Company;
+use App\Entity\CompanyPainting;
 use App\Entity\Model;
+use App\Entity\ModelExtra;
+use App\Entity\ModelMaterial;
+use App\Entity\Painting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,19 +25,33 @@ class ModelRepository extends ServiceEntityRepository
         parent::__construct($registry, Model::class);
     }
 
-    public function getByCompanyAndBurial(Company $company, Burial $burial)
+    public function getCompleteProductsRelatedToCompany(Company $company)
     {
 
-        $query = $this->createQueryBuilder('model')
-            ->select('model')
-            ->where('model.company = :company')
-            ->andWhere('model.burial = :burial')
+        return $this->createQueryBuilder('m')
+            ->select('m', 'b', 'model_material', 'model_extra', 'cp')
+            ->innerJoin(Company::class, 'c', 'WITH', 'c.id = m.company')
+            ->innerJoin(Burial::class, 'b', 'WITH', 'b.id = m.burial')
+            ->innerJoin(ModelMaterial::class, 'model_material', 'WITH', 'model_material.model = m.id')
+            ->innerJoin(ModelExtra::class, 'model_extra', 'WITH', 'model_extra.model = m.id')
+            ->innerJoin(CompanyPainting::class, 'cp', 'WITH', 'cp.company = c.id')
+            ->where('c = :company')
             ->setParameter('company', $company)
-            ->setParameter('burial', $burial)
             ->getQuery()
             ->execute();
+    }
 
-        return $query;
+    public function getCompaniesThatHaveModels()
+    {
+
+        $query = $this->createQueryBuilder('m')
+            ->select('c')
+            ->innerJoin(Company::class, 'c', 'WITH', 'c.id = m.company')
+            ->groupBy('c')
+            ->getQuery();
+
+        return $query->execute();
+//        return $query;
     }
 
     // /**

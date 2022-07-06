@@ -31,7 +31,7 @@ class ModelMaterialRepository extends ServiceEntityRepository
             ->where('cm.company = :company')
             ->setParameter('company', $company)
             ->getQuery()
-        ->execute();
+            ->execute();
 
         $data['modelMaterials'] = $this->createQueryBuilder('model_material')
             ->select('model_material')

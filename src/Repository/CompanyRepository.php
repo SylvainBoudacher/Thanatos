@@ -32,6 +32,8 @@ class CompanyRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
+    
+
     // /**
     //  * @return Company[] Returns an array of Company objects
     //  */
