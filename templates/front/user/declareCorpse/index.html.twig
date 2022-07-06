@@ -94,30 +94,20 @@
 
     {% else %}
         <div class="pt-4">
-            <button name="finishExistantCorpse"
-                    class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
-                    value="true">
-  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-      Enregistrer
-  </span>
+            <button name="finishExistantCorpse" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" value="true">
+                    Enregistrer
             </button>
-
             {% endif %}
-
-            <button name="draftDeclaration" class="w-48 h-12 rounded-full text-white
-        bg-gradient-to-r from-purple-500 via-red-500 to-yellow-500" value="true">
-                Enregister en tant que brouillon
+            <button name="draftDeclaration"  class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" value="true">
+                Enregistrer en tant que brouillon
             </button>
-
-
             {% else %}
-
                 <button
                         class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
                         value="true">
-  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-      Enregistrer
-  </span>
+                  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                      Enregistrer
+                  </span>
                 </button>
 
             {% endif %}
@@ -131,20 +121,13 @@
 
         </div>
 
-        {% if order %}
-            Recap :
-
-        {% endif %}
-
         {% if not nextCorpse and editVersion is not defined and order is not null and order.corpses|length >= 1 %}
 
             <div class="pt-4">
                 <a href="{{ path('declare_corpse_address') }}"
-                   class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"
-                   value="true">
-              <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                   Étape suivante
-              </span>
+                    <button value="true" class="py-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        Passer à l'étape suivante
+                    </button>
                 </a>
             </div>
         {% endif %}
