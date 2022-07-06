@@ -20,27 +20,16 @@ class DriverController extends AbstractController
     */
     
     #[Route('/', name: 'driver_orders')]
-    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository): Response
+    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository , DriverOrderRepository $driverOrderRepository): Response
     {
         $company = $companyRepository->find($this->getUser()->getCompany());
 
         $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'DRIVER_NEW');
 
-        $getDriverOrders = $company->getDriverOrders();
+        $currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])->getCommand();
 
-        $currentOrder = null;
+        /*dd($currentOrder);*/
 
-        if(!empty($getDriverOrders)){
-            foreach($getDriverOrders as $driverOrder){
-                $driverOrders[] = $driverOrder->getCommand();
-                foreach($driverOrders as $order){
-                    if($order->getStatus() !== 'DRIVER_NEW' || $order->getStatus() !== 'DRIVER_CLOSE'){
-                        $currentOrder = $order;
-                    }
-                }
-            }
-        }
-        
         return $this->render('front/driver/orders/index.html.twig', [
             'controller_name' => 'DriverController',
             'orders' => $orders,

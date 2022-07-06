@@ -7,6 +7,10 @@
 </style>
 
 <div class="example-wrapper">
+    {% if currentOrder == true %}
+        <p>Votre commande a été prise en compte. Merci !</p>
+         {{ currentOrder.possessor.firstName }} {{ currentOrder.possessor.lastName }}
+    {% endif %}
 
     {% if orders is empty %}
         <section class="block rounded-lg bg-gray-50 stroke shadow-md block w-[40rem] mx-auto mt-32">
@@ -25,14 +29,12 @@
             </div>
         </section>
     {% else %}
-
         {% for order in orders %}
         <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex justify-end px-4 pt-4">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Nb corpse : {{ order.corpses.count() }}</span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Nombre corps : {{ order.corpses.count() }}</span>
                     </div>
                     <div class="flex flex-col items-center pb-10">
-                        <img class="mb-3 w-24 h-24 rounded-full shadow-lg" src="{{ asset('images/uploads/thebataman-6238e19786691083872923.jpeg') }}" alt="user image"/>
                         <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ order.possessor.lastname }} {{ order.possessor.firstname }}</h5>
                         <span class="text-sm text-gray-500 dark:text-gray-400"></span>
                         {% for addressOrder in order.addressOrders %}
@@ -115,6 +117,5 @@
     </div>
         {% endfor %}
     {% endif %}
-
 </div>
 {% endblock %}
