@@ -2,13 +2,17 @@
 
 namespace App\Controller\Front\driver;
 
+use App\Form\ProcessingValidationType;
 use App\Entity\DriverOrder;
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\DriverOrderRepository;
+use Google\Service\Forms\Form;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -61,6 +65,18 @@ class DriverController extends AbstractController
 
         return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
     }
+
+    #[Route('/processing-order/{order_id}', name: 'order_processing_corps')]
+    public function processingOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository,  $order_id): Response
+    {
+        $order = $orderRepository->find($order_id);
+        
+        return $this->render('front/driver/orders/processing.html.twig', [
+            'controller_name' => 'DriverController',
+        ]);
+    }
+
+
 
     #[Route('/order_arrive_to_client/{order_id}', name: 'order_arrive_to_client')]
     public function arriveDriverOrder(OrderRepository $orderRepository,  $order_id): Response
