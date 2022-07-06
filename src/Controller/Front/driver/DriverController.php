@@ -30,8 +30,6 @@ class DriverController extends AbstractController
 
         $currentOrder = null;
 
-        
-        
         if(!empty($getDriverOrders)){
             foreach($getDriverOrders as $driverOrder){
                 $driverOrders[] = $driverOrder->getCommand();
