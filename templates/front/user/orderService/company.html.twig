@@ -94,7 +94,8 @@
         </section>
 
         <div>
-            <form action="{{ path('temp') }}" method="POST" id="formBurialOrderProduct" name="formOrderService"
+            <form action="{{ path('user_order_recap', {corpse: corpse.id}) }}" method="POST" id="formBurialOrderProduct"
+                  name="formOrderService"
                   class="flex flex-col justify-center">
 
                 {# BURIAL #}

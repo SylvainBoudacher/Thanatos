@@ -381,7 +381,7 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/commander-un-service/etape-3/{id}/pompe-funebre/{company}', name: 'user_order_product', methods: ['POST', 'GET'])]
+    #[Route('/commander-un-service/etape-3/{corpse}/pompe-funebre/{company}', name: 'user_order_product', methods: ['POST', 'GET'])]
     public function orderServiceProduct(Request $request, ModelRepository $modelRepository, Corpse $corpse, Company $company): Response
     {
 
@@ -403,134 +403,62 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/commander-un-service/4', name: 'user_order_product_specificity', methods: ['POST', 'GET'])]
-    public function orderServiceProductSpecificity(Request $request, PaintingRepository $paintingRepository, ModelRepository $modelRepository): Response
+    #[Route('/commander-un-service/recapitulatif/{corpse}', name: 'user_order_recap', methods: ['POST', 'GET'])]
+    public function temp(Request $request, PaintingRepository $paintingRepository, ModelRepository $modelRepository, Corpse $corpse): Response
     {
-        /*    $session = $request->getSession();
-            $cartSession = $session->get('cartSession');
+        dump($corpse);
 
-            $em = $this->getDoctrine()->getManager();
-            $company = $em->getRepository(Company::class)->find($cartSession['company']);
-            $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
-            $paintings = $paintingRepository->getByCompany($company);
-            $models = $modelRepository->getByCompanyAndBurial($company, $burial);
-
-            $submittedToken = $request->request->get('token');
-
-            if ($this->isCsrfTokenValid('model-item', $submittedToken) && $request->query->get('nextStep') && $request->query->get('model')) {
-                $options = true;
-                $material = $request->request->get('material');
-                $extra = $request->request->get('extra');
-                $model = $em->getRepository(Model::class)->find($request->query->get('model'));
-                $modelExtra = NULL;
-
-                if (!empty($extra))
-                    $modelExtra = $em->getRepository(ModelExtra::class)->findOneBy(['model' => $model, 'extra' => $extra]);
-                    if (empty($modelExtra)) $options = false;
-                }
-
-                if ($options) {
-
-                    $modelMaterial = $em->getRepository(ModelMaterial::class)->findOneBy(['model' => $model, 'material' => $material]);
-
-                    if (!empty($modelMaterial)) {
-
-                        $cartSession = $session->get('cartSession');
-                        $cartSession['model'] = $model->getId();
-                        $cartSession['modelExtra'] = $modelExtra ? $modelExtra->getId() : NULL;
-                        $cartSession['modelMaterial'] = $modelMaterial->getId();
-                        $session->set('cartSession', $cartSession);
-
-                        return $this->redirectToRoute('user_order_recap');
-                    }
-
-                } else {
-                    $this->addFlash('error', 'Un soucis avec votre formulaire');
-                }
-            }*/
-
-        return $this->render('front/user/orderService/products.html.twig');
-    }
-
-    #[Route('/commander-un-service/1000', name: 'temp', methods: ['POST', 'GET'])]
-    public function temp(Request $request, PaintingRepository $paintingRepository, ModelRepository $modelRepository): Response
-    {
         dd($request->request->all());
     }
 
-    #[Route('/commander-un-service/recapitulatif', name: 'user_order_recap', methods: ['POST', 'GET'])]
-    public function orderServiceRecap(Request $request): Response
-    {
-        $session = $request->getSession();
-        $cartSession = $session->get('cartSession');
-        $em = $this->getDoctrine()->getManager();
-        $total = 0;
+//    #[Route('/commander-un-service/recapitulatif', name: 'user_order_recap', methods: ['POST', 'GET'])]
+    /* public function orderServiceRecap(Request $request): Response
+     {
+         $session = $request->getSession();
+         $cartSession = $session->get('cartSession');
+         $em = $this->getDoctrine()->getManager();
+         $total = 0;
 
-        $corpse = $em->getRepository(Corpse::class)->find($cartSession['corpse']);
-        $theme = $em->getRepository(Theme::class)->find($cartSession['theme']);
-        $company = $em->getRepository(Company::class)->find($cartSession['company']);
-        $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
-        $model = $em->getRepository(Model::class)->find($cartSession['model']);
-        $modelExtra = $cartSession['modelExtra'] ? $em->getRepository(ModelExtra::class)->find($cartSession['modelExtra']) : null;
-        $modelMaterial = $em->getRepository(ModelMaterial::class)->find($cartSession['modelMaterial']);
+         $corpse = $em->getRepository(Corpse::class)->find($cartSession['corpse']);
+         $theme = $em->getRepository(Theme::class)->find($cartSession['theme']);
+         $company = $em->getRepository(Company::class)->find($cartSession['company']);
+         $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
+         $model = $em->getRepository(Model::class)->find($cartSession['model']);
+         $modelExtra = $cartSession['modelExtra'] ? $em->getRepository(ModelExtra::class)->find($cartSession['modelExtra']) : null;
+         $modelMaterial = $em->getRepository(ModelMaterial::class)->find($cartSession['modelMaterial']);
 
-        /* ADDITION TOTAL */
-        $total += $modelExtra ? $modelExtra->getExtra()->getPrice() : 0;
-        $total += $theme->getPrice();
-        $total += $model->getPrice();
-        $total += $modelMaterial->getMaterial()->getPrice();
+         $total += $modelExtra ? $modelExtra->getExtra()->getPrice() : 0;
+         $total += $theme->getPrice();
+         $total += $model->getPrice();
+         $total += $modelMaterial->getMaterial()->getPrice();
 
-        if ($request->query->get('confirm')) {
-            $preparation = new Preparation();
-            $preparation->setPrice($total);
-            $preparation->setCorpse($corpse);
-            $preparation->setTheme($theme);
-            $preparation->setModelMaterial($modelMaterial);
-            $corpse->setPreparation($preparation);
+         if ($request->query->get('confirm')) {
+             $preparation = new Preparation();
+             $preparation->setPrice($total);
+             $preparation->setCorpse($corpse);
+             $preparation->setTheme($theme);
+             $preparation->setModelMaterial($modelMaterial);
+             $corpse->setPreparation($preparation);
 
-            $em->persist($preparation);
-            $em->flush();
+             $em->persist($preparation);
+             $em->flush();
 
-            $session->remove('cartSession');
+             $session->remove('cartSession');
 
-            return $this->redirectToRoute('user_order_success');
-        }
+             return $this->redirectToRoute('user_order_success');
+         }
 
-        return $this->render('front/user/orderService/recap.html.twig', [
-            'corpse' => $corpse,
-            'theme' => $theme,
-            'company' => $company,
-            'burial' => $burial,
-            'model' => $model,
-            'extra' => $modelExtra ? $modelExtra->getExtra() : [],
-            'material' => $modelMaterial->getMaterial(),
-            'total' => $total
-        ]);
-    }
-
-    #[Route('/tempHere', name: 'user_order_recaptemp', methods: ['POST', 'GET'])]
-    public function orderServiceRecapTemp(Request $request): Response
-    {
-
-        return $this->render('front/user/orderService/recap.html.twig', [
-        ]);
-    }
-
-
-    #[Route('/pompe-funebre/{id}', name: 'company_details')]
-    public function details_company(Company $company): Response
-    {
-        return $this->render("back/company/services/models/details.html.twig", [
-            "company" => $company,
-        ]);
-    }
-
-    #[Route('/pompe-funebre-temp/{id}', name: 'company_details_temp')]
-    public function details_company_temp(): Response
-    {
-        return $this->render("front/user/orderService/company.html.twig", [
-        ]);
-    }
+         return $this->render('front/user/orderService/recap.html.twig', [
+             'corpse' => $corpse,
+             'theme' => $theme,
+             'company' => $company,
+             'burial' => $burial,
+             'model' => $model,
+             'extra' => $modelExtra ? $modelExtra->getExtra() : [],
+             'material' => $modelMaterial->getMaterial(),
+             'total' => $total
+         ]);
+     }*/
 
     /**
      * @throws ApiErrorException

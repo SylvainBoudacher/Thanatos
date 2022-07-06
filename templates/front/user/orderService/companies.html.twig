@@ -9,7 +9,7 @@
         <div class="grid grid-cols-4 gap-3">
 
             {% for company in companies %}
-                <a href="{{ path('user_order_product', {id: corpse.id , company: company.id}) }}">
+                <a href="{{ path('user_order_product', {corpse: corpse.id , company: company.id}) }}">
                     <div>
                         <img class="object-cover w-full h-64 rounded-lg h-36 mb-2"
                              src="  {{ company.media ? vich_uploader_asset(company.media) : asset('images/company-default.png') }}"
