@@ -282,7 +282,6 @@ class  Corpse
 
     public function setPreparation(?Preparation $preparation): self
     {
-//        $preparation->setCorpse($this);
         $this->preparation = $preparation;
 
         return $this;

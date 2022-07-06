@@ -68,16 +68,10 @@ class Extra
      */
     private $modelExtras;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Preparation::class, mappedBy="extra")
-     */
-    private $preparations;
-
     public function __construct()
     {
         $this->companyExtras = new ArrayCollection();
         $this->modelExtras = new ArrayCollection();
-        $this->preparations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -187,36 +181,6 @@ class Extra
             // set the owning side to null (unless already changed)
             if ($modelExtra->getExtra() === $this) {
                 $modelExtra->setExtra(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Preparation>
-     */
-    public function getPreparations(): Collection
-    {
-        return $this->preparations;
-    }
-
-    public function addPreparation(Preparation $preparation): self
-    {
-        if (!$this->preparations->contains($preparation)) {
-            $this->preparations[] = $preparation;
-            $preparation->setExtra($this);
-        }
-
-        return $this;
-    }
-
-    public function removePreparation(Preparation $preparation): self
-    {
-        if ($this->preparations->removeElement($preparation)) {
-            // set the owning side to null (unless already changed)
-            if ($preparation->getExtra() === $this) {
-                $preparation->setExtra(null);
             }
         }
 

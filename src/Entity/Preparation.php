@@ -66,14 +66,15 @@ class Preparation
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Material::class, inversedBy="preparations")
+     * @ORM\ManyToOne(targetEntity=ModelMaterial::class, inversedBy="preparations")
      */
-    private $material;
+    private $modelMaterial;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Extra::class, inversedBy="preparations")
+     * @ORM\ManyToOne(targetEntity=ModelExtra::class)
      */
-    private $extra;
+    private $modelExtra;
+
 
     public function getId(): ?int
     {
@@ -152,26 +153,26 @@ class Preparation
         return $this;
     }
 
-    public function getMaterial(): ?Material
+    public function getModelMaterial(): ?ModelMaterial
     {
-        return $this->material;
+        return $this->modelMaterial;
     }
 
-    public function setMaterial(?Material $material): self
+    public function setModelMaterial(?ModelMaterial $modelMaterial): self
     {
-        $this->material = $material;
+        $this->modelMaterial = $modelMaterial;
 
         return $this;
     }
 
-    public function getExtra(): ?Extra
+    public function getModelExtra(): ?ModelExtra
     {
-        return $this->extra;
+        return $this->modelExtra;
     }
 
-    public function setExtra(?Extra $extra): self
+    public function setModelExtra(?ModelExtra $modelExtra): self
     {
-        $this->extra = $extra;
+        $this->modelExtra = $modelExtra;
 
         return $this;
     }

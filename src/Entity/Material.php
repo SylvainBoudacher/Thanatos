@@ -58,16 +58,10 @@ class Material
      */
     private $media;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Preparation::class, mappedBy="material")
-     */
-    private $preparations;
-
     public function __construct()
     {
         $this->companyMaterials = new ArrayCollection();
         $this->modelMaterials = new ArrayCollection();
-        $this->preparations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,33 +165,4 @@ class Material
         return $this;
     }
 
-    /**
-     * @return Collection<int, Preparation>
-     */
-    public function getPreparations(): Collection
-    {
-        return $this->preparations;
-    }
-
-    public function addPreparation(Preparation $preparation): self
-    {
-        if (!$this->preparations->contains($preparation)) {
-            $this->preparations[] = $preparation;
-            $preparation->setMaterial($this);
-        }
-
-        return $this;
-    }
-
-    public function removePreparation(Preparation $preparation): self
-    {
-        if ($this->preparations->removeElement($preparation)) {
-            // set the owning side to null (unless already changed)
-            if ($preparation->getMaterial() === $this) {
-                $preparation->setMaterial(null);
-            }
-        }
-
-        return $this;
-    }
 }
