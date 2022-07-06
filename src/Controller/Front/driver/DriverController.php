@@ -31,12 +31,21 @@ class DriverController extends AbstractController
         $company = $companyRepository->find($this->getUser()->getCompany());
         $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'DRIVER_NEW');
 
-        //find the order that the driver is working on
-        $currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])->getCommand();
-        //get the addressOrder of the order
-        $addressOrder = $currentOrder->getAddressOrders();
-        //get the address of the addressOrder
-        $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
+        //if driver have orders
+        if ( empty($currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])) )
+        {
+            $address = null;
+        }
+        else
+        {
+            //find the order that the driver is working on
+            $currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])->getCommand();
+            //get the addressOrder of the order
+            $addressOrder = $currentOrder->getAddressOrders();
+            //get the address of the addressOrder
+            $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
+        }
+
 
         return $this->render('front/driver/orders/index.html.twig', [
             'controller_name' => 'DriverController',
@@ -44,6 +53,7 @@ class DriverController extends AbstractController
             'currentOrder' => $currentOrder,
             'address' => $address,
         ]);
+
     }
 
     #[Route('/take-order/{order_id}', name: 'take_order')]
@@ -70,9 +80,10 @@ class DriverController extends AbstractController
     public function processingOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository,  $order_id): Response
     {
         $order = $orderRepository->find($order_id);
-        
+
         return $this->render('front/driver/orders/processing.html.twig', [
             'controller_name' => 'DriverController',
+            'order' => $order,
         ]);
     }
 
