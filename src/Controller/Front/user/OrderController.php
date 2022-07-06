@@ -2,6 +2,10 @@
 
 namespace App\Controller\Front\user;
 
+use App\Entity\CompanyPainting;
+use App\Entity\Extra;
+use App\Entity\Preparation;
+use App\Entity\Theme;
 use App\Repository\AddressOrderRepository;
 use App\Entity\Address;
 use App\Entity\AddressOrder;
@@ -26,6 +30,7 @@ use App\Repository\PreparationRepository;
 use App\Repository\ThemeRepository;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
+use PHPUnit\Util\Color;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
@@ -34,7 +39,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 
 #[IsGranted("ROLE_USER")]
 class OrderController extends AbstractController
@@ -310,72 +314,94 @@ class OrderController extends AbstractController
     }
 
     /* ORDER SERVICE */
-    #[Route('/commander-un-service/1', name: 'user_order_theme', methods: ['POST', 'GET'])]
-    public function orderServiceTheme(Request $request, ThemeRepository $themeRepository, CorpseRepository $corpseRepository): Response
+    #[Route('/commander-un-service/etape-1/{id}/{theme}', name: 'user_order_theme', methods: ['POST', 'GET'])]
+    public function orderServiceTheme(Request $request, ThemeRepository $themeRepository, CorpseRepository $corpseRepository, OrderRepository $orderRepository, Corpse $corpse, Theme $theme = null): Response
     {
 
-        $themes = $themeRepository->findAll();
-        $session = $request->getSession();
+        $preparation = new Preparation();
 
-        if (is_numeric($request->query->get('corpse'))) {
-            $cartSession['corpse'] = $request->query->get('corpse');
-            $session->set('cartSession', $cartSession);
+        // Get current order and check if order is owned by the user
+        $order = $orderRepository->findOneBy([
+            'possessor' => $this->getUser(),
+            'status' => Order::DRIVER_CLOSE,
+            'id' => $corpse->getCommand()->getId()
+        ]);
 
+        if (!$order) dd('error : corpse not owned');
+
+        if ($corpse->getPreparation()) {
+            if ($corpse->getPreparation()->getStatus() === Preparation::FUNERAL_DRAFT) $preparation = $corpse->getPreparation();
+            else dd("error : your current preparation is not draft");
         }
-        if ($request->query->get('nextStep') && $request->query->get('theme')) {
-            $cartSession = $session->get('cartSession');
-            $cartSession['theme'] = $request->query->get('theme');
-            $session->set('cartSession', $cartSession);
 
-            return $this->redirectToRoute('user_order_company', ['themeId' => $request->query->get('theme')]);
+        if ($theme) {
+
+            $preparation->setTheme($theme);
+            $preparation->setStatus(Preparation::FUNERAL_DRAFT);
+            $preparation->setCorpse($corpse);
+            $preparation->setCommand($corpse->getCommand());
+            $corpse->setPreparation($preparation);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($preparation);
+            $em->flush();
+
+            return $this->redirectToRoute('user_order_company', ['id' => $corpse->getId()]);
         }
+
+        $themesSpecial = $themeRepository->findBy(['type' => Theme::TYPE_SPECIAL], ['name' => 'ASC']);
+        $themesClassic = $themeRepository->findBy(['type' => Theme::TYPE_CLASSIC], ['name' => 'ASC']);
 
         return $this->render('front/user/orderService/index.html.twig', [
-            'themes' => $themes,
-            'referer' => $request->headers->get('referer')
-
+            'themesSpecial' => $themesSpecial,
+            'themesClassic' => $themesClassic,
+            'corpse' => $corpse,
         ]);
     }
 
-    #[Route('/commander-un-service/2', name: 'user_order_company', methods: ['POST', 'GET'])]
-    public function orderServiceCompany(Request $request, CompanyThemeRepository $companyThemeRep, CompanyRepository $companyRepository, int $themeId = null): Response
+    #[Route('/commander-un-service/etape-2/{id}', name: 'user_order_company', methods: ['POST', 'GET'])]
+    public function orderServiceCompany(Request $request, CompanyThemeRepository $companyThemeRep, CompanyRepository $companyRepository, ModelMaterialRepository $modelMaterialRepository, ModelRepository $modelRepository, OrderRepository $orderRepository, PreparationRepository $preparationRepository, Corpse $corpse): Response
     {
-        /*  $session = $request->getSession();
 
-          if ($request->query->get('nextStep') && $request->query->get('company')) {
-              $cartSession = $session->get('cartSession');
-              $cartSession['company'] = $request->query->get('company');
-              $session->set('cartSession', $cartSession);
+        // Get current order adn check if order is owned by the user
+        $order = $orderRepository->findBy([
+            'possessor' => $this->getUser(),
+            'status' => Order::DRIVER_CLOSE,
+            'id' => $corpse->getCommand()->getId()
+        ]);
 
-              return $this->redirectToRoute('user_order_product');
-          }
+        if (!$order) dd('error : corpse not owned');
+        if (!($corpse->getPreparation() && $corpse->getPreparation()->getStatus() === Preparation::FUNERAL_DRAFT)) dd('error : preparation not owned');
 
-          $themeId = $request->query->get('themeId');
-          $companies = $companyThemeRep->getCompaniesByTheme($themeId);*/
+        $companies = $modelRepository->getCompaniesThatHaveModels();
 
         return $this->render('front/user/orderService/companies.html.twig', [
-//            'companies' => $companies,
+            'companies' => $companies,
+            'corpse' => $corpse
         ]);
     }
 
-    #[Route('/commander-un-service/3/pompe-funebre/{id}', name: 'user_order_product', methods: ['POST', 'GET'])]
-    public function orderServiceProduct(Request $request, Company $company = null): Response
+    #[Route('/commander-un-service/etape-3/{id}/pompe-funebre/{company}', name: 'user_order_product', methods: ['POST', 'GET'])]
+    public function orderServiceProduct(Request $request, ModelRepository $modelRepository, Corpse $corpse, Company $company): Response
     {
-        /*  $session = $request->getSession();
-          $cartSession = $session->get('cartSession');
 
-          if ($request->query->get('nextStep') && $request->query->get('burial')) {
-              $cartSession['burial'] = $request->query->get('burial');
-              $session->set('cartSession', $cartSession);
+        $data = $modelRepository->getCompleteProductsRelatedToCompany($company);
+        $burials = array_filter($data, fn($i) => $i instanceof Burial);
+        $models = array_filter($data, fn($i) => $i instanceof Model);
+        $modelsExtra = array_filter($data, fn($i) => $i instanceof ModelExtra);
+        $modelsMaterial = array_filter($data, fn($i) => $i instanceof ModelMaterial);
+        $companiesPainting = array_filter($data, fn($i) => $i instanceof CompanyPainting);
 
-              return $this->redirectToRoute('user_order_product_specificity');
-          }
-
-          $em = $this->getDoctrine()->getManager();
-          $company = $em->getRepository(Company::class)->find($cartSession['company']);
-          $burials = $modelMaterialRepository->getBurialsByCompany($company);*/
-
-        return $this->render('front/user/orderService/company.html.twig');
+//        dd($modelsMaterial);
+        return $this->render('front/user/orderService/company.html.twig', [
+            'company' => $company,
+            'burials' => $burials,
+            'models' => $models,
+            'modelsMaterial' => $modelsMaterial,
+            'companiesPainting' => $companiesPainting,
+            'modelsExtra' => $modelsExtra,
+            'corpse' => $corpse
+        ]);
     }
 
     #[Route('/commander-un-service/4', name: 'user_order_product_specificity', methods: ['POST', 'GET'])]

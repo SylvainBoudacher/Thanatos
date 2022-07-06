@@ -1,4 +1,3 @@
-
 * {
     box-sizing: border-box;
 }
@@ -7,14 +6,16 @@
     display: none;
 }
 
-#formBurialOrderProduct input[type=radio].radioOrderService:checked + label {
-    border: 5px solid black;
+#formBurialOrderProduct input[type=radio].radioOrderService:checked + label .itemContent {
+    border: 3px solid black;
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem
 }
 
-#formBurialOrderProduct label:hover span {
+#formBurialOrderProduct input[type=radio]:checked + label .itemContent {
     transform: scale(1.25);
 }
 
-#formBurialOrderProduct label span {
+#formBurialOrderProduct label .itemContent {
     transition: transform 0.2s ease-in-out;
 }

@@ -19,14 +19,12 @@ const dependanceCharacteristics = {
 /* Filter models based on burial selected */
 Array.from(burials).forEach(item => {
     item.addEventListener('click', function (e) {
-        console.log(e.target);
 
         //init
         const burialVersion = e.target.dataset.burialVersion; // get burial model
         model.classList.remove('hidden'); // show model container
         const modelItems = model.getElementsByClassName('modelItem');
 
-        console.log(burialVersion);
         // filters model
         Array.from(modelItems).forEach((m) => {
 
@@ -54,7 +52,6 @@ Array.from(models).forEach(item => {
     item.addEventListener('click', function (e) {
 
         const modelVersion = e.target.dataset.modelVersion;
-        console.log(e.target);
 
         /* Hide all related item */
         Object.entries(dependanceCharacteristics).forEach(([key, value]) => {
@@ -71,7 +68,8 @@ Array.from(models).forEach(item => {
             });
 
             /* Set all radios to unchecked */
-            [extra, material, radiosColor].forEach((radios) => {
+            [radiosExtra, radiosMaterial, radiosColor].forEach((radios) => {
+                console.log(radios);
                 Array.from(radios).forEach((radio) => {
                     radio.checked = false;
                 });

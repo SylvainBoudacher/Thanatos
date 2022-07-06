@@ -8,16 +8,17 @@
 
         <div class="grid grid-cols-4 gap-3">
 
-            {% for i in 0..4 %}
-                <a href="#">
+            {% for company in companies %}
+                <a href="{{ path('user_order_product', {id: corpse.id , company: company.id}) }}">
                     <div>
                         <img class="object-cover w-full h-64 rounded-lg h-36 mb-2"
-                             src="https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+                             src="  {{ company.media ? vich_uploader_asset(company.media) : asset('images/company-default.png') }}"
                              alt="Article">
                         <div class="flex gap-x-5">
-                            <h3 class="capitalize text-xl">Burger king - nation
+                            <h3 class="capitalize text-xl">{{ company.name }}
                             </h3>
                             <div class="bg-gray-300 rounded-full text-xs px-2 py-2 flex">
+                                {# TODO set note from db #}
                                 <p class="self-center">4.3</p>
                             </div>
                         </div>
@@ -27,6 +28,7 @@
 
         </div>
 
+        {# NAV #}
         <nav aria-label="Page navigation example" class="justify-self-end">
             <ul class="inline-flex items-center -space-x-px">
                 <li>
