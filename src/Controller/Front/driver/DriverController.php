@@ -2,12 +2,17 @@
 
 namespace App\Controller\Front\driver;
 
+use App\Form\ProcessingValidationType;
 use App\Entity\DriverOrder;
+use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\DriverOrderRepository;
+use Google\Service\Forms\Form;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,32 +25,35 @@ class DriverController extends AbstractController
     */
     
     #[Route('/', name: 'driver_orders')]
-    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository): Response
+    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository , DriverOrderRepository $driverOrderRepository , AddressRepository $addressRepository): Response
     {
+        // get the driver id
         $company = $companyRepository->find($this->getUser()->getCompany());
-
         $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'DRIVER_NEW');
 
-        $getDriverOrders = $company->getDriverOrders();
-
-        $currentOrder = null;
-        
-        if(!empty($getDriverOrders)){
-            foreach($getDriverOrders as $driverOrder){
-                $driverOrders[] = $driverOrder->getCommand();
-                foreach($driverOrders as $order){
-                    if($order->getStatus() !== 'DRIVER_NEW' || $order->getStatus() !== 'DRIVER_CLOSE'){
-                        $currentOrder = $order;
-                    }
-                }
-            }
+        //if driver have orders
+        if ( empty($currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])) )
+        {
+            $address = null;
         }
-        
+        else
+        {
+            //find the order that the driver is working on
+            $currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])->getCommand();
+            //get the addressOrder of the order
+            $addressOrder = $currentOrder->getAddressOrders();
+            //get the address of the addressOrder
+            $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
+        }
+
+
         return $this->render('front/driver/orders/index.html.twig', [
             'controller_name' => 'DriverController',
             'orders' => $orders,
             'currentOrder' => $currentOrder,
+            'address' => $address,
         ]);
+
     }
 
     #[Route('/take-order/{order_id}', name: 'take_order')]
@@ -67,6 +75,19 @@ class DriverController extends AbstractController
 
         return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
     }
+
+    #[Route('/processing-order/{order_id}', name: 'order_processing_corps')]
+    public function processingOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository,  $order_id): Response
+    {
+        $order = $orderRepository->find($order_id);
+
+        return $this->render('front/driver/orders/processing.html.twig', [
+            'controller_name' => 'DriverController',
+            'order' => $order,
+        ]);
+    }
+
+
 
     #[Route('/order_arrive_to_client/{order_id}', name: 'order_arrive_to_client')]
     public function arriveDriverOrder(OrderRepository $orderRepository,  $order_id): Response

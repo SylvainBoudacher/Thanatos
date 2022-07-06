@@ -1,0 +1,77 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+    <section class="bg-white bg-gray-900 h-full">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+            <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
+                <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 text-white">Valider le processus de validation du/des corps</h2>
+                <p class="font-light text-gray-500 sm:text-xl text-gray-400">Attendez les secours et valider avec eux la légaliter de la commande</p>
+            </div>
+            <div class="grid gap-8 lg:grid-cols-2">
+
+                <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md bg-gray-800 border-gray-700">
+                    <div class="flex justify-between items-center mb-5 text-gray-500">
+                  <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded bg-primary-200 text-primary-800">
+                      <svg class="w-8" fill="red" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">
+                        <defs>
+                            <path d="M19.48 12.35c-1.57-4.08-7.16-4.3-5.81-10.23 .1-.44-.37-.78-.75-.55C9.29 3.71 6.68 8 8.87 13.62c.18.46-.36.89-.75.59 -1.81-1.37-2-3.34-1.84-4.75 .06-.52-.62-.77-.91-.34C4.69 10.16 4 11.84 4 14.37c.38 5.6 5.11 7.32 6.81 7.54 2.43.31 5.06-.14 6.95-1.87 2.08-1.93 2.84-5.01 1.72-7.69Zm-9.28 5.03c1.44-.35 2.18-1.39 2.38-2.31 .33-1.43-.96-2.83-.09-5.09 .33 1.87 3.27 3.04 3.27 5.08 .08 2.53-2.66 4.7-5.56 2.32Z" id="a"></path>
+                        </defs>
+                        <path fill="none" d="M0 0h24v24H0Z"></path>
+                        <g>
+                            <use xlink:href="#a"></use>
+                            <use xlink:href="#a"></use>
+                        </g>
+                    </svg>
+                      <p class="text-xl text-red-300 px-2">Pompier</p>
+                  </span>
+
+                    </div>
+                    <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 text-white">Validation des Pompiers</h2>
+                    <p class="mb-5 font-light text-gray-500 text-gray-400">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ac lobortis sapien. Phasellus porta urna eros, vel facilisis ex malesuada ac. Mauris ac molestie tortor. Aenean interdum massa tellus. Quisque pretium, diam vehicula vestibulum vulputate, tortor tellus porttitor quam.
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <input id="link-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="link-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">terms and conditions</a>.</label>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md bg-gray-800 border-gray-700">
+                    <div class="flex justify-between items-center mb-5 text-gray-500">
+                  <span class="bg-primary-100 text-primary-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded bg-primary-200 text-primary-800">
+
+                      <svg class="w-8" fill="blue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path fill="none" d="M0 0h24v24H0Z"></path>
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4Zm2.5 11.59l.9 3.88 -3.4-2.05 -3.4 2.05 .9-3.87 -3-2.59 3.96-.34L12 6.02l1.54 3.64 3.96.34 -3 2.59Z"></path>
+                    </svg>
+                      <p class="text-xl text-blue-300 px-2">Maréchaussée</p>
+                  </span>
+
+                    </div>
+                    <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 text-white">Validation de la Maréchaussée</h2>
+                    <p class="mb-5 font-light text-gray-500 text-gray-400">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ac lobortis sapien. Phasellus porta urna eros, vel facilisis ex malesuada ac. Mauris ac molestie tortor. Aenean interdum massa tellus. Quisque pretium, diam vehicula vestibulum vulputate, tortor tellus porttitor quam.
+                    </p>
+                    <div class="flex justify-between items-center">
+
+                        <div class="flex items-center">
+                            <input id="link-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="link-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">terms and conditions</a>.</label>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+            <div class="w-full mx-auto pt-8">
+                <a href="{{ path('order_valid' , {'order_id' : order.id}) }}">
+                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                        Valider le processus
+                    </button>
+                </a>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
