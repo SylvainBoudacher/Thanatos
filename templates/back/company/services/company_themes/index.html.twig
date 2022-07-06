@@ -18,7 +18,8 @@
                                 {% endif %}
                                 <div class="text-slate-50 font-extralight text-md" >
                                     <span>à partir de</span>
-                                    <span class="text-3xl font-bold">{{ detailedTheme.theme.price }} €</span>
+                                    <span class="text-3xl font-bold">{{ (detailedTheme.theme.price)|number_format(0, '.', ' ') }} €</span>
+                                    
                                     {% if detailedTheme.theme.name == "Vers l'infinie et l'au dela !" %}
                                     <span class="font-bold text-sm">/ kg</span>
                                     {% endif %}
