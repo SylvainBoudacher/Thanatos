@@ -27,18 +27,6 @@ class Order
     public const DRIVER_BRINGS_TO_WAREHOUSE = "DRIVER_BRINGS_TO_WAREHOUSE";
     public const DRIVER_CLOSE = "DRIVER_CLOSE";
 
-    public const FUNERAL_DRAFT = "FUNERAL_DRAFT";
-    public const FUNERAL_NEW = "FUNERAL_NEW";
-    public const FUNERAL_ACCEPT = "FUNERAL_ACCEPT";
-    public const FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL = "FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL";
-    public const FUNERAL_DRIVER_BRINGS_TO_FUNERAL = "FUNERAL_DRIVER_BRINGS_TO_FUNERAL";
-    public const FUNERAL_CORPSE_ARRIVES_TO_FUNERAL = "FUNERAL_CORPSE_ARRIVES_TO_FUNERAL";
-    public const FUNERAL_WAITING_PROCESSING = "FUNERAL_WAITING_PROCESSING";
-    public const FUNERAL_IN_PROGRESS_PROCESSING = "FUNERAL_IN_PROGRESS_PROCESSING";
-    public const FUNERAL_CLOSE_PROCESSING = "FUNERAL_CLOSE_PROCESSING";
-    public const FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER = "FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER";
-    public const FUNERAL_DRIVER_CLOSE_BRING = "FUNERAL_DRIVER_CLOSE_BRING";
-
     // WHEN CANCEL
     public const DRIVER_USER_CANCEL_ORDER = "DRIVER_USER_CANCEL_ORDER";
     public const DRIVER_PROCESSING_REFUSED = "DRIVER_PROCESSING_REFUSED";
@@ -105,12 +93,18 @@ class Order
      */
     private $types;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Preparation::class, mappedBy="command", orphanRemoval=true)
+     */
+    private $preparations;
+
     public function __construct()
     {
         $this->driverOrders = new ArrayCollection();
         $this->corpses = new ArrayCollection();
         $this->invoices = new ArrayCollection();
         $this->addressOrders = new ArrayCollection();
+        $this->preparations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -318,6 +312,36 @@ class Order
     public function setTypes(?string $types): self
     {
         $this->types = $types;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Preparation>
+     */
+    public function getPreparations(): Collection
+    {
+        return $this->preparations;
+    }
+
+    public function addPreparation(Preparation $preparation): self
+    {
+        if (!$this->preparations->contains($preparation)) {
+            $this->preparations[] = $preparation;
+            $preparation->setCommand($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreparation(Preparation $preparation): self
+    {
+        if ($this->preparations->removeElement($preparation)) {
+            // set the owning side to null (unless already changed)
+            if ($preparation->getCommand() === $this) {
+                $preparation->setCommand(null);
+            }
+        }
 
         return $this;
     }
