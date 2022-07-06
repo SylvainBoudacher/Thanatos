@@ -9,7 +9,6 @@
 <div class="example-wrapper">
     {% if currentOrder == true %}
 
-
         <section class="block rounded-lg bg-green-100 stroke shadow-md block w-[40rem] mx-auto mt-32">
             <div class="container flex flex-col items-center px-4 py-12 mx-auto text-center">
                 <h2 class="text-3xl font-semibold tracking-tight text-gray-700  ">
@@ -46,14 +45,9 @@
                     <p class="text-lg px-2">{{ currentOrder.corpses.count() }}</p>
                 </div>
 
-
-
-
-
-
                 <div class="mt-6 sm:-mx-2">
                     <div class="inline-flex w-full mt-4 sm:w-auto sm:mx-2 sm:mt-0">
-                        <a href="#"
+                        <a href="{{ path('order_arrive_to_client' , {'order_id' : currentOrder.id}) }}"
                            class="inline-flex items-center justify-center w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 border border-gray-200 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
                             Je suis Arriver
                         </a>
