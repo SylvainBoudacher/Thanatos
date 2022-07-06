@@ -4,9 +4,11 @@ namespace App\Controller\Front\driver;
 
 use App\Form\ProcessingValidationType;
 use App\Entity\DriverOrder;
+use App\Entity\Corpse;
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\CorpseRepository;
 use App\Repository\DriverOrderRepository;
 use Google\Service\Forms\Form;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -45,6 +47,8 @@ class DriverController extends AbstractController
             //get the address of the addressOrder
             $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
         }
+
+        /*dd($orders);*/
 
 
         return $this->render('front/driver/orders/index.html.twig', [
@@ -145,7 +149,7 @@ class DriverController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
 
-        $order->setStatus('DRIVER_STOCKED');
+        $order->setStatus('DRIVER_CLOSE');
 
         $entityManager->persist($order);
         $entityManager->flush();
