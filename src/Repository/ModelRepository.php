@@ -5,10 +5,12 @@ namespace App\Repository;
 use App\Entity\Burial;
 use App\Entity\Company;
 use App\Entity\CompanyPainting;
+use App\Entity\CompanyTheme;
 use App\Entity\Model;
 use App\Entity\ModelExtra;
 use App\Entity\ModelMaterial;
 use App\Entity\Painting;
+use App\Entity\Theme;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -41,17 +43,19 @@ class ModelRepository extends ServiceEntityRepository
             ->execute();
     }
 
-    public function getCompaniesThatHaveModels()
+    public function getCompaniesThatHaveModelsAndFiltersByTheme(Theme $theme)
     {
 
         $query = $this->createQueryBuilder('m')
             ->select('c')
             ->innerJoin(Company::class, 'c', 'WITH', 'c.id = m.company')
+            ->innerJoin(CompanyTheme::class, 'ct', 'WITH', 'ct.company = c.id')
+            ->where('ct.theme = :theme')
             ->groupBy('c')
+            ->setParameter('theme', $theme)
             ->getQuery();
 
         return $query->execute();
-//        return $query;
     }
 
     // /**

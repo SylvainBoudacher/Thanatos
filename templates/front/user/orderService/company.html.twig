@@ -85,16 +85,15 @@
                 <div class="row-span-2">{{ company.description }}
                 </div>
                 <div class="info">
-                    <p class="text-zinc-400	">Contact : Praesent a ornare ipsum. Phasellus vitae ipsum sit amet leo
-                        interdum
-                        iaculis. Pellentesque luctus vulputate velit nec consectetur. Duis eu ornare diam.
+                    <p class="text-zinc-400	">Contact : /
                     </p>
                 </div>
             </article>
         </section>
 
         <div>
-            <form action="{{ path('user_order_recap', {corpse: corpse.id}) }}" method="POST" id="formBurialOrderProduct"
+            <form action="{{ path('user_order_product', {corpse: corpse.id, company: company.id}) }}" method="POST"
+                  id="formBurialOrderProduct"
                   name="formOrderService"
                   class="flex flex-col justify-center">
 
@@ -160,7 +159,7 @@
 
                                 <input id="material-{{ modelMaterial.material.id }}-model-{{ modelMaterial.model.id }}"
                                        type="radio"
-                                       value="{{ modelMaterial.material.id }}" name="material"
+                                       value="{{ modelMaterial.id }}" name="material"
                                        class="radioOrderService radioMaterial"
 
                                 />
@@ -217,7 +216,7 @@
 
                             <div class="flex flex-col extraItem hidden" data-model-version="{{ modelExtra.model.id }}">
                                 <input id="extra-{{ modelExtra.extra.id }}-model-{{ modelExtra.model.id }}" type="radio"
-                                       value="{{ modelExtra.extra.id }}" name="extra"
+                                       value="{{ modelExtra.id }}" name="extra"
                                        class="radioOrderService radioExtra"
                                 />
                                 <label for="extra-{{ modelExtra.extra.id }}-model-{{ modelExtra.model.id }}"

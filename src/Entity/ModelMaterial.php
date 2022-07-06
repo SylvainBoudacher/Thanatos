@@ -37,6 +37,7 @@ class ModelMaterial
      */
     private $preparations;
 
+
     public function __construct()
     {
         $this->preparations = new ArrayCollection();
@@ -72,7 +73,7 @@ class ModelMaterial
     }
 
     /**
-     * @return Collection|Preparation[]
+     * @return Collection<int, Preparation>
      */
     public function getPreparations(): Collection
     {
@@ -100,4 +101,5 @@ class ModelMaterial
 
         return $this;
     }
+
 }

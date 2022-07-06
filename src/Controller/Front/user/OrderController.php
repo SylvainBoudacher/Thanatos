@@ -4,6 +4,7 @@ namespace App\Controller\Front\user;
 
 use App\Entity\CompanyPainting;
 use App\Entity\Extra;
+use App\Entity\Painting;
 use App\Entity\Preparation;
 use App\Entity\Theme;
 use App\Repository\AddressOrderRepository;
@@ -315,7 +316,7 @@ class OrderController extends AbstractController
 
     /* ORDER SERVICE */
     #[Route('/commander-un-service/etape-1/{corpse}/{theme}', name: 'user_order_theme', methods: ['POST', 'GET'])]
-    public function orderServiceTheme(Request $request, ThemeRepository $themeRepository, CorpseRepository $corpseRepository, OrderRepository $orderRepository, Corpse $corpse, Theme $theme = null): Response
+    public function orderServiceTheme(ThemeRepository $themeRepository, OrderRepository $orderRepository, Corpse $corpse, Theme $theme = null): Response
     {
 
         $preparation = new Preparation();
@@ -360,10 +361,10 @@ class OrderController extends AbstractController
     }
 
     #[Route('/commander-un-service/etape-2/{id}', name: 'user_order_company', methods: ['POST', 'GET'])]
-    public function orderServiceCompany(Request $request, CompanyThemeRepository $companyThemeRep, CompanyRepository $companyRepository, ModelMaterialRepository $modelMaterialRepository, ModelRepository $modelRepository, OrderRepository $orderRepository, PreparationRepository $preparationRepository, Corpse $corpse): Response
+    public function orderServiceCompany(ModelRepository $modelRepository, OrderRepository $orderRepository, Corpse $corpse): Response
     {
 
-        // Get current order adn check if order is owned by the user
+        // Get current order and check if order is owned by the user
         $order = $orderRepository->findBy([
             'possessor' => $this->getUser(),
             'status' => Order::DRIVER_CLOSE,
@@ -373,7 +374,7 @@ class OrderController extends AbstractController
         if (!$order) dd('error : corpse not owned');
         if (!($corpse->getPreparation() && $corpse->getPreparation()->getStatus() === Preparation::FUNERAL_DRAFT)) dd('error : preparation not owned');
 
-        $companies = $modelRepository->getCompaniesThatHaveModels();
+        $companies = $modelRepository->getCompaniesThatHaveModelsAndFiltersByTheme($corpse->getPreparation()->getTheme());
 
         return $this->render('front/user/orderService/companies.html.twig', [
             'companies' => $companies,
@@ -392,6 +393,40 @@ class OrderController extends AbstractController
         $modelsMaterial = array_filter($data, fn($i) => $i instanceof ModelMaterial);
         $companiesPainting = array_filter($data, fn($i) => $i instanceof CompanyPainting);
 
+        if ($request->request->get('burial') &&
+            $request->request->get('model') &&
+            $request->request->get('material') &&
+            $request->request->get('color') &&
+            $request->request->get('extra')
+        ) {
+
+            $em = $this->getDoctrine()->getManager();
+
+            $burial = $em->getRepository(Burial::class)->find($request->request->get('burial'));
+            $model = $em->getRepository(Model::class)->find($request->request->get('model'));
+            $modelMaterial = $em->getRepository(ModelMaterial::class)->find($request->request->get('material'));
+            $modelExtra = $em->getRepository(ModelExtra::class)->find($request->request->get('extra'));
+            $color = $em->getRepository(Painting::class)->find($request->request->get('color'));
+
+            $preparation = $corpse->getPreparation();
+            $preparation->setModelExtra($modelExtra);
+            $preparation->setModelMaterial($modelMaterial);
+            $preparation->setPainting($color);
+
+            $price = 0;
+            $price += $color->getPrice();
+            $price += $preparation->getTheme()->getPrice();
+            $price += $modelMaterial->getMaterial()->getPrice();
+            $price += $modelExtra->getExtra()->getPrice();
+            $price += $model->getPrice();
+
+            $preparation->setPrice($price);
+
+            $em->flush();
+
+            return $this->redirectToRoute('user_order_recap', ['corpse' => $corpse->getId()]);
+        }
+
         return $this->render('front/user/orderService/company.html.twig', [
             'company' => $company,
             'burials' => $burials,
@@ -404,61 +439,48 @@ class OrderController extends AbstractController
     }
 
     #[Route('/commander-un-service/recapitulatif/{corpse}', name: 'user_order_recap', methods: ['POST', 'GET'])]
-    public function temp(Request $request, PaintingRepository $paintingRepository, ModelRepository $modelRepository, Corpse $corpse): Response
+    public function orderServiceRecap(Request $request, OrderRepository $orderRepository, PaintingRepository $paintingRepository, ModelRepository $modelRepository, Corpse $corpse): Response
     {
-        dump($corpse);
+        // Get current order and check if order is owned by the user
+        $order = $orderRepository->findBy([
+            'possessor' => $this->getUser(),
+            'status' => Order::DRIVER_CLOSE,
+            'id' => $corpse->getCommand()->getId()
+        ]);
 
-        dd($request->request->all());
+        if (!$order) dd('error : corpse not owned');
+        if (!($corpse->getPreparation() && $corpse->getPreparation()->getStatus() === Preparation::FUNERAL_DRAFT)) dd('error : preparation not owned');
+
+        if ($request->query->get('confirm')) {
+
+            $em = $this->getDoctrine()->getManager();
+            $preparation = $corpse->getPreparation();
+            $preparation->setStatus(Preparation::FUNERAL_NEW);
+            $em->flush();
+
+            $this->addFlash('success', 'La commande a été envoyée à la pompe funèbre');
+            return $this->redirectToRoute('user_order');
+        }
+
+        if ($request->query->get('cancel')) {
+            $em = $this->getDoctrine()->getManager();
+            $preparation = $corpse->getPreparation();
+
+            $corpse->setPreparation(null);
+            $em->remove($preparation);
+            $em->persist($corpse);
+            $em->flush();
+
+            $this->addFlash('success', 'La commande a bien été annulée');
+            return $this->redirectToRoute('user_order');
+        }
+
+        return $this->render('front/user/orderService/recap.html.twig', [
+            'corpse' => $corpse,
+            'preparation' => $corpse->getPreparation(),
+            'company' => $corpse->getPreparation()->getModelExtra()->getModel()->getCompany()
+        ]);
     }
-
-//    #[Route('/commander-un-service/recapitulatif', name: 'user_order_recap', methods: ['POST', 'GET'])]
-    /* public function orderServiceRecap(Request $request): Response
-     {
-         $session = $request->getSession();
-         $cartSession = $session->get('cartSession');
-         $em = $this->getDoctrine()->getManager();
-         $total = 0;
-
-         $corpse = $em->getRepository(Corpse::class)->find($cartSession['corpse']);
-         $theme = $em->getRepository(Theme::class)->find($cartSession['theme']);
-         $company = $em->getRepository(Company::class)->find($cartSession['company']);
-         $burial = $em->getRepository(Burial::class)->find($cartSession['burial']);
-         $model = $em->getRepository(Model::class)->find($cartSession['model']);
-         $modelExtra = $cartSession['modelExtra'] ? $em->getRepository(ModelExtra::class)->find($cartSession['modelExtra']) : null;
-         $modelMaterial = $em->getRepository(ModelMaterial::class)->find($cartSession['modelMaterial']);
-
-         $total += $modelExtra ? $modelExtra->getExtra()->getPrice() : 0;
-         $total += $theme->getPrice();
-         $total += $model->getPrice();
-         $total += $modelMaterial->getMaterial()->getPrice();
-
-         if ($request->query->get('confirm')) {
-             $preparation = new Preparation();
-             $preparation->setPrice($total);
-             $preparation->setCorpse($corpse);
-             $preparation->setTheme($theme);
-             $preparation->setModelMaterial($modelMaterial);
-             $corpse->setPreparation($preparation);
-
-             $em->persist($preparation);
-             $em->flush();
-
-             $session->remove('cartSession');
-
-             return $this->redirectToRoute('user_order_success');
-         }
-
-         return $this->render('front/user/orderService/recap.html.twig', [
-             'corpse' => $corpse,
-             'theme' => $theme,
-             'company' => $company,
-             'burial' => $burial,
-             'model' => $model,
-             'extra' => $modelExtra ? $modelExtra->getExtra() : [],
-             'material' => $modelMaterial->getMaterial(),
-             'total' => $total
-         ]);
-     }*/
 
     /**
      * @throws ApiErrorException
