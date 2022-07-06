@@ -3,6 +3,7 @@
 namespace App\Controller\Front\driver;
 
 use App\Entity\DriverOrder;
+use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\DriverOrderRepository;
@@ -20,20 +21,26 @@ class DriverController extends AbstractController
     */
     
     #[Route('/', name: 'driver_orders')]
-    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository , DriverOrderRepository $driverOrderRepository): Response
+    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository , DriverOrderRepository $driverOrderRepository , AddressRepository $addressRepository): Response
     {
         $company = $companyRepository->find($this->getUser()->getCompany());
 
         $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'DRIVER_NEW');
 
+        //find the order that the driver is working on
         $currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])->getCommand();
 
-        /*dd($currentOrder);*/
+        $addressOrder = $currentOrder->getAddressOrders();
+
+        $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
+
+
 
         return $this->render('front/driver/orders/index.html.twig', [
             'controller_name' => 'DriverController',
             'orders' => $orders,
             'currentOrder' => $currentOrder,
+            'address' => $address,
         ]);
     }
 
