@@ -314,7 +314,7 @@ class OrderController extends AbstractController
     }
 
     /* ORDER SERVICE */
-    #[Route('/commander-un-service/etape-1/{id}/{theme}', name: 'user_order_theme', methods: ['POST', 'GET'])]
+    #[Route('/commander-un-service/etape-1/{corpse}/{theme}', name: 'user_order_theme', methods: ['POST', 'GET'])]
     public function orderServiceTheme(Request $request, ThemeRepository $themeRepository, CorpseRepository $corpseRepository, OrderRepository $orderRepository, Corpse $corpse, Theme $theme = null): Response
     {
 
@@ -392,7 +392,6 @@ class OrderController extends AbstractController
         $modelsMaterial = array_filter($data, fn($i) => $i instanceof ModelMaterial);
         $companiesPainting = array_filter($data, fn($i) => $i instanceof CompanyPainting);
 
-//        dd($modelsMaterial);
         return $this->render('front/user/orderService/company.html.twig', [
             'company' => $company,
             'burials' => $burials,
