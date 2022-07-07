@@ -5,16 +5,20 @@
 
     <section class="bg-white ">
         <div class="container px-6 py-10 mx-auto">
-            <h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl ">Récapitulatif de votre <span class="underline decoration-blue-500">commande</span></h1>
+            <h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl ">Récapitulatif de votre <span
+                        class="underline decoration-blue-500">commande</span></h1>
             {% for corpse in order.corpses %}
                 <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3 flex flex-row">
                     <div class="p-8 space-y-3 border-2 border-blue-400  rounded-xl">
-                            <span class="inline-block text-blue-500 ">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
-                                </svg>
-                            </span>
+                        <span class="inline-block text-blue-500 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
+                            </svg>
+                        </span>
 
                         <h1 class="text-2xl font-semibold text-gray-700 capitalize ">Cadavre</h1>
 
@@ -26,7 +30,9 @@
                             <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <g stroke-width="2" fill="none" stroke="#374151">
                                     <path d="M12 2a5 5 0 1 0 0 10 5 5 0 1 0 0-10Z"></path>
-                                    <path fill="none" stroke="#374151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14h.35c1.51 0 2.78 1.12 2.97 2.62l.39 3.12c.14 1.19-.79 2.24-1.99 2.24H5.25c-1.21 0-2.14-1.06-1.99-2.25l.39-3.13c.18-1.51 1.46-2.63 2.97-2.63h.35"></path>
+                                    <path fill="none" stroke="#374151" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M17 14h.35c1.51 0 2.78 1.12 2.97 2.62l.39 3.12c.14 1.19-.79 2.24-1.99 2.24H5.25c-1.21 0-2.14-1.06-1.99-2.25l.39-3.13c.18-1.51 1.46-2.63 2.97-2.63h.35"></path>
                                 </g>
                             </svg>
 
@@ -57,7 +63,8 @@
 
                         <div class="flex items-center mt-4  text-gray-700">
                             <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <g stroke-linecap="round" stroke-width="2" stroke="#000" fill="none" stroke-linejoin="round">
+                                <g stroke-linecap="round" stroke-width="2" stroke="#000" fill="none"
+                                   stroke-linejoin="round">
                                     <path d="M18 3l4-1 -1 4L11 16l-2.5-.5L8 13 18 3Z"></path>
                                     <path d="M2 20l2 2"></path>
                                     <path d="M5 14l1 4 4 1"></path>
@@ -89,19 +96,22 @@
                         </a>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3 flex flex-row">
-                    <div class="p-8 space-y-3 border-2 border-blue-400  rounded-xl">
-                            <span class="inline-block text-blue-500 ">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                                </svg>
-                            </span>
-                            <h1 class="text-2xl font-semibold text-gray-700 capitalize ">Adresse</h1>
-                            <p>{{ address.city }}</p>
-                            <p>{{ address.number }} {{ address.street }} {{ address.postcode }}</p>
-                    </div>
-                </div>
+
             {% endfor %}
+            <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3 flex flex-row">
+                <div class="p-8 space-y-3 border-2 border-blue-400  rounded-xl">
+                    <span class="inline-block text-blue-500 ">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        </svg>
+                    </span>
+                    <h1 class="text-2xl font-semibold text-gray-700 capitalize ">Adresse</h1>
+                    <p>{{ address.city }}</p>
+                    <p>{{ address.number }} {{ address.street }} {{ address.postcode }}</p>
+                </div>
+            </div>
             <div class="ml-1 mt-4">
                 <a href="{{ path('declare_corpse_confirmation', {cancel: 'true'}) }}">
                     <button class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-600 text-white-300 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
