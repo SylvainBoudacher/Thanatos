@@ -27,14 +27,12 @@ class AdminUserUpdateType extends AbstractType
             ->add('isVerified')
             ->add('address')
             ->add('company')
-
             ->add('submit', SubmitType::class, [
                 'label' => 'Modifier',
                 'attr' => [
                     'class' => 'px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600',
                 ],
             ])
-
         ;
     }
 
