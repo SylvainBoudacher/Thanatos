@@ -29,6 +29,7 @@ use App\Repository\OrderRepository;
 use App\Repository\PaintingRepository;
 use App\Repository\PreparationRepository;
 use App\Repository\ThemeRepository;
+use App\Security\Voter\PreparationVoter;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Util\Color;
@@ -316,26 +317,15 @@ class OrderController extends AbstractController
 
     /* ORDER SERVICE */
     #[Route('/commander-un-service/etape-1/{corpse}/{theme}', name: 'user_order_theme', methods: ['POST', 'GET'])]
-    public function orderServiceTheme(ThemeRepository $themeRepository, OrderRepository $orderRepository, Corpse $corpse, Theme $theme = null): Response
+    public function orderServiceTheme(ThemeRepository $themeRepository, Corpse $corpse, Theme $theme = null): Response
     {
+        $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
 
-        $preparation = new Preparation();
-
-        // Get current order and check if order is owned by the user
-        $order = $orderRepository->findOneBy([
-            'possessor' => $this->getUser(),
-            'status' => Order::DRIVER_CLOSE,
-            'id' => $corpse->getCommand()->getId()
-        ]);
-
-        if (!$order) dd('error : corpse not owned');
-
-        if ($corpse->getPreparation()) {
-            if ($corpse->getPreparation()->getStatus() === Preparation::FUNERAL_DRAFT) $preparation = $corpse->getPreparation();
-            else dd("error : your current preparation is not draft");
-        }
+        $preparation = $corpse->getPreparation() !== null ? $corpse->getPreparation() : new Preparation();
 
         if ($theme) {
+
+            if ($theme->getDeletedAt()) dd('error : theme deleted');
 
             $preparation->setTheme($theme);
             $preparation->setStatus(Preparation::FUNERAL_DRAFT);
@@ -364,15 +354,7 @@ class OrderController extends AbstractController
     public function orderServiceCompany(ModelRepository $modelRepository, OrderRepository $orderRepository, Corpse $corpse): Response
     {
 
-        // Get current order and check if order is owned by the user
-        $order = $orderRepository->findBy([
-            'possessor' => $this->getUser(),
-            'status' => Order::DRIVER_CLOSE,
-            'id' => $corpse->getCommand()->getId()
-        ]);
-
-        if (!$order) dd('error : corpse not owned');
-        if (!($corpse->getPreparation() && $corpse->getPreparation()->getStatus() === Preparation::FUNERAL_DRAFT)) dd('error : preparation not owned');
+        $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
 
         $companies = $modelRepository->getCompaniesThatHaveModelsAndFiltersByTheme($corpse->getPreparation()->getTheme());
 

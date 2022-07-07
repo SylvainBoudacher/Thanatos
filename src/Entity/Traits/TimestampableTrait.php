@@ -2,6 +2,7 @@
 
 namespace App\Entity\Traits;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -9,7 +10,7 @@ trait TimestampableTrait
 {
 
     /**
-     * @var \DateTime $createdAt
+     * @var DateTime $createdAt
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"}, nullable=true)
@@ -17,7 +18,7 @@ trait TimestampableTrait
     private $createdAt;
 
     /**
-     * @var \DateTime $updatedAt
+     * @var DateTime $updatedAt
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"}, nullable=true)
@@ -25,61 +26,61 @@ trait TimestampableTrait
     private $updatedAt;
 
     /**
-     * @var \DateTime $deletedAt
+     * @var DateTime $deletedAt
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $deletedAt;
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime|null
      */
-    public function getDeletedAt(): \DateTime
+    public function getDeletedAt(): ?DateTime
     {
         return $this->deletedAt;
     }
 
     /**
-     * @param \DateTime $deletedAt
+     * @param DateTime $deletedAt
      * @return self
      */
-    public function setDeletedAt(\DateTime $deletedAt): self
+    public function setDeletedAt(DateTime $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
         return $this;
