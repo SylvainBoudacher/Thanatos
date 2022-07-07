@@ -21,8 +21,8 @@ class StaticController extends AbstractController
             {
                 return $this->redirectToRoute('dashboard_driver');
 
-            } elseif ($this->getUser()->getRoles("ROLE_MORGUE")[0] == "ROLE_MORGUE") {
-                return $this->redirectToRoute('morgue_dashboard');
+            } elseif ($this->getUser()->getRoles("ROLE_COMPANY")[0] == "ROLE_COMPANY") {
+                return $this->redirectToRoute('home_company');
 
             } elseif ($this->getUser()->getRoles("ROLE_ADMIN")[0] == "ROLE_ADMIN") {
                 return $this->redirectToRoute('admin_dashboard');

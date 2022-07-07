@@ -1,7 +1,7 @@
 {% extends 'base_back.html.twig' %}
 
 {% block body %}
-    <div class="container flex flex-row h-100">
+    <div class=" flex flex-row h-100">
         {{ include('components/sideBarPro.html.twig') }}
 
         <div class="h-screen px-10 py-4 flex flex-col justify-between w-[100%]">
@@ -15,13 +15,19 @@
                         Bienvenues dans votre panneau de gestions des Matériaux.
                     </p>
                     <p class="text-slate-700 text-lg font-light mb-2">
-                        C'est ici que vous allez pouvoir à la fois gérer ce qui est disponible dans notre base de données, et dans le même temps mettre à disposition
-                        les matériaux sur le market pour vos clients.
+                        C'est à la fois l'ensemble des matériaux disponibles chez Thanatos (premier tableau) et ceux que vous avez décider d'exposer pour vos modèles de tombes.
+                        
+                    </p>
+                    <p class="text-slate-700 text-lg font-light mb-2">
+                        Les métériaux pouvant convenir à un model de sépulture précis et pas un autre, tous les métériaux mis à disposition des clients (deuxième tableau) ne pourront pas être sélectionné par eux.
+                    </p>
+                    <p class="text-slate-700 text-lg font-light mb-2">
+                        En revanche vous avez une section dédiée (voir l'onglet "Matériaux d'un model") qui permet de choisir parmis les matérieux mis à disposition de clients, ceux que vous voulez choisir par model.
                     </p>
                 </section>
 
 
-                <a href="{{ path("create_extra") }}">
+                <a href="{{ path("create_material") }}">
                     <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Ajouter un matériaux</button>
                 </a>
 
