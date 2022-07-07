@@ -14,8 +14,13 @@ class CompanyController extends AbstractController
     #[Route('/', name: 'home_company')]
     public function index(): Response
     {
-        return $this->render('back/company/index.html.twig');
+        // TODO : remove, just for presentation
+//        return $this->render('back/company/index.html.twig');
+
+        return $this->redirectToRoute('home_services');
     }
+
+
 
 
 }
