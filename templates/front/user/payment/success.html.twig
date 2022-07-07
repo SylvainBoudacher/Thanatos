@@ -2,23 +2,28 @@
 
 {% block body %}
 
-        <section class=" m-32 lg:flex lg:justify-center">
-            <div class="bg-white dark:bg-gray-800 lg:mx-8 lg:flex lg:max-w-5xl lg:shadow-lg lg:rounded-lg">
-                <div class="lg:w-1/2">
-                    <img class="h-64 bg-cover lg:rounded-lg lg:h-full" src="{{ asset('images/successPurchase.svg') }}" </img>
-                </div>
+    <section class=" m-32 lg:flex lg:justify-center">
+        <div class="bg-white dark:bg-gray-800 lg:mx-8 lg:flex lg:max-w-5xl lg:shadow-lg lg:rounded-lg">
+            <div class="lg:w-1/2">
+                <img class="h-64 bg-cover lg:rounded-lg lg:h-full"
+                     src="{{ asset('images/successPurchase.svg') }}"/>
+            </div>
 
 
-                <div class="max-w-xl px-6 py-12 lg:max-w-5xl lg:w-1/2">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white md:text-3xl">Merci pour votre  <span class="text-blue-600 dark:text-blue-400">Achat</span></h2>
-                    <p class="mt-4 text-gray-600 dark:text-gray-400">
-                        Retrouver votre commande dans votre espace personnel. Un email vous sera envoyé avec les détails de votre commande. Votre Facture vous sera envoyée dans votre boite mail.
-                    </p>
-                    <div class="mt-20">
-                        <a href="{{ path('homepage') }}" class="px-5 py-2 font-semibold text-gray-100 transition-colors duration-200 transform bg-gray-900 rounded-md hover:bg-gray-700">Retourner vers le menu</a>
-                    </div>
+            <div class="max-w-xl px-6 py-12 lg:max-w-5xl lg:w-1/2">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white md:text-3xl">Merci pour votre <span
+                            class="text-blue-600 dark:text-blue-400">Achat</span></h2>
+                <p class="mt-4 text-gray-600 dark:text-gray-400">
+                    Retrouvez votre commande dans votre espace personnel. Un email vous sera envoyé avec les détails de
+                    votre commande. Votre facture vous sera envoyez dans votre boite mail.
+                </p>
+                <div class="mt-20">
+                    <a href="{{ path('homepage') }}"
+                       class="px-5 py-2 font-semibold text-gray-100 transition-colors duration-200 transform bg-gray-900 rounded-md hover:bg-gray-700">Retourner
+                        vers le menu</a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
 {% endblock %}
