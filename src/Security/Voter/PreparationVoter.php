@@ -9,7 +9,6 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class PreparationVoter extends Voter
 {
@@ -34,7 +33,6 @@ class PreparationVoter extends Voter
             && ($subject instanceof Corpse ||
                 $subject instanceof Preparation);
 
-        return in_array($attribute, [self::EDIT, self::VIEW, self::ORDER]);
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -42,7 +40,7 @@ class PreparationVoter extends Voter
 
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof User) {
             return false;
         }
 

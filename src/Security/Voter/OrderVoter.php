@@ -2,12 +2,13 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Corpse;
+use App\Entity\Order;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class CorpseVoter extends Voter
+class OrderVoter extends Voter
 {
     public const EDIT = 'EDIT';
     public const VIEW = 'VIEW';
@@ -17,7 +18,7 @@ class CorpseVoter extends Voter
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
         return in_array($attribute, [self::EDIT, self::VIEW])
-            && $subject instanceof Corpse;
+            && $subject instanceof Order;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -31,7 +32,8 @@ class CorpseVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case self::EDIT:
-                return $this->canOrder($subject, $user);
+                return $this->canEdit($subject, $user);
+                break;
             case self::VIEW:
                 // logic to determine if the user can VIEW
                 // return true or false
@@ -41,12 +43,9 @@ class CorpseVoter extends Voter
         return false;
     }
 
-    private function canEdit(Corpse $corpse, User $user): bool
+    private function canEdit(Order $order, User $user): bool
     {
 
-        if ($corpse->getDeletedAt()) return false;
-
-        return $corpse->getCommand()->getPossessor() === $user;
-
+        return $order->getPossessor() === $user;
     }
 }
