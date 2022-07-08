@@ -356,9 +356,11 @@ class OrderController extends AbstractController
 
         $companies = $modelRepository->getCompaniesThatHaveModelsAndFiltersByTheme($corpse->getPreparation()->getTheme(), true);
 
+        $page = $request->query->getInt('page', 1) ? $request->query->getInt('page', 1) : 1;
+
         $pagination = $paginator->paginate(
             $companies,
-            $request->query->getInt('page', 1),
+            $page,
             10
         );
 
@@ -373,6 +375,9 @@ class OrderController extends AbstractController
     public function orderServiceProduct(Request $request, ModelRepository $modelRepository, Corpse $corpse, Company $company): Response
     {
 
+        $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
+
+        // get ressources funeral
         $data = $modelRepository->getCompleteProductsRelatedToCompany($company);
         $burials = array_filter($data, fn($i) => $i instanceof Burial);
         $models = array_filter($data, fn($i) => $i instanceof Model);
@@ -380,26 +385,42 @@ class OrderController extends AbstractController
         $modelsMaterial = array_filter($data, fn($i) => $i instanceof ModelMaterial);
         $companiesPainting = array_filter($data, fn($i) => $i instanceof CompanyPainting);
 
-        if ($request->request->get('burial') &&
-            $request->request->get('model') &&
-            $request->request->get('material') &&
-            $request->request->get('color') &&
-            $request->request->get('extra')
+        if ($request->request->getInt('burial') &&
+            $request->request->getInt('model') &&
+            $request->request->getInt('material') &&
+            $request->request->getInt('color') &&
+            $request->request->getInt('extra')
         ) {
-
             $em = $this->getDoctrine()->getManager();
 
+            // get entites for order
             $burial = $em->getRepository(Burial::class)->find($request->request->get('burial'));
             $model = $em->getRepository(Model::class)->find($request->request->get('model'));
             $modelMaterial = $em->getRepository(ModelMaterial::class)->find($request->request->get('material'));
             $modelExtra = $em->getRepository(ModelExtra::class)->find($request->request->get('extra'));
             $color = $em->getRepository(Painting::class)->find($request->request->get('color'));
 
+            // Verification if ressources consistent
+            $entities = [$burial, $model, $modelMaterial, $modelExtra, $color];
+            if (in_array(null, $entities) || in_array([], $entities)) dd('ressources hacked');
+
+            if (!($model->getBurial()->getId() == $burial->getId() &&
+                $modelMaterial->getModel()->getId() == $model->getId() &&
+                $modelExtra->getModel()->getId() == $model->getId() &&
+                $em->getRepository(CompanyPainting::class)->findBY([
+                    'company' => $model->getCompany()->getId(),
+                    'painting' => $color
+
+                ]))) dd('ressources hacked');
+
+
+            // set preparation
             $preparation = $corpse->getPreparation();
             $preparation->setModelExtra($modelExtra);
             $preparation->setModelMaterial($modelMaterial);
             $preparation->setPainting($color);
 
+            // get total price
             $price = 0;
             $price += $color->getPrice();
             $price += $preparation->getTheme()->getPrice();
@@ -428,17 +449,9 @@ class OrderController extends AbstractController
     #[Route('/commander-un-service/recapitulatif/{corpse}', name: 'user_order_recap', methods: ['POST', 'GET'])]
     public function orderServiceRecap(Request $request, OrderRepository $orderRepository, PaintingRepository $paintingRepository, ModelRepository $modelRepository, Corpse $corpse): Response
     {
-        // Get current order and check if order is owned by the user
-        $order = $orderRepository->findBy([
-            'possessor' => $this->getUser(),
-            'status' => Order::DRIVER_CLOSE,
-            'id' => $corpse->getCommand()->getId()
-        ]);
+        $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
 
-        if (!$order) dd('error : corpse not owned');
-        if (!($corpse->getPreparation() && $corpse->getPreparation()->getStatus() === Preparation::FUNERAL_DRAFT)) dd('error : preparation not owned');
-
-        if ($request->query->get('confirm')) {
+        if ($request->query->getBoolean('confirm')) {
 
             $em = $this->getDoctrine()->getManager();
             $preparation = $corpse->getPreparation();
@@ -449,7 +462,7 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('user_order');
         }
 
-        if ($request->query->get('cancel')) {
+        if ($request->query->getBoolean('cancel')) {
             $em = $this->getDoctrine()->getManager();
             $preparation = $corpse->getPreparation();
 
