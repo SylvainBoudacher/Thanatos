@@ -91,156 +91,160 @@
             </article>
         </section>
 
-        <form action="{{ path('user_order_product', {corpse: corpse.id, company: company.id}) }}" method="POST"
-              id="formBurialOrderProduct"
-              name="formOrderService"
-              class="flex flex-col items-center">
+        {% if burials is not empty or models is not empty or modelsMaterial is not empty or companiesPainting is not empty or modelsExtra is not empty %}
+            <form action="{{ path('user_order_product', {corpse: corpse.id, company: company.id}) }}" method="POST"
+                  id="formBurialOrderProduct"
+                  name="formOrderService"
+                  class="flex flex-col items-center">
 
-            <h1 class="text-red-600	mt-7">Veuillez choisir tous les élements pour pouvoir valider</h1>
+                <h1 class="text-red-600	mt-7">Veuillez choisir tous les élements pour pouvoir valider</h1>
 
-            {# BURIAL #}
-            <div id="burial" class="burial flex flex-col justify-center">
-                <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
-                    Choisir un
-                    contenant</h1>
+                {# BURIAL #}
+                <div id="burial" class="burial flex flex-col justify-center">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un
+                        contenant</h1>
 
-                <div class="burials flex flex-wrap justify-center gap-9">
-                    {% for burial in burials %}
-                        <input id="burial-{{ burial.id }}" type="radio" value="{{ burial.id }}" name="burial"
-                               class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioBurial"
-                               data-burial-version="{{ burial.id }}"
-                        />
-                        <label for="burial-{{ burial.id }}" class="inline-block cursor-pointer itemContent"><span
-                                    class="bg-purple-600 p-9 block w-auto h-auto itemContent rounded">{{ burial.name }}</span></label>
-                    {% endfor %}
-                </div>
-            </div>
-
-            {# MODEL #}
-            <div id="model" class="model flex flex-col justify-center hidden">
-                <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
-                    Choisir un
-                    modèle</h1>
-
-                <div class="models flex flex-wrap justify-center gap-9">
-
-                    {% for model in models %}
-                        <div class="flex flex-col modelItem hidden"
-                             data-burial-version="{{ model.burial.id }}">
-
-                            <input id="model-{{ model.id }}" type="radio" value="{{ model.id }}" name="model"
-                                   class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioModel"
-                                   data-model-version="{{ model.id }}"
-
+                    <div class="burials flex flex-wrap justify-center gap-9">
+                        {% for burial in burials %}
+                            <input id="burial-{{ burial.id }}" type="radio" value="{{ burial.id }}" name="burial"
+                                   class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioBurial"
+                                   data-burial-version="{{ burial.id }}"
                             />
-                            <label for="model-{{ model.id }}" class="inline-block cursor-pointer">
-
-                                <img src="{{ company.media ? vich_uploader_asset(company.media) : asset('images/model-default.png') }}"
-                                     alt="modele"
-                                     class="w-52 h-52 itemContent"/>
-
-                            </label>
-                            <span class="w-full h-full"> {{ model.name }}<br>{{ model.price }}€</span>
-
-                        </div>
-                    {% endfor %}
+                            <label for="burial-{{ burial.id }}" class="inline-block cursor-pointer itemContent"><span
+                                        class="bg-purple-600 p-9 block w-auto h-auto itemContent rounded">{{ burial.name }}</span></label>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
 
-            {# MATERIAL #}
-            <div id="material" class="flex flex-col justify-center hidden">
-                <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
-                    Choisir un
-                    matériau</h1>
+                {# MODEL #}
+                <div id="model" class="model flex flex-col justify-center hidden">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un
+                        modèle</h1>
 
-                <div class="materials flex flex-wrap justify-center gap-9">
-                    {% for modelMaterial in modelsMaterial %}
-                        <div class="flex flex-col materialItem hidden"
-                             data-model-version="{{ modelMaterial.model.id }}">
+                    <div class="models flex flex-wrap justify-center gap-9">
 
-                            <input id="material-{{ modelMaterial.material.id }}-model-{{ modelMaterial.model.id }}"
-                                   type="radio"
-                                   value="{{ modelMaterial.id }}" name="material"
-                                   class="radioOrderService radioMaterial"
+                        {% for model in models %}
+                            <div class="flex flex-col modelItem hidden"
+                                 data-burial-version="{{ model.burial.id }}">
 
-                            />
-                            <label for="material-{{ modelMaterial.material.id }}-model-{{ modelMaterial.model.id }}"
-                                   class="inline-block cursor-pointer">
+                                <input id="model-{{ model.id }}" type="radio" value="{{ model.id }}" name="model"
+                                       class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioModel"
+                                       data-model-version="{{ model.id }}"
 
-                                <img src="{{ modelMaterial.material.media ? vich_uploader_asset(modelMaterial.material.media) : asset('images/material-default.png') }}"
-                                     alt="Materiau {{ modelMaterial.material.name }}"
-                                     class="w-52 h-52 itemContent"/>
+                                />
+                                <label for="model-{{ model.id }}" class="inline-block cursor-pointer">
 
-                            </label>
-                            <span class="w-full h-full">{{ modelMaterial.material.name }}
-                                <br>{{ modelMaterial.material.price }}€</span>
-                        </div>
-                    {% endfor %}
+                                    <img src="{{ company.media ? vich_uploader_asset(company.media) : asset('images/model-default.png') }}"
+                                         alt="modele"
+                                         class="w-52 h-52 itemContent"/>
+
+                                </label>
+                                <span class="w-full h-full"> {{ model.name }}<br>{{ model.price }}€</span>
+
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
 
-            {# COLOR #}
-            <div id="color" class="flex flex-col justify-center hidden">
-                <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
-                    Choisir une
-                    couleur</h1>
+                {# MATERIAL #}
+                <div id="material" class="flex flex-col justify-center hidden">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un
+                        matériau</h1>
 
-                <div class="colors flex flex-wrap justify-center gap-9">
-                    {% for companyPainting in companiesPainting %}
+                    <div class="materials flex flex-wrap justify-center gap-9">
+                        {% for modelMaterial in modelsMaterial %}
+                            <div class="flex flex-col materialItem hidden"
+                                 data-model-version="{{ modelMaterial.model.id }}">
 
-                        <div class="flex flex-col colorItem hidden">
-                            <input id="color-{{ companyPainting.painting.id }}" type="radio"
-                                   value="{{ companyPainting.painting.id }}" name="color"
-                                   class="radioOrderService radioColor"
-                            />
-                            <label for="color-{{ companyPainting.painting.id }}"
-                                   class="inline-block cursor-pointer">
-                                <div style="background-color:{{ companyPainting.painting.hexaCode }}" alt=""
-                                     class="w-52 h-52 itemContent rounded"></div>
+                                <input id="material-{{ modelMaterial.material.id }}-model-{{ modelMaterial.model.id }}"
+                                       type="radio"
+                                       value="{{ modelMaterial.id }}" name="material"
+                                       class="radioOrderService radioMaterial"
 
-                            </label>
-                            <span class="w-full h-full">{{ companyPainting.painting.name }}
-                                <br>{{ companyPainting.painting.price }}€</span>
-                        </div>
-                    {% endfor %}
+                                />
+                                <label for="material-{{ modelMaterial.material.id }}-model-{{ modelMaterial.model.id }}"
+                                       class="inline-block cursor-pointer">
+
+                                    <img src="{{ modelMaterial.material.media ? vich_uploader_asset(modelMaterial.material.media) : asset('images/material-default.png') }}"
+                                         alt="Materiau {{ modelMaterial.material.name }}"
+                                         class="w-52 h-52 itemContent"/>
+
+                                </label>
+                                <span class="w-full h-full">{{ modelMaterial.material.name }}
+                                    <br>{{ modelMaterial.material.price }}€</span>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
 
-            {# EXTRAS #}
-            <div id="extra" class="flex flex-col justify-center hidden">
-                <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
-                    Choisir un
-                    extra</h1>
+                {# COLOR #}
+                <div id="color" class="flex flex-col justify-center hidden">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir une
+                        couleur</h1>
 
-                <div class="extras flex flex-wrap justify-center gap-9">
-                    {% for modelExtra in modelsExtra %}
+                    <div class="colors flex flex-wrap justify-center gap-9">
+                        {% for companyPainting in companiesPainting %}
 
-                        <div class="flex flex-col extraItem hidden" data-model-version="{{ modelExtra.model.id }}">
-                            <input id="extra-{{ modelExtra.extra.id }}-model-{{ modelExtra.model.id }}" type="radio"
-                                   value="{{ modelExtra.id }}" name="extra"
-                                   class="radioOrderService radioExtra"
-                            />
-                            <label for="extra-{{ modelExtra.extra.id }}-model-{{ modelExtra.model.id }}"
-                                   class="inline-block cursor-pointer">
+                            <div class="flex flex-col colorItem hidden">
+                                <input id="color-{{ companyPainting.painting.id }}" type="radio"
+                                       value="{{ companyPainting.painting.id }}" name="color"
+                                       class="radioOrderService radioColor"
+                                />
+                                <label for="color-{{ companyPainting.painting.id }}"
+                                       class="inline-block cursor-pointer">
+                                    <div style="background-color:{{ companyPainting.painting.hexaCode }}" alt=""
+                                         class="w-52 h-52 itemContent rounded"></div>
 
-                                <img src="{{ modelExtra.extra.media ? vich_uploader_asset(modelExtra.extra.media) : asset('images/extra-default.png') }}"
-                                     alt="Extra {{ modelExtra.extra.name }}"
-                                     class="w-52 h-52 itemContent"/>
-
-                            </label>
-                            <span class="w-full h-full">{{ modelExtra.extra.name }}<br>{{ modelExtra.extra.price }}
-                                €</span>
-                        </div>
-
-                    {% endfor %}
+                                </label>
+                                <span class="w-full h-full">{{ companyPainting.painting.name }}
+                                    <br>{{ companyPainting.painting.price }}€</span>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-            <button type="submit"
-                    id="submitOrderService"
-                    class="hidden mt-5 w-fit focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
-                Confirmer le choix de ses produits
-            </button>
-        </form>
+
+                {# EXTRAS #}
+                <div id="extra" class="flex flex-col justify-center hidden">
+                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un
+                        extra</h1>
+
+                    <div class="extras flex flex-wrap justify-center gap-9">
+                        {% for modelExtra in modelsExtra %}
+
+                            <div class="flex flex-col extraItem hidden" data-model-version="{{ modelExtra.model.id }}">
+                                <input id="extra-{{ modelExtra.extra.id }}-model-{{ modelExtra.model.id }}" type="radio"
+                                       value="{{ modelExtra.id }}" name="extra"
+                                       class="radioOrderService radioExtra"
+                                />
+                                <label for="extra-{{ modelExtra.extra.id }}-model-{{ modelExtra.model.id }}"
+                                       class="inline-block cursor-pointer">
+
+                                    <img src="{{ modelExtra.extra.media ? vich_uploader_asset(modelExtra.extra.media) : asset('images/extra-default.png') }}"
+                                         alt="Extra {{ modelExtra.extra.name }}"
+                                         class="w-52 h-52 itemContent"/>
+
+                                </label>
+                                <span class="w-full h-full">{{ modelExtra.extra.name }}<br>{{ modelExtra.extra.price }}
+                                    €</span>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                </div>
+                <button type="submit"
+                        id="submitOrderService"
+                        class="hidden mt-5 w-fit focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                    Confirmer le choix de ses produits
+                </button>
+            </form>
+        {% else %}
+            <h2 class="mt-7">Cette pompe funèbre ne contient aucune ressources</h2>
+        {% endif %}
     </div>
 
 {% endblock %}
