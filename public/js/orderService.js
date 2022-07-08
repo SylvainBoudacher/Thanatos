@@ -9,6 +9,7 @@ const radiosMaterial = document.getElementsByClassName('radioMaterial');
 const radiosExtra = document.getElementsByClassName('radioExtra');
 const models = document.formOrderService.model;
 const burials = document.formOrderService.burial;
+const inputNames = ['material', 'color', 'model', 'extra', 'burial'];
 
 const dependanceCharacteristics = {
     extra: extra,
@@ -69,7 +70,6 @@ Array.from(models).forEach(item => {
 
             /* Set all radios to unchecked */
             [radiosExtra, radiosMaterial, radiosColor].forEach((radios) => {
-                console.log(radios);
                 Array.from(radios).forEach((radio) => {
                     radio.checked = false;
                 });
@@ -77,3 +77,23 @@ Array.from(models).forEach(item => {
         });
     });
 });
+
+/* Hide or Show button to validate form */
+[radiosColor, radiosMaterial, radiosExtra, radiosModel].forEach((radios) => {
+    const submitOrderService = document.getElementById('submitOrderService');
+
+    Array.from(radios).forEach((radio) => {
+        radio.addEventListener('click', (e) => {
+
+            let form = new FormData(document.formOrderService);
+
+            if (Array.from(form.values()).length !== inputNames.length && !(inputNames.every((val) => Array.from(form.keys()).includes(val)))) {
+                if (!submitOrderService.classList.hasOwnProperty('hidden')) submitOrderService.classList.add('hidden');
+                return false;
+            }
+
+            submitOrderService.classList.remove('hidden');
+
+        })
+    });
+})
