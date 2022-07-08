@@ -3,7 +3,6 @@
 namespace App\Controller\Front\user;
 
 use App\Entity\CompanyPainting;
-use App\Entity\Extra;
 use App\Entity\Painting;
 use App\Entity\Preparation;
 use App\Entity\Theme;
@@ -21,10 +20,8 @@ use App\Form\AddressType;
 use App\Form\CorpseType;
 use App\Form\NewPreparationType;
 use App\Repository\CorpseRepository;
-use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelRepository;
 use App\Repository\OrderRepository;
-use App\Repository\PaintingRepository;
 use App\Repository\PreparationRepository;
 use App\Repository\ThemeRepository;
 use App\Security\Voter\PreparationVoter;
@@ -321,8 +318,7 @@ class OrderController extends AbstractController
 
         $preparation = $corpse->getPreparation() !== null ? $corpse->getPreparation() : new Preparation();
 
-        if ($theme) {
-
+        if (!is_null($theme)) {
             if ($theme->getDeletedAt()) dd('error : theme deleted');
 
             $preparation->setTheme($theme);
@@ -334,6 +330,16 @@ class OrderController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($preparation);
             $em->flush();
+
+            if ($theme->getType() === Theme::TYPE_SPECIAL) {
+                $preparation->setPainting(null);
+                $preparation->setModelMaterial(null);
+                $preparation->setModelExtra(null);
+                $preparation->setPrice($theme->getPrice());
+
+                $em->flush();
+                return $this->redirectToRoute('user_order_recap', ['corpse' => $corpse->getId()]);
+            }
 
             return $this->redirectToRoute('user_order_company', ['id' => $corpse->getId()]);
         }
@@ -447,7 +453,7 @@ class OrderController extends AbstractController
     }
 
     #[Route('/commander-un-service/recapitulatif/{corpse}', name: 'user_order_recap', methods: ['POST', 'GET'])]
-    public function orderServiceRecap(Request $request, OrderRepository $orderRepository, PaintingRepository $paintingRepository, ModelRepository $modelRepository, Corpse $corpse): Response
+    public function orderServiceRecap(Request $request, Corpse $corpse): Response
     {
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
 
@@ -458,7 +464,9 @@ class OrderController extends AbstractController
             $preparation->setStatus(Preparation::FUNERAL_NEW);
             $em->flush();
 
-            $this->addFlash('success', 'La commande a été envoyée à la pompe funèbre');
+            if ($preparation->getTheme()->getType() === Theme::TYPE_SPECIAL) $this->addFlash('success', 'La commande a été envoyée à Thanatos');
+            else $this->addFlash('success', 'La commande a été envoyée à la pompe funèbre');
+
             return $this->redirectToRoute('user_order');
         }
 
@@ -478,7 +486,7 @@ class OrderController extends AbstractController
         return $this->render('front/user/orderService/recap.html.twig', [
             'corpse' => $corpse,
             'preparation' => $corpse->getPreparation(),
-            'company' => $corpse->getPreparation()->getModelExtra()->getModel()->getCompany()
+            'company' => $corpse->getPreparation()?->getModelExtra()?->getModel()?->getCompany()
         ]);
     }
 
