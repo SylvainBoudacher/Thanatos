@@ -43,7 +43,7 @@ class ModelRepository extends ServiceEntityRepository
             ->execute();
     }
 
-    public function getCompaniesThatHaveModelsAndFiltersByTheme(Theme $theme)
+    public function getCompaniesThatHaveModelsAndFiltersByTheme(Theme $theme, $getData)
     {
 
         $query = $this->createQueryBuilder('m')
@@ -55,7 +55,7 @@ class ModelRepository extends ServiceEntityRepository
             ->setParameter('theme', $theme)
             ->getQuery();
 
-        return $query->execute();
+        return $getData ? $query->execute() : $query;
     }
 
     // /**

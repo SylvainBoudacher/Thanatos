@@ -20,8 +20,6 @@ use App\Entity\Order;
 use App\Form\AddressType;
 use App\Form\CorpseType;
 use App\Form\NewPreparationType;
-use App\Repository\CompanyRepository;
-use App\Repository\CompanyThemeRepository;
 use App\Repository\CorpseRepository;
 use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelRepository;
@@ -32,7 +30,7 @@ use App\Repository\ThemeRepository;
 use App\Security\Voter\PreparationVoter;
 use Carbon\Carbon;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Util\Color;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
@@ -351,16 +349,23 @@ class OrderController extends AbstractController
     }
 
     #[Route('/commander-un-service/etape-2/{id}', name: 'user_order_company', methods: ['POST', 'GET'])]
-    public function orderServiceCompany(ModelRepository $modelRepository, OrderRepository $orderRepository, Corpse $corpse): Response
+    public function orderServiceCompany(Request $request, ModelRepository $modelRepository, PaginatorInterface $paginator, Corpse $corpse): Response
     {
 
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
 
-        $companies = $modelRepository->getCompaniesThatHaveModelsAndFiltersByTheme($corpse->getPreparation()->getTheme());
+        $companies = $modelRepository->getCompaniesThatHaveModelsAndFiltersByTheme($corpse->getPreparation()->getTheme(), true);
+
+        $pagination = $paginator->paginate(
+            $companies,
+            $request->query->getInt('page', 1),
+            10
+        );
 
         return $this->render('front/user/orderService/companies.html.twig', [
             'companies' => $companies,
-            'corpse' => $corpse
+            'corpse' => $corpse,
+            'pagination' => $pagination
         ]);
     }
 

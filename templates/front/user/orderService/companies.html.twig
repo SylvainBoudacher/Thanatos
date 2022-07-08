@@ -4,11 +4,12 @@
 {% block body %}
     <div class="grid place-content-center place-items-center">
 
-        <h1 class="text-4xl m-3 mb-5 ">Selection d'une morgue</h1>
-
+        <h1 class="text-4xl m-3 mb-5 ">Selection d'une pompe funèbre </h1>
+        <h2 class="text-xl mt-4 text-stone-500 mb-5">Total de pompe funèbre <span
+                    class="text-blue-600	">{{ pagination.getTotalItemCount }}</span></h2>
         <div class="grid grid-cols-4 gap-3">
 
-            {% for company in companies %}
+            {% for company in pagination %}
                 <a href="{{ path('user_order_product', {corpse: corpse.id , company: company.id}) }}">
                     <div>
                         <img class="object-cover w-full h-64 rounded-lg h-36 mb-2"
@@ -75,7 +76,7 @@
                 </li>
             </ul>
         </nav>
-
+        <nav>    {{ knp_pagination_render(pagination) }}</nav>
     </div>
 
 {% endblock %}
