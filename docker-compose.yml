@@ -55,6 +55,15 @@ services:
       - "80:80"
       - "443:443"
 
+  node:
+    build:
+      context: ./docker/node
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    tty: true
+
 volumes:
   db-data: {}
   app-cache: {}
