@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Burial;
 use App\Entity\Company;
 use App\Entity\CompanyMaterial;
+use App\Entity\Material;
 use App\Entity\Model;
 use App\Entity\ModelMaterial;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -103,7 +104,22 @@ class ModelMaterialRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
 
+        return $query;
+    }
 
+    public function getByCompanyAndMaterial(Company $company, Material $material)
+    {
+        $query = $this->createQueryBuilder('model_material')
+            ->select('model_material')
+            ->join('model_material.material', 'material')
+            ->join('model_material.model', 'model')
+            ->join("model.company", "company")
+            ->where('material = :material')
+            ->andWhere('company = :company')
+            ->setParameter("material", $material)
+            ->setParameter("company", $company)
+            ->getQuery()
+            ->execute();
         return $query;
     }
 

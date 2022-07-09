@@ -11,6 +11,7 @@ use App\Repository\CompanyExtraRepository;
 use App\Repository\CompanyMaterialRepository;
 use App\Repository\ExtraRepository;
 use App\Repository\MaterialRepository;
+use App\Repository\ModelMaterialRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\GeneralVoter;
 use Doctrine\ORM\EntityManagerInterface;
