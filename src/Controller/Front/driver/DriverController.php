@@ -43,7 +43,7 @@ class DriverController extends AbstractController
             //find the order that the driver is working on
             $currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])->getCommand();
 
-            
+
 
             if ($currentOrder->getStatus() != 'DRIVER_CLOSE')
             {

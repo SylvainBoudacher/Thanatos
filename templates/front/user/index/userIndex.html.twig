@@ -5,12 +5,28 @@
                 {% if order.status != 'DRAFT' and order.status != 'DRIVER_USER_CANCEL_ORDER'  %}
                     <div class="py-2">
                         <div class="container px-9 py-3 mx-auto rounded-b-lg border border-slate-200 rounded-lg shadow-sm">
-                            <div class="flex flex-row justify-between">
+                            <div class="flex flex-row justify-between mt-2">
                                 <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Commande
-                                    #{{ order.number }}</p>
-                                <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">
-
+                                    #{{ order.number }}
                                 </p>
+
+
+                                {% if order.status != 'DRIVER_COSE' %}
+
+                                    {% for corpse in order.corpses %}
+                                        <a href="{{ path('user_order_theme', {corpse: corpse.id}) }}">
+                                            <button  class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2">
+                                                Commander un service pour {{ corpse.lastname }} {{ corpse.firstname }}
+                                            </button>
+                                        </a>
+
+                                    {% endfor %}
+                                {% else %}
+                                    <p>pouet pouet</p>
+                                {% endif %}
+
+
+
                             </div>
                             <div class=" py-3 mx-auto rounded-b-lg w-full">
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">

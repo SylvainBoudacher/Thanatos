@@ -31,6 +31,8 @@ class StaticController extends AbstractController
                 $orderNotClose = $orderRepository->findAllOrderWithoutStatus('CLOSE');
                 $orderNotNew = $orderRepository->findAllOrderWithoutStatus('NEW');
 
+                /*dd($orderNotClose[1]->getCorpses());*/
+
                 return $this->render('front/index.html.twig', [
                     'controller_name' => 'StaticController',
                     'orderNotClose' => $orderNotClose,
