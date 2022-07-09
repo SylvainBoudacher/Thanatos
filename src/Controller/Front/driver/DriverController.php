@@ -42,10 +42,21 @@ class DriverController extends AbstractController
         {
             //find the order that the driver is working on
             $currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])->getCommand();
-            //get the addressOrder of the order
-            $addressOrder = $currentOrder->getAddressOrders();
-            //get the address of the addressOrder
-            $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
+
+            
+
+            if ($currentOrder->getStatus() != 'DRIVER_CLOSE')
+            {
+                //get the addressOrder of the order
+                $addressOrder = $currentOrder->getAddressOrders();
+                //get the address of the addressOrder
+                $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
+            }
+            else
+            {
+                $currentOrder = null;
+                $address = null;
+            }
         }
 
 

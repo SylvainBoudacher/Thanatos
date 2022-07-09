@@ -88,6 +88,18 @@ class OrderRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
+    public function findCurrentOrder(string $type, string $status)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.types = :types')
+            ->andwhere('o.status = :status')
+            ->setParameter('types', $type)
+            ->setParameter('status', $status)
+            ->orderBy('o.updatedAt', 'DESC');
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
     public function findAllOrderWhenTypeWithoutStatus($type, $status)
     {
         $qb = $this->createQueryBuilder('o')
