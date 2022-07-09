@@ -53,7 +53,11 @@
                                     </h1>
 
                                     <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                        135.20€
+                                        {% if order.types == constant('DRIVER', order) %}
+                                            15.00€
+                                        {% elseif order.types == constant('FUNERAL', order) %}
+                                            FAUT LE RECUPE
+                                        {% endif %}
                                     </p>
                                     <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
                                         {% if order.types ==  constant('DRIVER', order) %}
@@ -88,15 +92,13 @@
 
                                 <div class="w-64 mx-4 h-full">
                                     <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
-
                                         Adresse de livraison
                                     </h1>
-
-                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                        34 allée des Renards
-                                    </p>
-                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                        76450 Poitoux-Charente
+                                    <p class=" max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                        {% for addressOrder in order.addressOrders %}
+                                            {% set address = addressOrder.address %}
+                                             <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">{{ address.number }} {{ address.street }} {{ address.city }} {{ address.postcode }}</p>
+                                    {% endfor %}
                                     </p>
                                 </div>
 
