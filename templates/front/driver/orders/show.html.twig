@@ -4,8 +4,6 @@
 
     <section>
         <div class="flex flex-row h-100 w-full">
-
-
             <div class="flex flex-col w-64 h-screen py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
                 <div class="flex flex-col items-center mt-6 -mx-2">
                     <img class="object-cover w-24 h-24 mx-2 rounded-full" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar">
@@ -53,21 +51,26 @@
                         </div>
 
                         <div class="inline-flex w-full mt-6 sm:w-auto sm:mx-2 sm:mt-0 pt-4">
-                            <a href="{{ path('order_stocked' , {'order_id' : order.id}) }}" class="inline-flex items-center mx-auto  w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
-                                Arriver à l'entrepot
-                            </a>
+                            {% if order.status == 'DRIVER_ACCEPT' %}
+                                <a href="{{ path('order_processing_corps' , {'order_id' : order.id}) }}" class="inline-flex items-center mx-auto  w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
+                                    Arriver
+                                </a>
+                            {% else %}
+                                <a href="{{ path('order_stocked' , {'order_id' : order.id}) }}" class="inline-flex items-center mx-auto  w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
+                                    Arriver à l'entrepôt
+                                </a>
+                            {% endif %}
+
                         </div>
                     </nav>
                 </div>
             </div>
 
             <div class="w-full bg-red-100 ">
-
-
                 {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %}
-                    <img class="object-cover h-full" src="{{ asset("images/mapToWarehouse.png") }}">
-                {% else %}
                     <img class="object-cover h-full" src="{{ asset("images/map.png") }}">
+                {% else %}
+                    <img class="object-cover h-full" src="{{ asset("images/mapToWarehouse.png") }}">
                 {% endif %}
             </div>
 
@@ -113,7 +116,7 @@
             <h3>My Google Maps Demo</h3>
         </div>
 
-        {% if order.status == 'DRIVER_ASCERTAINMENT' %}
+        {#{% if order.status == 'DRIVER_ASCERTAINMENT' %}
             <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
                 <a href="{{ path('order_invalid', {order_id: order.id} ) }}">
                     <button type="button"
@@ -128,9 +131,19 @@
                     </button>
                 </a>
             </div>
-        {% endif %}
+        {% endif %}#}
 
-        {% if order.status == 'DRIVER_VALIDATE' %}
+        {% if order.status == 'DRIVER_ACCEPT' %}
+            <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
+                <a href="{{ path('order_processing_corps', {order_id: order.id} ) }}">
+                    <button type="button"
+                            class="text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-green-900">
+                        Go to storage
+                    </button>
+                </a>
+
+            </div>
+        {% else %}
             <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
                 <a href="{{ path('order_stocked', {order_id: order.id} ) }}">
                     <button type="button"
