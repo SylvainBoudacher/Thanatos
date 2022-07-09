@@ -29,15 +29,12 @@ class CompanyMaterialFixtures extends Fixture implements DependentFixtureInterfa
         foreach ($companies as $company) {
             foreach ($materials as $material) {
 
-                if ($faker->numberBetween(0, 1) === 0) {
+                $companyMaterial = new CompanyMaterial();
+                $companyMaterial
+                    ->setCompany($company)
+                    ->setMaterial($material);
+                $manager->persist($companyMaterial);
 
-                    $companyMaterial = new CompanyMaterial();
-                    $companyMaterial
-                        ->setCompany($company)
-                        ->setMaterial($material);
-                    $manager->persist($companyMaterial);
-
-                }
             }
         }
 
