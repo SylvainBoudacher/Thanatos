@@ -10,6 +10,7 @@ use App\Repository\CompanyExtraRepository;
 use App\Repository\CompanyMaterialRepository;
 use App\Repository\ExtraRepository;
 use App\Repository\MaterialRepository;
+use App\Repository\ModelMaterialRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -102,7 +103,7 @@ class MaterialController extends AbstractController
 
 
     #[Route('/switch/{id}', name: 'switch_material')]
-    public function switch_material(int $id, EntityManagerInterface $em, UserRepository $userRep, CompanyMaterialRepository $companyMaterialRep, MaterialRepository $materialRep) : Response {
+    public function switch_material(int $id, EntityManagerInterface $em, UserRepository $userRep, CompanyMaterialRepository $companyMaterialRep, MaterialRepository $materialRep, ModelMaterialRepository $modelMaterialRep) : Response {
         $user = $userRep->find($this->getUser());
         $company = $user->getCompany();
         $material = $materialRep->find($id);
@@ -116,6 +117,10 @@ class MaterialController extends AbstractController
         $companyMaterial = $companyMaterialRep->getOneByCompanyAndMaterial($company, $material);
 
         if ($companyMaterial) {
+            $modelMaterials = $modelMaterialRep->getByCompanyAndMaterial($company, $material);
+            foreach ($modelMaterials as $modelMaterial) {
+                $em->remove($modelMaterial);
+            }
             $em->remove($companyMaterial);
             $em->flush();
             $this->addFlash("success", "Le matériaux ".$material->getName()." ne sera plus disponible pour les clients");
