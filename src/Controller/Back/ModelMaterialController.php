@@ -2,13 +2,9 @@
 
 namespace App\Controller\Back;
 
-
 use App\Entity\CompanyMaterial;
 use App\Repository\CompanyMaterialRepository;
-use App\Repository\CompanyRepository;
-use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelRepository;
-use App\Repository\UserRepository;
 use App\Service\GetterService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -39,6 +35,7 @@ class ModelMaterialController extends AbstractController
         $model = $modelRep->findOneBy(["id" => $id]);
         $company = $getterService->getCompanyOfUser();
         $companyMaterials = $companyMaterialRep->findBy(["company" => $company]);
+        dd($companyMaterials);
 
         $default = [
             'defaultCompanyMaterials' => $companyMaterials
