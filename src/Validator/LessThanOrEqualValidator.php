@@ -3,6 +3,7 @@
 namespace App\Validator;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use DateTime;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -19,7 +20,7 @@ class LessThanOrEqualValidator extends ConstraintValidator
         }
 
         if (!($value instanceof DateTime)) {
-            throw new UnexpectedValueException($value, 'datetime');
+            throw new UnexpectedTypeException($value, 'datetime');
         }
 
         $value = new Carbon($value);
@@ -32,7 +33,14 @@ class LessThanOrEqualValidator extends ConstraintValidator
                     ->setParameter('{{ string }}', $value)
                     ->setParameter('{{ comparison }}', $constraint->comparison)
                     ->addViolation();
+            }
+        } else {
+            if (!$value->lte(Carbon::now()->sub(CarbonInterval::years(18)))) {
 
+                $this->context->buildViolation($constraint->message)
+                    ->setParameter('{{ string }}', $value)
+                    ->setParameter('{{ comparison }}', $constraint->comparison)
+                    ->addViolation();
             }
         }
     }

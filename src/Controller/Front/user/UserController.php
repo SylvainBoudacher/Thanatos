@@ -18,26 +18,25 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
-#[Route('/settings')]
+#[Route('/paramètres')]
 class UserController extends AbstractController
 {
     /**
      * @IsGranted("ROLE_USER")
      */
 
-    #[Route('/account', name: 'app_settings_account')]
-    public function account(Request $request , UserRepository $userRep): Response
+    #[Route('/compte', name: 'app_settings_account')]
+    public function account(Request $request, UserRepository $userRep): Response
     {
         $user = $userRep->find($this->getUser());
         $form = $this->createForm(UserAccountUpdateFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //$this->get('session')->migrate();
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash(
                 'success',
-                'Vos données ont bien été changer'
+                'Vos données ont bien été changées'
             );
 
             return $this->redirectToRoute('app_settings_account');
@@ -51,18 +50,18 @@ class UserController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      */
-    #[Route('/wallet', name: 'app_settings_wallet')]
+    #[Route('/portefeuille', name: 'app_settings_wallet')]
     public function wallet(CreditCardRepository $creditCardRep): Response
     {
         $user = $this->getUser();
         $wallets = $creditCardRep->findBy(['possessor' => $user]);
 
-        foreach ($wallets as $wallet){
-            $numbs = str_split($wallet->getNumber() , 4);
+        foreach ($wallets as $wallet) {
+            $numbs = str_split($wallet->getNumber(), 4);
             $wallet->setNumber($numbs[3]);
         }
 
-        if (count($wallets) >=5){
+        if (count($wallets) >= 5) {
             $this->addFlash(
                 'error',
                 'Vous avez atteint votre limite de carte'
@@ -74,10 +73,10 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/wallet/new-card', name: 'app_settings_wallet_new')]
-    public function newCard(Request $request , CreditCardRepository $creditCardRep): Response
+    #[Route('/portefeuille/nouvelle-carte', name: 'app_settings_wallet_new')]
+    public function newCard(Request $request, CreditCardRepository $creditCardRep): Response
     {
-        $card = New CreditCard();
+        $card = new CreditCard();
         $form = $this->createForm(NewCreditCardFormType::class, $card);
         $form->handleRequest($request);
 
@@ -99,7 +98,7 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/wallet/delete-card/{id}', name: 'app_settings_wallet_delete')]
+    #[Route('/portefeuille/supprimer-carte/{id}', name: 'app_settings_wallet_delete')]
     public function delete(Request $request, CreditCard $creditCardRep)
     {
         $em = $this->getDoctrine()->getManager();
@@ -112,7 +111,7 @@ class UserController extends AbstractController
 
     /**  ********************* */
 
-    #[Route('/password', name: 'app_settings_password')]
+    #[Route('/mot-de-passe', name: 'app_settings_password')]
     public function password(Request $request): Response
     {
         $user = $this->getUser();
