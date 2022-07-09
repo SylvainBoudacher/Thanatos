@@ -48,8 +48,6 @@ class DriverController extends AbstractController
             $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
         }
 
-        /*dd($orders);*/
-
 
         return $this->render('front/driver/orders/index.html.twig', [
             'controller_name' => 'DriverController',
