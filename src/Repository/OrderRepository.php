@@ -120,11 +120,23 @@ class OrderRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
-    public function findAllOrderWithoutStatus($status)
+    public function findAllOrderWithoutStatus($status )
     {
         $qb = $this->createQueryBuilder('o')
             ->where('o.status != :status')
             ->setParameter('status', $status)
+            ->orderBy('o.updatedAt', 'DESC');
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
+    public function findAllOrderWithoutTwoStatus( $status ,  $status2 )
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->where('o.status != :status')
+            ->andWhere('o.status != :status2')
+            ->setParameter('status', $status)
+            ->setParameter('status2', $status2)
             ->orderBy('o.updatedAt', 'DESC');
         $query = $qb->getQuery();
         return $query->execute();

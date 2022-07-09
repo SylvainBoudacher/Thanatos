@@ -45,7 +45,7 @@ class OrderController extends AbstractController
     public function dashboard(OrderRepository $orderRepository): Response
     {
 
-        $orderNotClose = $orderRepository->findAllOrderWithoutStatus('CLOSE');
+        $orderNotClose = $orderRepository->findAllOrderWithoutTwoStatus('CLOSE' , 'DRIVER_USER_CANCEL_ORDER');
         $orderClose = $orderRepository->findAllOrderWhenStatus('CLOSE');
 
         return $this->render('front/user/myCommand/index.html.twig', [
