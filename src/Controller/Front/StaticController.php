@@ -36,8 +36,6 @@ class StaticController extends AbstractController
                     'orderNotClose' => $orderNotClose,
                     'orderNotNew' => $orderNotNew,
                 ]);
-
-
             }
         }
         else
