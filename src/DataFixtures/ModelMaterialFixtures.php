@@ -25,14 +25,13 @@ class ModelMaterialFixtures extends Fixture implements DependentFixtureInterface
         foreach ($models as $model) {
             foreach ($materials as $material) {
 
-                if ($faker->numberBetween(0, 1) === 0) {
-                    $modelMaterial = new ModelMaterial();
-                    $modelMaterial
-                        ->setModel($model)
-                        ->setMaterial($material);
+                $modelMaterial = new ModelMaterial();
+                $modelMaterial
+                    ->setModel($model)
+                    ->setMaterial($material);
 
-                    $manager->persist($modelMaterial);
-                }
+                $manager->persist($modelMaterial);
+
             }
         }
 

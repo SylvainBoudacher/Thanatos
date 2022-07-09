@@ -25,15 +25,13 @@ class ModelExtraFixtures extends Fixture implements DependentFixtureInterface
         foreach ($models as $model) {
             foreach ($extras as $extra) {
 
-                if ($faker->numberBetween(0, 1) === 0) {
-                    $modelExtra = new ModelExtra();
-                    $modelExtra
-                        ->setModel($model)
-                        ->setExtra($extra);
+                $modelExtra = new ModelExtra();
+                $modelExtra
+                    ->setModel($model)
+                    ->setExtra($extra);
 
-                    $manager->persist($modelExtra);
+                $manager->persist($modelExtra);
 
-                }
             }
         }
 

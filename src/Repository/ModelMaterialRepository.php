@@ -91,6 +91,19 @@ class ModelMaterialRepository extends ServiceEntityRepository
         return $query;
     }
 
+    public function getByCompany(Company $company)
+    {
+        $query = $this->createQueryBuilder('model_material')
+            ->select('model_material')
+            ->join('App\Entity\Model', 'model', 'WITH', 'model = model_material.model')
+            ->join('App\Entity\CompanyMaterial', 'cm', 'WITH', 'cm.material = model_material.material')
+            ->where('cm.company = :company')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->execute();
+        return $query;
+    }
+
     // /**
     //  * @return ModelMaterial[] Returns an array of ModelMaterial objects
     //  */

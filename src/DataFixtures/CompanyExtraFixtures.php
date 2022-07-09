@@ -23,15 +23,12 @@ class CompanyExtraFixtures extends Fixture implements DependentFixtureInterface
         foreach ($companies as $company) {
             foreach ($extras as $extra) {
 
-                if ($faker->numberBetween(0, 1) === 0) {
+                $companyExtra = new CompanyExtra();
+                $companyExtra
+                    ->setCompany($company)
+                    ->setExtra($extra);
+                $manager->persist($companyExtra);
 
-                    $companyExtra = new CompanyExtra();
-                    $companyExtra
-                        ->setCompany($company)
-                        ->setExtra($extra);
-                    $manager->persist($companyExtra);
-
-                }
             }
         }
 

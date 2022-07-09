@@ -4,6 +4,7 @@ namespace App\Controller\Back;
 
 use App\Entity\CompanyMaterial;
 use App\Repository\CompanyMaterialRepository;
+use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelRepository;
 use App\Service\GetterService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -21,7 +22,7 @@ class ModelMaterialController extends AbstractController
     {
         $company = $getterService->getCompanyOfUser();
         if ($company == null) $this->redirectToRoute("home_company");
-        // TODO : prévoir le cas ou la company est pas celle de l'user
+        // TODO : prévoir le cas ou la company est pas celle de l'user, un servive à utiliser partout
 
         $models = $modelRep->findBy(["company" => $company]);
         return $this->render("back/company/services/model_materials/index.html.twig", [
@@ -30,22 +31,30 @@ class ModelMaterialController extends AbstractController
     }
 
     #[Route('/manage/{id}', name: 'manage_model_materials')]
-    public function manage_model_materials(int $id, GetterService $getterService, ModelRepository $modelRep, CompanyMaterialRepository $companyMaterialRep): Response
+    public function manage_model_materials(int $id, GetterService $getterService, ModelRepository $modelRep, CompanyMaterialRepository $companyMaterialRep, ModelMaterialRepository $modelMaterialRep): Response
     {
         $model = $modelRep->findOneBy(["id" => $id]);
         $company = $getterService->getCompanyOfUser();
-        $companyMaterials = $companyMaterialRep->findBy(["company" => $company]);
-        dd($companyMaterials);
+
+        // Materials exposé par la company et peut être appliqué à un model
+        $exposedCompanyMaterialsByTheCompany = $companyMaterialRep->findBy(["company" => $company]);
+
+        // TODO : get modelmaterial de company modelMaterial.model.company =
+        $truc = $modelMaterialRep->getByCompany($company);
+        dd($truc);
+
+        // TODO : mettre dans le form toutes les CompanyMaterials, et coché les materials qui sont dans MODEL_MATERIAL
+
 
         $default = [
-            'defaultCompanyMaterials' => $companyMaterials
+            'defaultCompanyMaterials' => $exposedCompanyMaterialsByTheCompany
         ];
 
-        // TODO : plus meme verifications que au dessus
 
         $form = $this->createFormBuilder($default)
-            ->add('defaultCompanyMaterials', EntityType::class, [
+            ->add('truc', EntityType::class, [
                 'class' => CompanyMaterial::class,
+                'choices' => $exposedCompanyMaterialsByTheCompany,
                 'multiple' => true,
                 'expanded' => true,
             ])
