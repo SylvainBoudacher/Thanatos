@@ -36,23 +36,31 @@ class ModelMaterialController extends AbstractController
         $model = $modelRep->findOneBy(["id" => $id]);
         $company = $getterService->getCompanyOfUser();
 
-        // Materials exposé par la company et peut être appliqué à un model
+        // All exposed materials which are ready to be applied to a model
         $exposedCompanyMaterialsByTheCompany = $companyMaterialRep->findBy(["company" => $company]);
 
-        // TODO : get modelmaterial de company modelMaterial.model.company =
-        $truc = $modelMaterialRep->getByCompany($company);
-        dd($truc);
+        // Materials already applied to a model
+        $modelMaterialsAvailableForTheModel = $modelMaterialRep->getByCompanyAndModel($company, $model);
 
-        // TODO : mettre dans le form toutes les CompanyMaterials, et coché les materials qui sont dans MODEL_MATERIAL
-
+        // Array of CompanyMaterial already applied to a model. Used as default values for checkboxes below
+        $markChecked = [];
+        foreach ($exposedCompanyMaterialsByTheCompany as $companyMaterial) {
+            $materialRef = $companyMaterial->getMaterial();
+            foreach ($modelMaterialsAvailableForTheModel as $modelMaterial) {
+                $material = $modelMaterial->getMaterial();
+                if ($materialRef == $material) {
+                    $markChecked[] = $companyMaterial;
+                    break;
+                }
+            }
+        }
 
         $default = [
-            'defaultCompanyMaterials' => $exposedCompanyMaterialsByTheCompany
+            'defaultCompanyMaterials' => $markChecked
         ];
 
-
         $form = $this->createFormBuilder($default)
-            ->add('truc', EntityType::class, [
+            ->add('defaultCompanyMaterials', EntityType::class, [
                 'class' => CompanyMaterial::class,
                 'choices' => $exposedCompanyMaterialsByTheCompany,
                 'multiple' => true,
