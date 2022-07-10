@@ -240,11 +240,15 @@ class OrderController extends AbstractController
 
             $address = $addressOrder->getAddress();
             $em = $doctrine->getManager();
-            $price = 0.00;
+            $priceOrder = 0.00;
 
             foreach ($order->getCorpses() as $corpse) {
-                $price += 15.00;
+                $priceOrder += 15.00;
             }
+
+            $TVA = 20/100;
+
+            $priceOrderTVA = $priceOrder * (1 + $TVA);
 
             if ($request->query->getBoolean('confirm')
                 || $request->query->getBoolean('cancel')) {
@@ -271,7 +275,8 @@ class OrderController extends AbstractController
             return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
                 'order' => $order,
                 'address' => $address,
-                'price' => $price
+                'price' => $priceOrder,
+                'priceWithTva' => $priceOrderTVA
             ]);
         }
 
