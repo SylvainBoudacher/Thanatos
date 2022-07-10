@@ -254,8 +254,6 @@ class OrderController extends AbstractController
                 || $request->query->getBoolean('cancel')) {
 
                 if ($request->query->getBoolean('confirm')) {
-
-                    // Driver dois payer la commande
                     return $this->redirectToRoute('user_order_payment');
                 } else if ($request->query->getBoolean('cancel')) {
                     $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
@@ -519,12 +517,19 @@ class OrderController extends AbstractController
     {
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+
+        $stripe = new \Stripe\StripeClient($_ENV['STRIPE_SECRET_KEY']);
+
+        $stripe->products->create([
+            'name' => 'Gold Special',
+        ]);
+
         $checkout_session = Session::create([
             'customer_email' => $this->getUser()->getEmail(),
             'submit_type' => 'pay',
             'line_items' => [[
                 # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                'price' => 'price_1LH6P2GgCa17kbBHIR6gSl2k',
+                'price' => 'price_1LH328GgCa17kbBH3P8ybu94',
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
