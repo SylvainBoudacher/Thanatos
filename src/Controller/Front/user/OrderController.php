@@ -240,6 +240,11 @@ class OrderController extends AbstractController
 
             $address = $addressOrder->getAddress();
             $em = $doctrine->getManager();
+            $price = 0.00;
+
+            foreach ($order->getCorpses() as $corpse) {
+                $price += 15.00;
+            }
 
             if ($request->query->getBoolean('confirm')
                 || $request->query->getBoolean('cancel')) {
@@ -257,7 +262,6 @@ class OrderController extends AbstractController
                         'address' => $address
                     ]);
                 }
-
                 $em->persist($order);
                 $em->flush();
 
@@ -266,7 +270,8 @@ class OrderController extends AbstractController
 
             return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
                 'order' => $order,
-                'address' => $address
+                'address' => $address,
+                'price' => $price
             ]);
         }
 
