@@ -240,13 +240,20 @@ class OrderController extends AbstractController
 
             $address = $addressOrder->getAddress();
             $em = $doctrine->getManager();
+            $priceOrder = 0.00;
+
+            foreach ($order->getCorpses() as $corpse) {
+                $priceOrder += 15.00;
+            }
+
+            $TVA = 20/100;
+
+            $priceOrderTVA = $priceOrder * (1 + $TVA);
 
             if ($request->query->getBoolean('confirm')
                 || $request->query->getBoolean('cancel')) {
 
                 if ($request->query->getBoolean('confirm')) {
-
-                    // Driver dois payer la commande
                     return $this->redirectToRoute('user_order_payment');
                 } else if ($request->query->getBoolean('cancel')) {
                     $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
@@ -257,7 +264,6 @@ class OrderController extends AbstractController
                         'address' => $address
                     ]);
                 }
-
                 $em->persist($order);
                 $em->flush();
 
@@ -266,7 +272,9 @@ class OrderController extends AbstractController
 
             return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
                 'order' => $order,
-                'address' => $address
+                'address' => $address,
+                'price' => $priceOrder,
+                'priceWithTva' => $priceOrderTVA
             ]);
         }
 
@@ -509,12 +517,19 @@ class OrderController extends AbstractController
     {
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+
+        $stripe = new \Stripe\StripeClient($_ENV['STRIPE_SECRET_KEY']);
+
+        $stripe->products->create([
+            'name' => 'Gold Special',
+        ]);
+
         $checkout_session = Session::create([
             'customer_email' => $this->getUser()->getEmail(),
             'submit_type' => 'pay',
             'line_items' => [[
                 # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                'price' => 'price_1LH6P2GgCa17kbBHIR6gSl2k',
+                'price' => 'price_1LH328GgCa17kbBH3P8ybu94',
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
