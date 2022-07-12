@@ -31,7 +31,7 @@ class CorpseVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case self::EDIT:
-                return $this->canOrder($subject, $user);
+                return $this->canEdit($subject, $user);
             case self::VIEW:
                 // logic to determine if the user can VIEW
                 // return true or false
