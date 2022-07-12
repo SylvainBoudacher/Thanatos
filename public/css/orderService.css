@@ -1,7 +1,3 @@
-* {
-    box-sizing: border-box;
-}
-
 #formBurialOrderProduct input[type=radio].radioOrderService {
     display: none;
 }
