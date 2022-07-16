@@ -72,7 +72,7 @@
                                 <div class=" w-64 mx-4 h-full ">
                                     <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps
                                         déclaré<span class="lowercase">(s)</span></h1>
-                                    {% for corpse in order.corpses|slice(0, 3) %}
+                                    {% for corpse in order.corpses %}
                                         <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
                                             {{ corpse.firstname }} {{ corpse.lastname }}
                                         </p>
@@ -96,8 +96,8 @@
                                     </h1>
                                     <p class=" max-w-xl mt-4 text-gray-500 white:text-gray-300">
                                         {% for addressOrder in order.addressOrders %}
-                                            {% set address = addressOrder.address %}
-                                             <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">{{ address.number }} {{ address.street }} {{ address.city }} {{ address.postcode }}</p>
+                                        {% set address = addressOrder.address %}
+                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">{{ address.number }} {{ address.street }} {{ address.city }} {{ address.postcode }}</p>
                                     {% endfor %}
                                     </p>
                                 </div>

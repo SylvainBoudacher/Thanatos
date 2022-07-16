@@ -32,6 +32,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
+use Stripe\StripeClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,7 +46,7 @@ class OrderController extends AbstractController
     public function dashboard(OrderRepository $orderRepository): Response
     {
 
-        $orderNotClose = $orderRepository->findAllOrderWithoutTwoStatus('CLOSE' , 'DRIVER_USER_CANCEL_ORDER');
+        $orderNotClose = $orderRepository->findAllOrderWithoutTwoStatus('CLOSE', 'DRIVER_USER_CANCEL_ORDER');
         $orderClose = $orderRepository->findAllOrderWhenStatus('CLOSE');
 
 
@@ -81,7 +82,7 @@ class OrderController extends AbstractController
 
     /* DECLARE CORPSE */
     #[Route('/declarer-corps', name: 'declare_corpse', methods: ['POST', 'GET'])]
-    public function declareCorpses(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, CorpseRepository $corpseRep): Response
+    public function declareCorpses(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, CorpseRepository $corpseRep, AddressOrderRepository $addressOrderRep,): Response
     {
         $em = $doctrine->getManager();
 
@@ -179,11 +180,27 @@ class OrderController extends AbstractController
             }
         }
 
+        $priceOrder = 0.00;
+        $priceOrderTVA = 0.00;
+        $TVA = 20 / 100;
+        $address = null;
+
+        if ($order !== null) {
+            $priceOrder = count($order->getCorpses()->toArray()) * 15.00;
+            $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
+            if ($addressOrder instanceof AddressOrder) $address = $addressOrder->getAddress();
+            $priceOrderTVA = $priceOrder * (1 + $TVA);
+        }
+
+
         return $this->renderForm('front/user/declareCorpse/index.html.twig', [
             'form' => $form,
             'order' => $order,
             'corpse' => $corpse,
-            'nextCorpse' => $nextCorpse
+            'nextCorpse' => $nextCorpse,
+            'priceOrderTVA' => $priceOrderTVA,
+            'priceOrder' => $priceOrder,
+            'address' => $address
         ]);
     }
 
@@ -220,8 +237,18 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('declare_corpse_confirmation');
         }
 
+        $TVA = 20 / 100;
+
+        $priceOrder = count($order->getCorpses()->toArray()) * 15.00;
+        $priceOrderTVA = $priceOrder * (1 + $TVA);
+
         return $this->renderForm('front/user/declareCorpse/address.html.twig', [
             'form' => $form,
+            'address' => $address,
+            'order' => $order,
+            'priceOrderTVA' => $priceOrderTVA,
+            'priceOrder' => $priceOrder,
+
         ]);
     }
 
@@ -246,7 +273,7 @@ class OrderController extends AbstractController
                 $priceOrder += 15.00;
             }
 
-            $TVA = 20/100;
+            $TVA = 20 / 100;
 
             $priceOrderTVA = $priceOrder * (1 + $TVA);
 
@@ -518,7 +545,7 @@ class OrderController extends AbstractController
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
-        $stripe = new \Stripe\StripeClient($_ENV['STRIPE_SECRET_KEY']);
+        $stripe = new StripeClient($_ENV['STRIPE_SECRET_KEY']);
 
         $stripe->products->create([
             'name' => 'Gold Special',
