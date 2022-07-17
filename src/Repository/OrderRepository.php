@@ -59,7 +59,7 @@ class OrderRepository extends ServiceEntityRepository
             ->setParameter('status', array_values($arrayStatus))
             ->setParameter('user', $user)
             ->orderBy('o.updatedAt', 'DESC')
-            ->setMaxResults( 1 );
+            ->setMaxResults(1);
         $query = $qb->getQuery();
         return $query->execute();
     }
@@ -132,7 +132,7 @@ class OrderRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
-    public function findAllOrderWithoutStatus($status )
+    public function findAllOrderWithoutStatus($status)
     {
         $qb = $this->createQueryBuilder('o')
             ->where('o.status != :status')
@@ -142,7 +142,7 @@ class OrderRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
-    public function findAllOrderWithoutTwoStatus( $status ,  $status2 )
+    public function findAllOrderWithoutTwoStatus($status, $status2)
     {
         $qb = $this->createQueryBuilder('o')
             ->where('o.status != :status')
@@ -164,6 +164,33 @@ class OrderRepository extends ServiceEntityRepository
 
         $query = $qb->getQuery();
         return $query->getOneOrNullResult();
+    }
+
+    public function findAllOwnedOrderInProgress()
+    {
+        $status = [Order::DRAFT];
+
+        $qb = $this->createQueryBuilder('o')
+            ->where("o.status NOT IN(:status)")
+            ->andWhere('o.possessor = :possessor')
+            ->setParameter('status', $status)
+            ->setParameter('possessor', $this->security->getUser());
+
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
+
+    public function findAllOwnedOrderClosed()
+    {
+
+        $qb = $this->createQueryBuilder('o')
+            ->where("o.status = :status")
+            ->andWhere('o.possessor = :possessor')
+            ->setParameter('status', Order::DRIVER_CLOSE)
+            ->setParameter('possessor', $this->security->getUser());
+
+        $query = $qb->getQuery();
+        return $query->execute();
     }
 
 

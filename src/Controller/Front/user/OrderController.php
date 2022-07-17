@@ -46,13 +46,38 @@ class OrderController extends AbstractController
     public function dashboard(OrderRepository $orderRepository): Response
     {
 
-        $orderNotClose = $orderRepository->findAllOrderWithoutTwoStatus('CLOSE', 'DRIVER_USER_CANCEL_ORDER');
-        $orderClose = $orderRepository->findAllOrderWhenStatus('CLOSE');
+        $ordersInProgress = $orderRepository->findAllOwnedOrderInProgress();
+        $ordersClose = $orderRepository->findAllOwnedOrderClosed();
+        $orderDraft = $orderRepository->findOneOwnedOrderByStatus(Order::DRAFT);
 
+        // Get address form order draft
+        if ($orderDraft !== null) {
+            $addressOrders = array_filter($orderDraft->getAddressOrders()->toArray(), function ($i) {
+                return $i->getStatus() === AddressOrder::DECLARATION_CORPSES;
+            });
+            if (!empty($addressOrders)) $orderDraft->address = $addressOrders[0]->getAddress();
+        }
+
+        foreach ($ordersInProgress as $order) {
+
+            $addressOrders = array_filter($order->getAddressOrders()->toArray(), function ($i) {
+                return $i->getStatus() === AddressOrder::DECLARATION_CORPSES;
+            });
+            if (!empty($addressOrders)) $order->address = $addressOrders[0]->getAddress();
+        }
+
+        foreach ($ordersClose as $order) {
+
+            $addressOrders = array_filter($order->getAddressOrders()->toArray(), function ($i) {
+                return $i->getStatus() === AddressOrder::DECLARATION_CORPSES;
+            });
+            if (!empty($addressOrders)) $order->address = $addressOrders[0]->getAddress();
+        }
 
         return $this->render('front/user/myCommand/index.html.twig', [
-            'orderNotClose' => $orderNotClose,
-            'orderClose' => $orderClose,
+            'orderDraft' => $orderDraft,
+            'orderInProgress' => $ordersInProgress,
+            'orderClose' => $ordersClose,
         ]);
     }
 
@@ -81,6 +106,7 @@ class OrderController extends AbstractController
     }
 
     /* DECLARE CORPSE */
+
     #[Route('/declarer-corps', name: 'declare_corpse', methods: ['POST', 'GET'])]
     public function declareCorpses(Request $request, ManagerRegistry $doctrine, OrderRepository $orderRep, CorpseRepository $corpseRep, AddressOrderRepository $addressOrderRep,): Response
     {
@@ -357,6 +383,7 @@ class OrderController extends AbstractController
     }
 
     /* ORDER SERVICE */
+
     #[Route('/commander-un-service/etape-1/{corpse}/{theme}', name: 'user_order_theme', methods: ['POST', 'GET'])]
     public function orderServiceTheme(ThemeRepository $themeRepository, Corpse $corpse, Theme $theme = null): Response
     {
@@ -589,4 +616,5 @@ class OrderController extends AbstractController
     {
         return $this->render('front/user/payment/cancel.html.twig');
     }
+
 }
