@@ -13,20 +13,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted("ROLE_ADMIN")]
 #[Route("/admin")]
-
 class AdminUserController extends AbstractController
 {
     #[Route('/users/list', name: 'admin_users_list')]
     public function users(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();
+
         return $this->render('back/admin/users/list.html.twig', [
             'users' => $users,
         ]);
     }
 
     #[Route('/users/edit/{id}', name: 'admin_user_edit', methods: ['POST', 'GET'])]
-    public function edit(Request $request , UserRepository $userRepository , int $id): Response
+    public function edit(Request $request, UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
         $form = $this->createForm(UserAccountUpdateFormType::class, $user);
@@ -58,7 +58,6 @@ class AdminUserController extends AbstractController
             'user' => $user,
         ]);
     }
-
 
 
 }

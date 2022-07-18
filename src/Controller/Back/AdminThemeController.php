@@ -2,6 +2,7 @@
 
 namespace App\Controller\Back;
 
+use App\Entity\Media;
 use App\Entity\Theme;
 use App\Form\ThemeType;
 use App\Repository\ThemeRepository;
@@ -47,15 +48,17 @@ class AdminThemeController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'delete_theme')]
-    public function delete(EntityManagerInterface $em, ThemeRepository $themeRep, int $id): Response
+    public function delete(EntityManagerInterface $em, ThemeRepository $themeRep, int $id,): Response
     {
         $theme = $themeRep->find($id);
         $media = $theme->getMedia();
-        $em->remove($media);
+
+        if ($media instanceof Media) $em->remove($media);
         $em->remove($theme);
         $em->flush();
 
         // TODO : Warning, later if there are company that uses a specific theme while an order is not finished
+
 
         return $this->redirectToRoute("home_theme");
     }
