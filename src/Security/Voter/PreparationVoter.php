@@ -5,6 +5,7 @@ namespace App\Security\Voter;
 use App\Entity\Corpse;
 use App\Entity\Order;
 use App\Entity\Preparation;
+use App\Entity\Theme;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -16,6 +17,7 @@ class PreparationVoter extends Voter
     public const EDIT = 'EDIT';
     public const VIEW = 'VIEW';
     public const ORDER = 'ORDER';
+    public const ORDER_CLASSIC = 'ORDER_CLASSIC';
 
     private EntityManagerInterface $em;
 
@@ -29,7 +31,7 @@ class PreparationVoter extends Voter
 
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW, self::ORDER])
+        return in_array($attribute, [self::EDIT, self::VIEW, self::ORDER, self::ORDER_CLASSIC])
             && ($subject instanceof Corpse ||
                 $subject instanceof Preparation);
 
@@ -53,8 +55,11 @@ class PreparationVoter extends Voter
                 // return true or false
                 break;
             case self::ORDER:
+
                 return $this->canOrder($subject, $user);
-                break;
+            case self::ORDER_CLASSIC:
+
+                return $this->canOrderTypeClassic($subject);
         }
 
         return false;
@@ -83,4 +88,15 @@ class PreparationVoter extends Voter
 
         return true;
     }
+
+    private function canOrderTypeClassic(Corpse $corpse): bool
+    {
+
+        if ($corpse->getPreparation() == null || $corpse->getPreparation()->getTheme() == null) return false;
+
+        if ($corpse->getPreparation()->getTheme()->getType() !== Theme::TYPE_CLASSIC) return false;
+
+        return true;
+    }
+
 }

@@ -2,12 +2,14 @@
 
 
 {% block body %}
+    {{ include('components/corpseRecapReference.html.twig') }}
+
     <div class="grid place-content-center place-items-center">
 
         <h1 class="text-4xl m-3 mb-5 ">Selection d'une pompe funèbre </h1>
         <h2 class="text-xl mt-4 text-stone-500 mb-5">Total de pompe funèbre <span
                     class="text-blue-600	">{{ pagination.getTotalItemCount }}</span></h2>
-        <div class="grid grid-cols-4 gap-3">
+        <div class="grid grid-cols-4 gap-3 p-8">
 
             {% for company in pagination %}
                 <a href="{{ path('user_order_product', {corpse: corpse.id , company: company.id}) }}">

@@ -3,6 +3,7 @@
 namespace App\Controller\Front\user;
 
 use App\Entity\CompanyPainting;
+use App\Entity\CompanyTheme;
 use App\Entity\Painting;
 use App\Entity\Preparation;
 use App\Entity\Theme;
@@ -430,8 +431,8 @@ class OrderController extends AbstractController
     #[Route('/commander-un-service/etape-2/{id}', name: 'user_order_company', methods: ['POST', 'GET'])]
     public function orderServiceCompany(Request $request, ModelRepository $modelRepository, PaginatorInterface $paginator, Corpse $corpse): Response
     {
-
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
+        $this->denyAccessUnlessGranted(PreparationVoter::ORDER_CLASSIC, $corpse);
 
         $companies = $modelRepository->getCompaniesThatHaveModelsAndFiltersByTheme($corpse->getPreparation()->getTheme(), true);
 
@@ -455,6 +456,11 @@ class OrderController extends AbstractController
     {
 
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
+        $this->denyAccessUnlessGranted(PreparationVoter::ORDER_CLASSIC, $corpse);
+
+        $hasTheme = array_filter($company->getCompanyThemes()->toArray(), fn(CompanyTheme $i) => $i->getTheme()->getId() == $corpse->getPreparation()->getTheme()->getId());
+
+        if (empty($hasTheme)) dd('error page');
 
         // get ressources funeral
         $data = $modelRepository->getCompleteProductsRelatedToCompany($company);
@@ -529,6 +535,27 @@ class OrderController extends AbstractController
     public function orderServiceRecap(Request $request, Corpse $corpse): Response
     {
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
+
+        if (($corpse->getPreparation() == null)) {
+            dd('page error');
+        } else {
+            switch ($corpse->getPreparation()->getTheme()->getType()) {
+
+                case Theme::TYPE_CLASSIC:
+                    if ($corpse->getPreparation()->getModelExtra() == null ||
+                        $corpse->getPreparation()->getModelMaterial() == null ||
+                        $corpse->getPreparation()->getPainting() == null
+                    )
+                        dd('page error');
+
+                    break;
+                case Theme::TYPE_SPECIAL:
+
+                    break;
+                default:
+                    dd('page error');
+            }
+        }
 
         if ($request->query->getBoolean('confirm')) {
 
