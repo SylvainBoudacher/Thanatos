@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Burial;
 use App\Entity\Model;
 use App\Utils\StyleClasses;
+use App\Utils\MediaConstraints;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -13,11 +14,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\Image;
 
 class ModelType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        MediaConstraints::init();
+//        dd(MediaConstraints::$IMAGE);
         $builder
             ->add('name', TextType::class, [
                 "label" => "Nom",
@@ -68,18 +73,21 @@ class ModelType extends AbstractType
                     "class" => StyleClasses::SELECT_DEFAULT,
                 ],
             ])
-            ->add('images', FileType::class,[
+            ->add('images', FileType::class, [
                 'label' => false,
                 'multiple' => true,
                 'mapped' => false,
                 'required' => false,
                 "attr" => [
-                    "class" => "mt-4"
+                    "class" => "mt-4",
+                    'accept' => 'image/*'
+
                 ],
+                'constraints' => MediaConstraints::$IMAGE,
                 "help" => "ATTENTION : Les images utilisés seront TOUTES remplacées par celles que vous sélectionnerez maintenant",
                 "help_attr" => [
                     "class" => StyleClasses::HELP_DEFAULT,
-                ]
+                ],
             ]);
     }
 

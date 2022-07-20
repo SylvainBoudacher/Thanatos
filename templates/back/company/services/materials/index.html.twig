@@ -15,20 +15,28 @@
                         Bienvenues dans votre panneau de gestions des Matériaux.
                     </p>
                     <p class="text-slate-700 text-lg font-light mb-2">
-                        C'est à la fois l'ensemble des matériaux disponibles chez Thanatos (premier tableau) et ceux que vous avez décider d'exposer pour vos modèles de tombes.
-                        
+                        C'est à la fois l'ensemble des matériaux disponibles chez Thanatos (premier tableau) et ceux que
+                        vous avez décider d'exposer pour vos modèles de tombes.
+
                     </p>
                     <p class="text-slate-700 text-lg font-light mb-2">
-                        Les métériaux pouvant convenir à un model de sépulture précis et pas un autre, tous les métériaux mis à disposition des clients (deuxième tableau) ne pourront pas être sélectionné par eux.
+                        Les métériaux pouvant convenir à un model de sépulture précis et pas un autre, tous les
+                        métériaux mis à disposition des clients (deuxième tableau) ne pourront pas être sélectionné par
+                        eux.
                     </p>
                     <p class="text-slate-700 text-lg font-light mb-2">
-                        En revanche vous avez une section dédiée (voir l'onglet "Matériaux d'un model") qui permet de choisir parmis les matérieux mis à disposition de clients, ceux que vous voulez choisir par model.
+                        En revanche vous avez une section dédiée (voir l'onglet "Matériaux d'un model") qui permet de
+                        choisir parmis les matérieux mis à disposition de clients, ceux que vous voulez choisir par
+                        model.
                     </p>
                 </section>
 
 
                 <a href="{{ path("create_material") }}">
-                    <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Ajouter un matériaux</button>
+                    <button type="button"
+                            class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                        Ajouter un matériaux
+                    </button>
                 </a>
 
                 <div class="flex flex-col mt-6">
@@ -37,37 +45,52 @@
                             <div class="overflow-hidden ">
                                 <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Nom
-                                        </th>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Prix
-                                        </th>
-                                        <th scope="col" class="p-4">
-                                            <span class="sr-only">Edit</span>
-                                        </th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col"
+                                                class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                                Nom
+                                            </th>
+                                            <th scope="col"
+                                                class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                                Prix
+                                            </th>
+                                            <th scope="col" class="p-4">
+                                                <span class="sr-only">Edit</span>
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                    {% if materials %}
-                                        {% for material in materials %}
+                                        {% if materials %}
+                                            {% for material in materials %}
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ material.name }}</td>
+                                                    <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ material.price }}
+                                                        €
+                                                    </td>
+                                                    <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                                                        <a href="{{ path("details_material", {"id" : material.id}) }}"
+                                                           class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
+                                                        <a href="{{ path("modify_material", {"id" : material.id}) }}"
+                                                           class="text-blue-600 mr-2 dark:text-blue-500 hover:underline">Modifier</a>
+                                                        {% if material.canBeDeleted %}
+                                                            <a href="{{ path("delete_material", {"id" : material.id}) }}"
+                                                               class="text-red-600 mr-2 dark:text-red-500 hover:underline">Supprimer</a>
+                                                        {% else %}
+                                                            <span class="text-green-600 dark:text-green-500">Utilisé</span>
+                                                        {% endif %}
+                                                        <a href="{{ path("switch_material", {"id" : material.id}) }}"
+                                                           class="text-violet-600 dark:text-violet-500 hover:underline">Switch</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
                                             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ material.name }}</td>
-                                                <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ material.price }} €</td>
-                                                <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                                    <a href="{{ path("details_material", {"id" : material.id}) }}" class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
-                                                    <a href="{{ path("modify_material", {"id" : material.id}) }}" class="text-blue-600 mr-2 dark:text-blue-500 hover:underline">Modifier</a>
-                                                    <a href="{{ path("delete_material", {"id" : material.id}) }}" class="text-red-600 mr-2 dark:text-red-500 hover:underline">Supprimer</a>
-                                                    <a href="{{ path("switch_material", {"id" : material.id}) }}" class="text-violet-600 dark:text-violet-500 hover:underline">Switch</a>
+                                                <td colspan="5"
+                                                    class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    Aucun matériaux n'est renseigné chez Thanatos
                                                 </td>
                                             </tr>
-                                        {% endfor %}
-                                    {% else %}
-                                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <td colspan="5" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Aucun matériaux n'est renseigné chez Thanatos</td>
-                                        </tr>
-                                    {% endif %}
+                                        {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -75,7 +98,8 @@
                     </div>
                 </div>
 
-                <h2 class="text-2xl text-slate-800 my-4 font-medium">Materials que vous avez mis à dispositions des clients</h2>
+                <h2 class="text-2xl text-slate-800 my-4 font-medium">Materials que vous avez mis à dispositions des
+                    clients</h2>
 
                 <div class="flex flex-col mt-6">
                     <div class="overflow-x-auto shadow-md sm:rounded-lg">
@@ -83,35 +107,52 @@
                             <div class="overflow-hidden ">
                                 <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Nom
-                                        </th>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Prix
-                                        </th>
-                                        <th scope="col" class="p-4">
-                                            <span class="sr-only">Edit</span>
-                                        </th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col"
+                                                class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                                Nom
+                                            </th>
+                                            <th scope="col"
+                                                class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                                Prix
+                                            </th>
+                                            <th scope="col" class="p-4">
+                                                <span class="sr-only">Edit</span>
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                    {% if materialsSuscribedByCompany %}
-                                        {% for materialSuscribedByCompany in materialsSuscribedByCompany %}
+                                        {% if materialsSuscribedByCompany %}
+                                            {% for materialSuscribedByCompany in materialsSuscribedByCompany %}
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ materialSuscribedByCompany.name }}</td>
+                                                    <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ materialSuscribedByCompany.price }}
+                                                        €
+                                                    </td>
+                                                    <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                                                        <a href="{{ path("details_material", {"id" : materialSuscribedByCompany.id}) }}"
+                                                           class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
+                                                        
+                                                        {% if materialSuscribedByCompany.canBeSwitched %}
+                                                            <a href="{{ path("switch_material", {"id" : materialSuscribedByCompany.id}) }}"
+                                                               class="text-red-600 dark:text-red-500 hover:underline">Retirer</a>
+                                                        {% else %}
+                                                            <span class="text-green-600 dark:text-green-500 pr-2">Utilisé
+                                                                dans une commande</span>
+                                                        {% endif %}
+
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
                                             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ materialSuscribedByCompany.name }}</td>
-                                                <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ materialSuscribedByCompany.price }} €</td>
-                                                <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                                    <a href="{{ path("details_material", {"id" : materialSuscribedByCompany.id}) }}" class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
-                                                    <a href="{{ path("switch_material", {"id" : materialSuscribedByCompany.id}) }}" class="text-red-600 dark:text-red-500 hover:underline">Retirer</a>
+                                                <td colspan="5"
+                                                    class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    Vous n'avez mis aucun materiaux à dispositions des clients pour le
+                                                    moment
                                                 </td>
                                             </tr>
-                                        {% endfor %}
-                                    {% else %}
-                                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <td colspan="5" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Vous n'avez mis aucun materiaux à dispositions des clients pour le moment</td>
-                                        </tr>
-                                    {% endif %}
+                                        {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -122,7 +163,8 @@
             </div>
 
             <div class="flex flex-row-reverse">
-                <a href="{{ path("home_services") }}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
+                <a href="{{ path("home_services") }}"
+                   class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
             </div>
 
             <div class="absolute bottom-[0%] mb-4">
@@ -133,7 +175,6 @@
                     {% include 'components/toasts/error.html.twig' with {'message' : message} %}
                 {% endfor %}
             </div>
-
 
 
         </div>

@@ -11,21 +11,26 @@
             <h1 class="text-3xl text-slate-800 mb-6 font-bold">Gestion de vos peintures dans Thanatos</h1>
 
             <section class="flex flex-col min-h-[150px] bg-gray-100 p-4 rounded-lg shadow-md mb-6">
-                    <p class="text-slate-700 text-lg font-light mb-2">
-                        Bienvenues dans votre panneau de gestions des peintures.
-                    </p>
-                    <p class="text-slate-700 text-lg font-light mb-2">
-                        C'est à la fois l'ensemble des peintures disponibles chez Thanatos (premier tableau) et ceux que vous avez décider d'exposer pour vos modèles de tombes.
-                    </p>
-                    <p class="text-slate-700 text-lg font-light mb-2">
-                        Contrairement aux matériaux et aux extras, les peintures peuvent être utilisé sur n'importe quel modèle à partir du moment qu'il a été mis à disposition des clients.
-                    </p>
-            </section>  
+                <p class="text-slate-700 text-lg font-light mb-2">
+                    Bienvenues dans votre panneau de gestions des peintures.
+                </p>
+                <p class="text-slate-700 text-lg font-light mb-2">
+                    C'est à la fois l'ensemble des peintures disponibles chez Thanatos (premier tableau) et ceux que
+                    vous avez décider d'exposer pour vos modèles de tombes.
+                </p>
+                <p class="text-slate-700 text-lg font-light mb-2">
+                    Contrairement aux matériaux et aux extras, les peintures peuvent être utilisé sur n'importe quel
+                    modèle à partir du moment qu'il a été mis à disposition des clients.
+                </p>
+            </section>
 
             <h2 class="text-2xl text-slate-800 mt-6 mb-4 font-medium">Peintures dans la base de données</h2>
 
             <a href="{{ path("create_painting") }}">
-                <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Ajouter une nouvelle peinture</button>
+                <button type="button"
+                        class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                    Ajouter une nouvelle peinture
+                </button>
             </a>
 
             <div class="flex flex-col mt-6">
@@ -34,43 +39,59 @@
                         <div class="overflow-hidden ">
                             <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                                 <thead class="bg-gray-100 dark:bg-gray-700">
-                                <tr>
-                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                        Nom
-                                    </th>
-                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                        Hexacode
-                                    </th>
-                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                        Prix
-                                    </th>
-                                    <th scope="col" class="p-4">
-                                        <span class="sr-only">Edit</span>
-                                    </th>
-                                </tr>
+                                    <tr>
+                                        <th scope="col"
+                                            class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                            Nom
+                                        </th>
+                                        <th scope="col"
+                                            class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                            Hexacode
+                                        </th>
+                                        <th scope="col"
+                                            class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                            Prix
+                                        </th>
+                                        <th scope="col" class="p-4">
+                                            <span class="sr-only">Edit</span>
+                                        </th>
+                                    </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                {% if paintings %}
-                                    {% for painting in paintings %}
+                                    {% if paintings %}
+                                        {% for painting in paintings %}
+                                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ painting.name }}</td>
+                                                <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <div class="h-[25px] w-[100px] bg-[{{ painting.hexaCode }}]"></div>
+                                                </td>
+                                                <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ painting.price }}
+                                                    €
+                                                </td>
+                                                <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                                                    <a href="{{ path("details_painting", {"id" : painting.id}) }}"
+                                                       class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
+                                                    <a href="{{ path("modify_painting", {"id" : painting.id}) }}"
+                                                       class="text-blue-600 mr-2 dark:text-blue-500 hover:underline">Modifier</a>
+                                                    {% if painting.canBeDeleted %}
+                                                        <a href="{{ path("delete_painting", {"id" : painting.id}) }}"
+                                                           class="text-red-600 mr-2 dark:text-red-500 hover:underline">Supprimer</a>
+                                                    {% else %}
+                                                        <span class="text-green-600 dark:text-green-500 pr-2">Utilisé</span>
+                                                    {% endif %}
+                                                    <a href="{{ path("switch_painting", {"id" : painting.id}) }}"
+                                                       class="text-violet-600 dark:text-violet-500 hover:underline">Switch</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
                                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ painting.name }}</td>
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                <div class="h-[25px] w-[100px] bg-[{{ painting.hexaCode }}]"></div>
-                                            </td>
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ painting.price }} €</td>
-                                            <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                                <a href="{{ path("details_painting", {"id" : painting.id}) }}" class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
-                                                <a href="{{ path("modify_painting", {"id" : painting.id}) }}" class="text-blue-600 mr-2 dark:text-blue-500 hover:underline">Modifier</a>
-                                                <a href="{{ path("delete_painting", {"id" : painting.id}) }}" class="text-red-600 mr-2 dark:text-red-500 hover:underline">Supprimer</a>
-                                                <a href="{{ path("switch_painting", {"id" : painting.id}) }}" class="text-violet-600 dark:text-violet-500 hover:underline">Switch</a>
+                                            <td colspan="5"
+                                                class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Aucune peintures n'est renseignée chez Thanatos
                                             </td>
                                         </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td colspan="5" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Aucune peintures n'est renseignée chez Thanatos</td>
-                                    </tr>
-                                {% endif %}
+                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>
@@ -78,7 +99,8 @@
                 </div>
             </div>
 
-            <h2 class="text-2xl text-slate-800 my-4 font-medium">Peintures que vous avez mis à dispositions des clients</h2>
+            <h2 class="text-2xl text-slate-800 my-4 font-medium">Peintures que vous avez mis à dispositions des
+                clients</h2>
 
             <div class="flex flex-col mt-6">
                 <div class="overflow-x-auto shadow-md sm:rounded-lg">
@@ -86,41 +108,57 @@
                         <div class="overflow-hidden ">
                             <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                                 <thead class="bg-gray-100 dark:bg-gray-700">
-                                <tr>
-                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                        Nom
-                                    </th>
-                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                        Hexacode
-                                    </th>
-                                    <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                        Prix
-                                    </th>
-                                    <th scope="col" class="p-4">
-                                        <span class="sr-only">Edit</span>
-                                    </th>
-                                </tr>
+                                    <tr>
+                                        <th scope="col"
+                                            class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                            Nom
+                                        </th>
+                                        <th scope="col"
+                                            class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                            Hexacode
+                                        </th>
+                                        <th scope="col"
+                                            class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                            Prix
+                                        </th>
+                                        <th scope="col" class="p-4">
+                                            <span class="sr-only">Edit</span>
+                                        </th>
+                                    </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                {% if paintingsSuscribedByCompany %}
-                                    {% for paintingSuscribedByCompany in paintingsSuscribedByCompany %}
+                                    {% if paintingsSuscribedByCompany %}
+                                        {% for paintingSuscribedByCompany in paintingsSuscribedByCompany %}
+                                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ paintingSuscribedByCompany.name }}</td>
+                                                <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    <div class="h-[25px] w-[100px] bg-[{{ paintingSuscribedByCompany.hexaCode }}]"></div>
+                                                </td>
+                                                <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ paintingSuscribedByCompany.price }}
+                                                    €
+                                                </td>
+                                                <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                                                    <a href="{{ path("details_painting", {"id" : paintingSuscribedByCompany.id}) }}"
+                                                       class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
+                                                    {% if paintingSuscribedByCompany.canBeSwitched %}
+                                                        <a href="{{ path("switch_painting", {"id" : paintingSuscribedByCompany.id}) }}"
+                                                           class="text-red-600 dark:text-red-500 hover:underline">Retirer</a>
+                                                    {% else %}
+                                                        <span class="text-green-600 dark:text-green-500 pr-2">Utilisée
+                                                            dans une commande</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
                                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ paintingSuscribedByCompany.name }}</td>
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                <div class="h-[25px] w-[100px] bg-[{{ paintingSuscribedByCompany.hexaCode }}]"></div>
-                                            </td>
-                                            <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ paintingSuscribedByCompany.price }} €</td>
-                                            <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                                <a href="{{ path("details_painting", {"id" : paintingSuscribedByCompany.id}) }}" class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
-                                                <a href="{{ path("switch_painting", {"id" : paintingSuscribedByCompany.id}) }}" class="text-violet-600 dark:text-violet-500 hover:underline">Switch</a>
+                                            <td colspan="5"
+                                                class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                Vous n'avez mis aucunes peintures à dispositions des clients pour le
+                                                moment
                                             </td>
                                         </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td colspan="5" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Vous n'avez mis aucunes peintures à dispositions des clients pour le moment</td>
-                                    </tr>
-                                {% endif %}
+                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>
@@ -129,7 +167,8 @@
             </div>
 
             <div class="flex flex-row-reverse">
-                <a href="{{ path("home_services") }}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
+                <a href="{{ path("home_services") }}"
+                   class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
             </div>
 
             <div class="absolute bottom-[0%] mb-4">
@@ -140,7 +179,6 @@
                     {% include 'components/toasts/error.html.twig' with {'message' : message} %}
                 {% endfor %}
             </div>
-
 
 
         </div>

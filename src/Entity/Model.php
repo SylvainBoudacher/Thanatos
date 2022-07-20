@@ -242,6 +242,12 @@ class Model
         return $this;
     }
 
+    public function canBeDeleted()
+    {
+        return (empty($this->modelExtras->toArray()) &&
+            empty($this->modelMaterials->toArray()));
+    }
+
     public function __toString(): string
     {
         return $this->name;

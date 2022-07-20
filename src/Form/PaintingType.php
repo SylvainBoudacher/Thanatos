@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Painting;
+use App\Utils\MediaConstraints;
 use App\Utils\StyleClasses;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
@@ -39,13 +40,15 @@ class PaintingType extends AbstractType
                 "label_attr" => [
                     "class" => StyleClasses::lABEL_DEFAULT
                 ],
+                'constraints' => MediaConstraints::$IMAGE,
+
                 "attr" => [
                     "placeholder" => "Entrez le prix de la peinture...",
                     "class" => StyleClasses::TEXT_INPUT_DEFAULT,
+                    'accept' => 'image/*'
                 ]
             ])
-            ->add('media', MediaType::class)
-        ;
+            ->add('media', MediaType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/company/services")] // TODO : Peut-être faire /company/{nomDeLaCompagnie}/services dans le futur
+#[Route("/morgue/services")] // TODO : Peut-être faire /company/{nomDeLaCompagnie}/services dans le futur
 #[IsGranted("ROLE_COMPANY")]
 class ServicesController extends AbstractController
 {

@@ -19,6 +19,21 @@ class PreparationRepository extends ServiceEntityRepository
         parent::__construct($registry, Preparation::class);
     }
 
+    public function getPreparationsByCompany($company)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->innerJoin('App\Entity\ModelMaterial', 'mm', 'WITH', 'mm = p.modelMaterial')
+            ->innerJoin('App\Entity\ModelExtra', 'me', 'WITH', 'me = p.modelExtra')
+            ->innerJoin('App\Entity\Model', 'model', 'WITH', 'model = mm.model and model = me.model')
+            ->join('App\Entity\Company', 'c', 'WITH', 'c = model.company')
+            ->where('c = :company')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->execute();
+
+        return $query;
+    }
+
     // /**
     //  * @return Preparation[] Returns an array of Preparation objects
     //  */

@@ -3,41 +3,42 @@
 {% block body %}
     <div class="container flex flex-row h-100">
         {{ include('components/sideBarPro.html.twig') }}
-            <div class="p-10">
+        <div class="p-10">
 
-                <h1 class="font-bold text-3xl text-slate-800 mb-4">Gestion des service de la morgue</h1>
+            <h1 class="font-bold text-3xl text-slate-800 mb-4">Gestion des service de la morgue</h1>
 
-                <h2 class="font-light text-lg text-blue-900 ml-2 my-2">Service dans la DB Thanatos</h2>
+            <h2 class="font-light text-lg text-blue-900 ml-2 my-2">Service que proposent Thanatos</h2>
 
-                <ul>
-                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
-                        <a href="{{ path("view_burials") }}">Gérer les Burials</a>
-                    </li>
-                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
-                        <a href="{{ path("view_materials") }}">Gérer les MATERIAUX</a>
-                    </li>
-                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
-                        <a href="{{ path("view_paintings") }}">Gérer les PAINTING</a>
-                    </li>
-                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
-                        <a href="{{ path("view_extras") }}">Gérer les EXTRAS</a>
-                    </li>
-                </ul>
+            <ul>
+                <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                    <a href="{{ path("view_burials") }}">Gérer les sépultures</a>
+                </li>
+                <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                    <a href="{{ path("view_materials") }}">Gérer les matériaux</a>
+                </li>
+                <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                    <a href="{{ path("view_paintings") }}">Gérer les peintures</a>
+                </li>
+                <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                    <a href="{{ path("view_extras") }}">Gérer les extras</a>
+                </li>
+            </ul>
 
-                <h2 class="font-light text-lg text-blue-900 ml-2 my-2">Service auquels votre compagnie s'engage à fournir</h2>
+            <h2 class="font-light text-lg text-blue-900 ml-2 my-2">Service auquels votre compagnie s'engage à
+                fournir</h2>
 
-                <ul>
-                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
-                        <a href="{{ path("view_models") }}">Gérer les Modèles de burials</a>
-                    </li>
-                    <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
-                        <a href="{{ path("view_company_themes") }}">Gérer les souscription aux THEMES chez Thanatos</a>
-                    </li>
-                    {#            <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">#}
-                    {#                <a href="{{ path("view_company_paintings") }}">Gérer les PAINTINGS que vous allez rendre disponible pour les clients</a>#}
-                    {#            </li>#}
-                </ul>
-            </div>
+            <ul>
+                <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                    <a href="{{ path("view_models") }}">Gérer les modèles de sépultures</a>
+                </li>
+                <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800">
+                    <a href="{{ path("view_company_themes") }}">Gérer les souscriptions aux thèmes chez Thanatos</a>
+                </li>
+                {#            <li class="text-lg text-slate-800 ml-5 my-2 hover:underline hover:text-purple-800"> #}
+                {#                <a href="{{ path("view_company_paintings") }}">Gérer les PAINTINGS que vous allez rendre disponible pour les clients</a> #}
+                {#            </li> #}
+            </ul>
+        </div>
     </div>
 
 {% endblock %}

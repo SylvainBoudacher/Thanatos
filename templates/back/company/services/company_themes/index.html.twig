@@ -14,32 +14,38 @@
                         Bienvenues dans votre panneau de adhésion aux thème de Thanatos.
                     </p>
                     <p class="text-slate-700 text-lg font-light mb-2">
-                        Nous proposons plusieurs façons de traiter une commande : une méthode classique où le corps sera toujours envoyé au client, et une spéciale qui ne reviendra jamais à l'envoyeur vis-à-vis de la nature de celle-ci.
+                        Nous proposons plusieurs façons de traiter une commande : une méthode classique où le corps sera
+                        toujours envoyé au client, et une spéciale qui ne reviendra jamais à l'envoyeur vis-à-vis de la
+                        nature de celle-ci.
                     </p>
                     <p class="text-slate-700 text-lg font-light mb-2">
-                        Libre à vous de choisir les thèmes dont vous vous engager à respecter lorsque vous effecturer vos services pour vos clients.
+                        Libre à vous de choisir les thèmes dont vous vous engager à respecter lorsque vous effecturer
+                        vos services pour vos clients.
                     </p>
-                </section> 
-                
+                </section>
+
                 <div class="flex flex-wrap">
                     {% for detailedTheme in detailedThemes %}
                         <div class="relative flex flex-col justify-between h-[400px] w-[325px] bg-gradient-to-b from-[#4031B3] to-indigo-500 p-4 pt-8 px-6 m-2 my-4 rounded-xl shadow-lg">
                             <div>
                                 {% if loop.last %}
-                                    <div class="absolute px-4 py-2 -top-5 left-[50%] -translate-x-[50%] bg-red-200 rounded-xl">Le plus populaire</div>
+                                    <div class="absolute px-4 py-2 -top-5 left-[50%] -translate-x-[50%] bg-red-200 rounded-xl">
+                                        Le plus populaire
+                                    </div>
                                 {% endif %}
-                                <div class="text-slate-50 font-extralight text-md" >
+                                <div class="text-slate-50 font-extralight text-md">
                                     <span>à partir de</span>
-                                    <span class="text-3xl font-bold">{{ (detailedTheme.theme.price)|number_format(0, '.', ' ') }} €</span>
-                                    
+                                    <span class="text-3xl font-bold">{{ (detailedTheme.theme.price)|number_format(0, '.', ' ') }}
+                                        €</span>
+
                                     {% if detailedTheme.theme.name == "Vers l'infinie et l'au dela !" %}
-                                    <span class="font-bold text-sm">/ kg</span>
+                                        <span class="font-bold text-sm">/ kg</span>
                                     {% endif %}
                                 </div>
                                 <h3 class="text-slate-50 font-bold text-2xl mb-2">{{ detailedTheme.theme.name }}</h3>
                                 {% if detailedTheme.theme.type == "classic" %}
                                     <span class="text-slate-50 font-bold text-sm mt-1 bg-blue-500 px-3 py-1 rounded-full">Classique</span>
-                                {% else %}   
+                                {% else %}
                                     <span class="text-slate-50 font-bold text-sm mt-1 bg-orange-600 px-3 py-1 rounded-full">Special</span>
                                 {% endif %}
                                 <p class="text-slate-50 text-md mt-3">{{ detailedTheme.theme.description }}</p>
@@ -47,43 +53,52 @@
 
                             <div>
 
-                            <div class="flex justify-center mb-8">
-                                <a class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl" href="{{ path("switch_company_themes", {"id" : detailedTheme.theme.id }) }}">
-                                        {% if detailedTheme.isSuscribed == false %}
-                                            Se désabonner
-                                        {% elseif detailedTheme.isSuscribed == true %}
-                                            S'abonner
-                                        {% endif %} 
-                                    </a>
-                            </div>
+                                <div class="flex justify-center mb-8">
+                                    {% if detailedTheme.canBeSwitched == true %}
 
-                                
+                                        <a class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl"
+                                           href="{{ path("switch_company_themes", {"id" : detailedTheme.theme.id }) }}">
+                                            {% if detailedTheme.isSuscribed == false %}
+                                                S'abonner
+                                            {% elseif detailedTheme.isSuscribed == true %}
+                                                Se désabonner
+                                            {% endif %}
+                                        </a>
+                                    {% else %}
+                                        <span class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl"
+                                              href="{{ path("switch_company_themes", {"id" : detailedTheme.theme.id }) }}">
+                                            Utilisé dans une commande
+                                        </span>
+                                    {% endif %}
+
+                                </div>
+
+
                                 <div class="flex justify-end items-center">
                                     <span class="flex text-slate-50 font-bold text-sm">
-                                    {% if detailedTheme.isSuscribed == false %}
-                                        <span class="mr-2">Non abonné</span>
-                                        <div class="rounded-full w-[16px] h-[16px] bg-red-500 translate-y-[12%] mr-0"></div>
-                                    {% elseif detailedTheme.isSuscribed == true %}
-                                        <span class="mr-2">Abonné</span>
-                                        <div class="rounded-full w-[16px] h-[16px] bg-green-500 translate-y-[12%] mr-0"></div>
-                                    {% endif %} 
+                                        {% if detailedTheme.isSuscribed == false %}
+                                            <span class="mr-2">Non abonné</span>
+                                            <div class="rounded-full w-[16px] h-[16px] bg-red-500 translate-y-[12%] mr-0"></div>
+                                        {% elseif detailedTheme.isSuscribed == true %}
+                                            <span class="mr-2">Abonné</span>
+                                            <div class="rounded-full w-[16px] h-[16px] bg-green-500 translate-y-[12%] mr-0"></div>
+                                        {% endif %}
                                     </span>
                                 </div>
 
                             </div>
-                            
+
                         </div>
-                    {% endfor %} 
+                    {% endfor %}
                 </div>
-        
+
                 <div class="flex flex-row-reverse">
-                    <a href="{{ path("home_services") }}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
-                </div> 
+                    <a href="{{ path("home_services") }}"
+                       class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
+                </div>
 
             </div>
         </div>
-
-
 
 
         <div class="absolute bottom-[0%] mb-4">

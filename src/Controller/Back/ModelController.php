@@ -10,14 +10,17 @@ use App\Repository\CompanyRepository;
 use App\Repository\ModelMediaRepository;
 use App\Repository\ModelRepository;
 use App\Repository\UserRepository;
+use App\Security\Voter\GeneralVoter;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Node\Expr\AssignOp\Mod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/company/services/models")]
+#[Route("/morgue/services/modèles")]
 #[IsGranted("ROLE_COMPANY")]
 class ModelController extends AbstractController
 {
@@ -25,22 +28,25 @@ class ModelController extends AbstractController
     public function view_models(ModelRepository $modelRep, CompanyRepository $companyRep, UserRepository $userRep): Response
     {
         $company = $companyRep->find($userRep->find($this->getUser())->getCompany()->getId());
-        $models = $modelRep->findBy(["company" => $company]);
+        $models = $modelRep->findBy(["company" => $company, "deletedAt" => null], ['name' => 'ASC']);
+
         return $this->render("back/company/services/models/index.html.twig", [
             "models" => $models
         ]);
     }
 
     #[Route('/details/{id}', name: 'details_model')]
-    public function details_model(ModelRepository $modelRep, int $id): Response
+    public function details_model(ModelRepository $modelRep, Model $model): Response
     {
-        $model = $modelRep->find($id);
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $model);
+        $this->denyAccessUnlessGranted(GeneralVoter::OWNED_COMPANY, $model);
+
         return $this->render("back/company/services/models/details.html.twig", [
             "model" => $model,
         ]);
     }
 
-    #[Route('/create', name: 'create_model')]
+    #[Route('/créer', name: 'create_model')]
     public function create_model(Request $request, EntityManagerInterface $em, CompanyRepository $companyRep, UserRepository $userRep): Response
     {
         $company = $companyRep->find($userRep->find($this->getUser())->getCompany()->getId());
@@ -50,6 +56,7 @@ class ModelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $model->setCompany($company);
             $images = $form->get("images")->getData();
 
@@ -76,14 +83,16 @@ class ModelController extends AbstractController
         ]);
     }
 
-    #[Route('/modify/{id}', name: 'modify_model')]
-    public function modify_model(Request $request, EntityManagerInterface $em, int $id, ModelRepository $modelRep, ModelMediaRepository $modelMediaRep): Response
+    #[Route('/modifier/{id}', name: 'modify_model')]
+    public function modify_model(Request $request, EntityManagerInterface $em, Model $model, ModelRepository $modelRep, ModelMediaRepository $modelMediaRep): Response
     {
-        $model = $modelRep->find($id);
+
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $model);
+        $this->denyAccessUnlessGranted(GeneralVoter::OWNED_COMPANY, $model);
+
         $form = $this->createForm(ModelType::class, $model);
         $form->remove("company");
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -121,19 +130,17 @@ class ModelController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'delete_model')]
-    public function delete_model(EntityManagerInterface $em, int $id, ModelRepository $modelRep, ModelMediaRepository $modelMediaRep): Response
+    #[Route('/supprimer/{id}', name: 'delete_model')]
+    public function delete_model(EntityManagerInterface $em, Model $model, ModelRepository $modelRep, ModelMediaRepository $modelMediaRep): Response
     {
-        $model = $modelRep->find($id);
-        $modelMedias = $modelMediaRep->findBy(["model" => $model]);
 
-        foreach ($modelMedias as $modelMedia) {
-            $media = $modelMedia->getMedia();
-            $em->remove($media);
-            $em->remove($modelMedia);
-        }
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $model);
+        $this->denyAccessUnlessGranted(GeneralVoter::OWNED_COMPANY, $model);
 
-        $em->remove($model);
+        if (!$model->canBeDeleted()) dd('page error');
+
+        $model->setDeletedAt(new DateTime());
+
         $em->flush();
 
         return $this->redirectToRoute("view_models");

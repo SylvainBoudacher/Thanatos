@@ -4,6 +4,7 @@ namespace App\Controller\Back;
 
 
 use App\Entity\CompanyMaterial;
+use App\Entity\Model;
 use App\Repository\CompanyMaterialRepository;
 use App\Repository\CompanyRepository;
 use App\Repository\ModelMaterialRepository;
@@ -16,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/company/services/modelMaterials")]
+#[Route("/morgue/services/modele-materiel")]
 #[IsGranted("ROLE_COMPANY")]
 class ModelMaterialController extends AbstractController
 {
@@ -34,10 +35,11 @@ class ModelMaterialController extends AbstractController
     }
 
     #[Route('/manage/{id}', name: 'manage_model_materials')]
-    public function manage_model_materials(int $id, GetterService $getterService, ModelRepository $modelRep, CompanyMaterialRepository $companyMaterialRep): Response
+    public function manage_model_materials(Model $model, GetterService $getterService, ModelRepository $modelRep, CompanyMaterialRepository $companyMaterialRep): Response
     {
-        $model = $modelRep->findOneBy(["id" => $id]);
         $company = $getterService->getCompanyOfUser();
+        if ($model->getCompany()->getId() !== $company?->getId()) dd('page error');
+
         $companyMaterials = $companyMaterialRep->findBy(["company" => $company]);
 
         $default = [
@@ -59,8 +61,4 @@ class ModelMaterialController extends AbstractController
             "form" => $form->createView()
         ]);
     }
-
-
-
-
 }

@@ -12,13 +12,18 @@
                         Bienvenues dans le panneau de gestion des modèles de sépulture.
                     </p>
                     <p class="text-slate-700 text-lg font-light mb-2">
-                        Ce sont vos différentes déclinaisons de vos sépultures que vous allez référencer ici. Elles vous sont propre à vous uniquement.
-                        La création de nouveaux modèles se base donc sur les sépulture déjà référencé chez Thanatos (voir l'onglet "Sépulture" pour plus d'information)
+                        Ce sont vos différentes déclinaisons de vos sépultures que vous allez référencer ici. Elles vous
+                        sont propre à vous uniquement.
+                        La création de nouveaux modèles se base donc sur les sépulture déjà référencé chez Thanatos
+                        (voir l'onglet "Sépulture" pour plus d'information)
                     </p>
                 </section>
 
                 <a href="{{ path("create_model") }}">
-                    <button type="button" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Ajouter un modèle de sépulture</button>
+                    <button type="button"
+                            class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                        Ajouter un modèle de sépulture
+                    </button>
                 </a>
                 <div class="flex flex-col mt-6">
                     <div class="overflow-x-auto shadow-md sm:rounded-lg">
@@ -26,44 +31,60 @@
                             <div class="overflow-hidden ">
                                 <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
                                     <thead class="bg-gray-100 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Nom
-                                        </th>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Description
-                                        </th>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Tombe
-                                        </th>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Prix
-                                        </th>
-                                        <th scope="col" class="p-4">
-                                            <span class="sr-only">Edit</span>
-                                        </th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col"
+                                                class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                                Nom
+                                            </th>
+                                            <th scope="col"
+                                                class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                                Description
+                                            </th>
+                                            <th scope="col"
+                                                class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                                Tombe
+                                            </th>
+                                            <th scope="col"
+                                                class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
+                                                Prix
+                                            </th>
+                                            <th scope="col" class="p-4">
+                                                <span class="sr-only">Edit</span>
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                    {% if models %}
-                                        {% for model in models %}
+                                        {% if models %}
+                                            {% for model in models %}
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ model.name }}</td>
+                                                    <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ model.description }}</td>
+                                                    <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ model.burial }}</td>
+                                                    <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ model.price }}
+                                                        €
+                                                    </td>
+                                                    <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
+                                                        <a href="{{ path("details_model", {"id" : model.id}) }}"
+                                                           class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
+                                                        <a href="{{ path("modify_model", {"id" : model.id}) }}"
+                                                           class="text-blue-600 mr-2 dark:text-blue-500 hover:underline">Modifier</a>
+                                                        {% if model.canBeDeleted %}
+                                                            <a href="{{ path("delete_model", {"id" : model.id}) }}"
+                                                               class="text-red-600 dark:text-red-500 hover:underline">Supprimer</a>
+                                                        {% else %}
+                                                            <span class="text-green-600 dark:text-green-500">Utilisé</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
                                             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ model.name }}</td>
-                                                <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ model.description }}</td>
-                                                <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ model.burial }}</td>
-                                                <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ model.price }} €</td>
-                                                <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                                    <a href="{{ path("details_model", {"id" : model.id}) }}" class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
-                                                    <a href="{{ path("modify_model", {"id" : model.id}) }}" class="text-blue-600 mr-2 dark:text-blue-500 hover:underline">Edit</a>
-                                                    <a href="{{ path("delete_model", {"id" : model.id}) }}" class="text-red-600 dark:text-red-500 hover:underline">Delete</a>
+                                                <td colspan="5"
+                                                    class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    Vous n'avez pas de modèles pour le moment
                                                 </td>
                                             </tr>
-                                        {% endfor %}
-                                    {% else %}
-                                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                            <td colspan="5" class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Vous n'avez pas de modèles pour le moment</td>
-                                        </tr>
-                                    {% endif %}
+                                        {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -72,7 +93,8 @@
                 </div>
             </div>
             <div class="flex flex-row-reverse">
-                <a href="{{ path("home_services") }}" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
+                <a href="{{ path("home_services") }}"
+                   class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
             </div>
         </div>
     </div>

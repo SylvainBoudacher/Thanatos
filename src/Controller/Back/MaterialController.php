@@ -5,12 +5,14 @@ namespace App\Controller\Back;
 use App\Entity\CompanyExtra;
 use App\Entity\CompanyMaterial;
 use App\Entity\Material;
+use App\Entity\Preparation;
 use App\Form\MaterialType;
 use App\Repository\CompanyExtraRepository;
 use App\Repository\CompanyMaterialRepository;
 use App\Repository\ExtraRepository;
 use App\Repository\MaterialRepository;
 use App\Repository\UserRepository;
+use App\Security\Voter\GeneralVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/company/services/materials")]
+#[Route("/morgue/services/materiaux")]
 #[IsGranted("ROLE_COMPANY")]
 class MaterialController extends AbstractController
 {
@@ -29,27 +31,69 @@ class MaterialController extends AbstractController
         $company = $user->getCompany();
 
         $materialsSuscribedByCompany = $materialRep->getAllByCompany($company);
+        $materials = $materialRep->findBy([
+            'deletedAt' => null,
+        ], [
+            'name' => 'ASC'
+        ]);
+
+        foreach ($materials as $material) {
+            $material->canBeDeleted = $this->canBeDeleted($material);
+            $material->canBeSwitched = $this->canBeSwitched($material);
+
+        }
+
+        foreach ($materialsSuscribedByCompany as $material) {
+            $material->canBeSwitched = $this->canBeSwitched($material);
+        }
 
         return $this->render("back/company/services/materials/index.html.twig", [
-            "materials" => $materialRep->findAll(),
+            "materials" => $materials,
             "materialsSuscribedByCompany" => $materialsSuscribedByCompany,
         ]);
     }
-    
-    
+
+
     /* THANATOS DATABASE RELATED */
-    
+
+    private function canBeDeleted(Material $material): bool
+    {
+        $em = $this->getDoctrine()->getManager();
+        $preparations = $em->getRepository(Preparation::class)->findAll();
+
+        if (!empty($preparations)) $preparations = array_map(function ($p) {
+            if ($p->getModelMaterial() !== null)
+                return $p->getModelMaterial()->getId();
+        }, $preparations);
+
+        return empty($material->getModelMaterials()->toArray()) && empty($material->getCompanyMaterials()->toArray()) && !in_array($material->getId(), $preparations);
+    }
+
+    private function canBeSwitched(Material $material): bool
+    {
+        $em = $this->getDoctrine()->getManager();
+        $preparations = $em->getRepository(Preparation::class)->findAll();
+
+        if (!empty($preparations)) $preparations = array_map(function ($p) {
+            if ($p->getModelMaterial() !== null)
+                return $p->getModelMaterial()->getId();
+        }, $preparations);
+
+        return !in_array($material->getId(), $preparations);
+    }
 
     #[Route('/details/{id}', name: 'details_material')]
-    public function details_materials(MaterialRepository $materialRep, int $id): Response
+    public function details_materials(Material $material): Response
     {
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $material);
+
         return $this->render("back/company/services/materials/details.html.twig", [
-            "material" => $materialRep->find($id)
+            "material" => $material
         ]);
     }
 
-    #[Route('/create', name: 'create_material')]
-    public function create_materials(Request $request, EntityManagerInterface $em, MaterialRepository $materialRep): Response
+    #[Route('/créer', name: 'create_material')]
+    public function create_materials(Request $request, EntityManagerInterface $em): Response
     {
         $material = new Material();
         $form = $this->createForm(MaterialType::class, $material);
@@ -66,10 +110,11 @@ class MaterialController extends AbstractController
         ]);
     }
 
-    #[Route('/modify/{id}', name: 'modify_material')]
-    public function modify_materials(Request $request, EntityManagerInterface $em, MaterialRepository $materialRep, int $id): Response
+    #[Route('/modifier/{id}', name: 'modify_material')]
+    public function modify_materials(Request $request, EntityManagerInterface $em, MaterialRepository $materialRep, Material $material): Response
     {
-        $material = $materialRep->find($id);
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $material);
+
         $form = $this->createForm(MaterialType::class, $material);
         $form->handleRequest($request);
 
@@ -84,28 +129,28 @@ class MaterialController extends AbstractController
         ]);
     }
 
-    #[Route('/materials/delete/{id}', name: 'delete_material')]
-    public function delete_materials(EntityManagerInterface $em, MaterialRepository $materialRep, int $id): Response
+
+    /* EXPOSED TO THE CLIENTS */
+
+    #[Route('/supprimer/{id}', name: 'delete_material')]
+    public function delete_materials(EntityManagerInterface $em, MaterialRepository $materialRep, Material $material): Response
     {
-        $material = $materialRep->find($id);
-        if($material->getMedia()) $em->remove($material->getMedia());
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $material);
+
+        if (!$this->canBeDeleted($material)) dd('page error');
+
+        if ($material->getMedia() != null) $em->remove($material->getMedia());
         $em->remove($material);
         $em->flush();
-
-        // TODO : ATTENTION : Checkez que aucuns materials n'est utilise par un company avant de supprimer
 
         return $this->redirectToRoute("view_materials");
     }
 
-    
-    /* EXPOSED TO THE CLIENTS */
-
-
     #[Route('/switch/{id}', name: 'switch_material')]
-    public function switch_material(int $id, EntityManagerInterface $em, UserRepository $userRep, CompanyMaterialRepository $companyMaterialRep, MaterialRepository $materialRep) : Response {
+    public function switch_material(Material $material, EntityManagerInterface $em, UserRepository $userRep, CompanyMaterialRepository $companyMaterialRep, MaterialRepository $materialRep): Response
+    {
         $user = $userRep->find($this->getUser());
         $company = $user->getCompany();
-        $material = $materialRep->find($id);
 
         // TODO : Meilleur vérification plus tard (genre theme désactivé par thanatos)
         if ($company === null) {
@@ -113,12 +158,18 @@ class MaterialController extends AbstractController
             return $this->redirectToRoute("view_materials");
         }
 
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $material);
+
         $companyMaterial = $companyMaterialRep->getOneByCompanyAndMaterial($company, $material);
 
         if ($companyMaterial) {
+            if (!$this->canBeSwitched($material)) {
+                $this->addFlash("error", "Le matériaux " . $material->getName() . " ne peut être retiré car il est utilisé dans une commande");
+                return $this->redirectToRoute("view_materials");
+            }
             $em->remove($companyMaterial);
             $em->flush();
-            $this->addFlash("success", "Le matériaux ".$material->getName()." ne sera plus disponible pour les clients");
+            $this->addFlash("success", "Le matériaux " . $material->getName() . " ne sera plus disponible pour les clients");
             return $this->redirectToRoute("view_materials");
         }
 
@@ -129,7 +180,7 @@ class MaterialController extends AbstractController
         $em->persist($companyMaterial);
         $em->flush();
 
-        $this->addFlash("success", "le matériaux ".$material->getName()." est désormais disponible pour les clients");
+        $this->addFlash("success", "le matériaux " . $material->getName() . " est désormais disponible pour les clients");
         return $this->redirectToRoute("view_materials");
 
     }

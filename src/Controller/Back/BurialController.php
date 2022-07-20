@@ -5,6 +5,8 @@ namespace App\Controller\Back;
 use App\Entity\Burial;
 use App\Form\BurialType;
 use App\Repository\BurialRepository;
+use App\Security\Voter\GeneralVoter;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/company/services/burials")]
+#[Route("/morgue/services/sépultures")]
 #[IsGranted("ROLE_COMPANY")]
 class BurialController extends AbstractController
 {
@@ -20,11 +22,15 @@ class BurialController extends AbstractController
     public function view_burial(Request $request, BurialRepository $burialRep): Response
     {
         return $this->render("back/company/services/burials/index.html.twig", [
-            "burials" => $burialRep->findAll()
+            "burials" => $burialRep->findBy([
+                'deletedAt' => null,
+            ], [
+                'name' => 'ASC'
+            ])
         ]);
     }
 
-    #[Route('/create', name: 'create_burial')]
+    #[Route('/créer', name: 'create_burial')]
     public function create_burial(Request $request, EntityManagerInterface $em): Response
     {
         $burial = new Burial();
@@ -42,14 +48,17 @@ class BurialController extends AbstractController
         ]);
     }
 
-    #[Route('/modify/{id}', name: 'modify_burial')]
+    #[Route('/modifier/{id}', name: 'modify_burial')]
     public function modify_burial(
-        Request $request,
+        Request                $request,
         EntityManagerInterface $em,
-        int $id,
-        BurialRepository $burialRep
-    ): Response {
-        $burial = $burialRep->find($id);
+        Burial                 $burial,
+        BurialRepository       $burialRep
+    ): Response
+    {
+
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $burial);
+
         $form = $this->createForm(BurialType::class, $burial);
         $form->handleRequest($request);
 
@@ -64,12 +73,16 @@ class BurialController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'delete_burial')]
-    public function delete_burial(EntityManagerInterface $em, int $id, BurialRepository $burialRep): Response
+    #[Route('/supprimer/{id}', name: 'delete_burial')]
+    public function delete_burial(EntityManagerInterface $em, Burial $burial, BurialRepository $burialRep): Response
     {
-        $burial = $burialRep->find($id);
-        $em->remove($burial);
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $burial);
+
+        if (!empty($burial->getModels()->toArray())) dd('page error');
+
+        $burial->setDeletedAt(new DateTime());
         $em->flush();
+
         return $this->redirectToRoute("view_burials");
     }
 
