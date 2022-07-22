@@ -13,32 +13,74 @@
             {% if themesClassic %}
                 {% for theme in themesClassic %}
                     {# CARD #}
-                    <div class="w-72 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-698">
-                        <img class="rounded-t-lg object-cover w-full h-40"
-                             src="{{ theme.media ? vich_uploader_asset(theme.media) : 'https://picsum.photos/id/1/200/300' }}"
-                             alt="">
-                        <div class="p-5">
-                            <a href="#">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ theme.name }}</h5>
-                            </a>
-                            <ul class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                                <li>{{ theme.description }}</li>
-                            </ul>
-                            <h3 class="px-2 text-sm text-gray-700 dark:text-gray-400">Price : {{ theme.price }}€</h3>
 
-                            <a href="{{ path('user_order_theme', {corpse: corpse.id, theme: theme.id}) }}"
+                    <div class="relative flex flex-col justify-between h-[400px] w-[325px] bg-gradient-to-b from-[#4031B3] to-indigo-500 p-4 pt-8 px-6 m-2 my-4 rounded-xl shadow-lg">
+                        <div>
+                            {% if loop.last %}
+                                <div class="absolute px-4 py-2 -top-5 left-[50%] -translate-x-[50%] bg-red-200 rounded-xl">
+                                    Le plus populaire
+                                </div>
+                            {% endif %}
+                            <div class="text-slate-50 font-extralight text-md">
+                                <span>à partir de</span>
+                                <span class="text-3xl font-bold">{{ (theme.price)|number_format(0, '.', ' ') }}
+                                    €</span>
 
-                               class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                Selectionner
-                                <svg class="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                          clip-rule="evenodd"></path>
-                                </svg>
-                            </a>
+                                {% if theme.name == "Vers l'infinie et l'au dela !" %}
+                                    <span class="font-bold text-sm">/ kg</span>
+                                {% endif %}
+                            </div>
+                            <h3 class="text-slate-50 font-bold text-2xl mb-2">{{ theme.name }}</h3>
+                            <span class="text-slate-50 font-bold text-sm mt-1 bg-blue-500 px-3 py-1 rounded-full">Classique</span>
+                            <p class="text-slate-50 text-md mt-3">{{ theme.description }}</p>
+
+                            <div>
+                                <div class="flex justify-center mb-8">
+
+                                    <a class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl mt-10"
+                                       href="{{ path('user_order_theme', {corpse: corpse.id, theme: theme.id}) }}">
+                                        Selectionner
+                                        <svg class="ml-2 -mr-1 w-4 h-4 inline" fill="currentColor" viewBox="0 0 20 20"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                                  clip-rule="evenodd"></path>
+                                        </svg>
+                                    </a>
+
+                                </div>
+                            </div>
                         </div>
+
                     </div>
+
+
+                    {#                    <div class="w-72 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-698"> #}
+                    {#                        <img class="rounded-t-lg object-cover w-full h-40" #}
+                    {#                             src="{{ theme.media ? vich_uploader_asset(theme.media) : 'https://picsum.photos/id/1/200/300' }}" #}
+                    {#                             alt=""> #}
+                    {#                        <div class="p-5"> #}
+                    {#                            <a href="#"> #}
+                    {#                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ theme.name }}</h5> #}
+                    {#                            </a> #}
+                    {#                            <ul class="mb-3 font-normal text-gray-700 dark:text-gray-400"> #}
+                    {#                                <li>{{ theme.description }}</li> #}
+                    {#                            </ul> #}
+                    {#                            <h3 class="px-2 text-sm text-gray-700 dark:text-gray-400">Price : {{ theme.price }}€</h3> #}
+
+                    {#                            <a href="{{ path('user_order_theme', {corpse: corpse.id, theme: theme.id}) }}" #}
+
+                    {#                               class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> #}
+                    {#                                Selectionner #}
+                    {#                                <svg class="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" #}
+                    {#                                     xmlns="http://www.w3.org/2000/svg"> #}
+                    {#                                    <path fill-rule="evenodd" #}
+                    {#                                          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" #}
+                    {#                                          clip-rule="evenodd"></path> #}
+                    {#                                </svg> #}
+                    {#                            </a> #}
+                    {#                        </div> #}
+                    {#                    </div> #}
                 {% endfor %}
             {% else %}
                 <p>Aucun thème disponible de type classique</p>
@@ -52,33 +94,47 @@
             {% if themesClassic %}
                 {% for theme in themesSpecial %}
                     {# CARD #}
-                    <div class="w-72 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-698">
-                        <a href="#">
-                            <img class="rounded-t-lg object-cover w-full h-40"
-                                 src="{{ theme.media ? vich_uploader_asset(theme.media) : 'https://picsum.photos/id/1/200/300' }} "
-                                 alt="">
-                        </a>
-                        <div class="p-5">
-                            <a href="#">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ theme.name }}</h5>
-                            </a>
-                            <ul class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                                {{ theme.description }}
-                            </ul>
-                            <h3 class="px-2 text-sm text-gray-700 dark:text-gray-400">Price : {{ theme.price }}€</h3>
 
-                            <a href="{{ path('user_order_theme', {corpse: corpse.id, theme: theme.id}) }}"
-                               class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                Selectionner
-                                <svg class="ml-2 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                          clip-rule="evenodd"></path>
-                                </svg>
-                            </a>
+                    <div class="relative flex flex-col justify-between h-[400px] w-[325px] bg-gradient-to-b from-[#4031B3] to-indigo-500 p-4 pt-8 px-6 m-2 my-4 rounded-xl shadow-lg">
+                        <div>
+                            {% if loop.last %}
+                                <div class="absolute px-4 py-2 -top-5 left-[50%] -translate-x-[50%] bg-red-200 rounded-xl">
+                                    Le plus populaire
+                                </div>
+                            {% endif %}
+                            <div class="text-slate-50 font-extralight text-md">
+                                <span>à partir de</span>
+                                <span class="text-3xl font-bold">{{ (theme.price)|number_format(0, '.', ' ') }}
+                                    €</span>
+
+                                {% if theme.name == "Vers l'infinie et l'au dela !" %}
+                                    <span class="font-bold text-sm">/ kg</span>
+                                {% endif %}
+                            </div>
+                            <h3 class="text-slate-50 font-bold text-2xl mb-2">{{ theme.name }}</h3>
+                            <span class="text-slate-50 font-bold text-sm mt-1 bg-blue-500 px-3 py-1 rounded-full">Classique</span>
+                            <p class="text-slate-50 text-md mt-3">{{ theme.description }}</p>
+
+                            <div>
+                                <div class="flex justify-center mb-8">
+
+                                    <a class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl mt-10"
+                                       href="{{ path('user_order_theme', {corpse: corpse.id, theme: theme.id}) }}">
+                                        Selectionner
+                                        <svg class="ml-2 -mr-1 w-4 h-4 inline" fill="currentColor" viewBox="0 0 20 20"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                                  clip-rule="evenodd"></path>
+                                        </svg>
+                                    </a>
+
+                                </div>
+                            </div>
                         </div>
+
                     </div>
+
                 {% endfor %}
             {% else %}
                 <p>Aucun thème disponible de type spécial</p>
