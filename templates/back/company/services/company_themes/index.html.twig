@@ -54,7 +54,7 @@
                             <div>
 
                                 <div class="flex justify-center mb-8">
-                                    {% if detailedTheme.canBeSwitched == true %}
+                                    {% if detailedTheme.canBeSwitched %}
 
                                         <a class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl"
                                            href="{{ path("switch_company_themes", {"id" : detailedTheme.theme.id }) }}">
