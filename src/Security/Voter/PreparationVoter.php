@@ -49,13 +49,12 @@ class PreparationVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case self::EDIT:
+                return $this->canEdit($subject, $user);
                 break;
             case self::VIEW:
-                // logic to determine if the user can VIEW
-                // return true or false
+                return $this->canView($subject, $user);
                 break;
             case self::ORDER:
-
                 return $this->canOrder($subject, $user);
             case self::ORDER_CLASSIC:
 
@@ -63,6 +62,26 @@ class PreparationVoter extends Voter
         }
 
         return false;
+    }
+
+    private function canEdit(Preparation $preparation, User $user): bool
+    {
+
+        if ($preparation->getDeletedAt() != null) return false;
+
+        return $preparation->getModelMaterial()->getModel()->getCompany()->getId() === $user->getCompany()->getId() &&
+            $preparation->getStatus() != Preparation::FUNERAL_CLOSE_PROCESSING &&
+            $preparation->getStatus() != Preparation::FUNERAL_CANCEL;
+
+    }
+
+    private function canView(Preparation $preparation, User $user): bool
+    {
+
+        if ($preparation->getDeletedAt() != null) return false;
+
+        return $preparation->getModelMaterial()->getModel()->getCompany()->getId() === $user->getCompany()->getId();
+
     }
 
     private function canOrder(Corpse $corpse, User $user): bool

@@ -73,7 +73,7 @@ class GeneralVoter extends Voter
     private function isOwned($entity, $user): bool
     {
 
-        if ($this->getUser()->getRoles()[0] == "ROLE_ADMIN") return true;
+        if ($user->getRoles()[0] == "ROLE_ADMIN") return true;
         else if ($entity->getCompany() === $user->getCompany()->getId()) return false;
 
         return true;

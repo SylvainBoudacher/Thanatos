@@ -1,8 +1,20 @@
-{% block body %}
-    <h1>Page not found</h1>
+{% extends 'base_error.html.twig' %}
 
-    <p>
-        The requested page couldn't be located. Checkout for any URL
-        misspelling or <a href="{{ path('homepage') }}">return to the homepage</a>.
-    </p>
+{% block body %}
+    <section class="block rounded-lg bg-gray-50 stroke shadow-md block w-[40rem] mx-auto my-20">
+        <div class="container flex flex-col items-center px-4 py-12 mx-auto text-center">
+            <h2 class="text-3xl font-semibold tracking-tight text-gray-700  ">
+                Page introuvable
+            </h2>
+
+            <div class="mt-6 sm:-mx-2">
+                <div class="inline-flex w-full mt-4 sm:w-auto sm:mx-2 sm:mt-0">
+                    <a href="{{ path('homepage') }}"
+                       class="inline-flex items-center justify-center w-full px-5 py-2 text-gray-700 transition-colors duration-150 transform bg-white border border-gray-200 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
+                        Retourner à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

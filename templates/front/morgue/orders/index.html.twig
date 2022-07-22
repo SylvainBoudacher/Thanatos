@@ -1,0 +1,204 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+
+    <div class="mx-auto  text-center lg:mb-16 mb-8 pt-8">
+        <h2 class="mb-3 text-3xl lg:text-4xl font-extrabold text-gray-900 ">Mes commandes</h2>
+    </div>
+
+    {# PREPARATIONS #}
+    {% for preparation in preparations %}
+        <div class="container px-6 mx-auto pb-6 ">
+
+            <div class="flex flex-row  pb-4 justify-start ">
+                <p class="font-bold text-3xl pb-3 text-gray-800">Commande #{{ preparation.id }}</p>
+                <a href="{{ path('company_order', {id: preparation.id}) }}">
+                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir le détail</p>
+                </a>
+                <a href="#">
+                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir la facture</p>
+                </a>
+                <svg class="w-6  xmlns=" http:
+                //www.w3.org/2000/svg" viewBox="0 0 24 24" />
+                <path fill="none" d="M0 0h24v24H0Z"></path>
+                <path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path>
+                </svg>
+            </div>
+
+            <section class="dark:bg-white rounded-xl shadow-md ">
+                <div class="container px-9 py-10 mx-auto rounded-t-lg border border-slate-200">
+                    <div class="flex flex-row">
+                        <div class="md:flex md:items-center ">
+                            <div class="grid pr-4">
+                                <div>
+                                    <div class="bg-gray-200 rounded-lg shadow-xs">
+                                        <img class="w-[8rem] object-cover rounded-xl aspect-square max-w-[8rem]"
+                                             src="{{ asset('images/commandeLogo.svg') }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class=" max-w-lg min-w-64 mx-4 h-full ">
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
+                                    {% if preparation.status == constant('FUNERAL_NEW', preparation) %}
+                                    Nouvelle commande
+                                {% elseif
+                                    preparation.status == constant('FUNERAL_ACCEPT', preparation) or
+                                    preparation.status == constant('FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL', preparation) %}
+                                    En attente qu'un chauffeur s'occupe de vous transmettre le corps
+                                {% elseif preparation.status == constant('FUNERAL_DRIVER_BRINGS_TO_FUNERAL', preparation) %}
+                                    En attente de votre confirmation que le corps soit bien arrivé.
+                                {% elseif preparation.status == constant('FUNERAL_CORPSE_ARRIVES_TO_FUNERAL', preparation) %}
+                                    En attente de la prise en charge du corps de votre part.
+                                {% elseif preparation.status == constant('FUNERAL_IN_PROGRESS_PROCESSING', preparation) %}
+                                    En cours du traitement du corps de votre part.
+                                {% elseif preparation.status == constant('FUNERAL_CLOSE_PROCESSING', preparation) %}
+                                    En attente qu'un chauffeur viennent rechercher le corps.
+                                {% elseif preparation.status == constant('FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER', preparation) %}
+                                    Un chauffeur accepte de récupérer le corps.
+                                {% elseif preparation.status == constant('FUNERAL_DRIVER_CLOSE_BRING', preparation) %}
+                                    Commande close
+                                    {% endif %}<br>
+
+                                </h1>
+
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    {{ preparation.price }}€
+                                </p>
+                            </div>
+
+                            <div class=" w-64 mx-4 h-full ">
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps
+                                    à s'occuper</h1>
+                                {% set corpse = preparation.corpse %}
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    {{ corpse.firstname }} {{ corpse.lastname }}
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {# End of the card #}
+                <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
+                    <div class="flex flex-row">
+
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                        <div class="bg-blue-600 h-2.5 rounded-full"
+
+                                {% if preparation.status == 'FUNERAL_NEW' %} style="width: 5% ">{% endif %}
+                            {% if preparation.status == 'FUNERAL_ACCEPT' %} style="width: 24% ">{% endif %}
+                            {% if preparation.status == 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' or
+                                preparation.status == 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' %} style="width: 43% ">{% endif %}
+                            {% if preparation.status == 'FUNERAL_CORPSE_ARRIVES_TO_FUNERAL' %} style="width: 62% ">{% endif %}
+                            {% if preparation.status == 'FUNERAL_IN_PROGRESS_PROCESSING' %} style="width: 81% ">{% endif %}
+                            {% if preparation.status == 'FUNERAL_CLOSE_PROCESSING' %} style="width: 100% ">{% endif %}
+                        </div>
+                    </div>
+                    <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                        <p class="text-sm">Nouvelle Commande</p>
+                        <p class="text-sm">Commande acceptée</p>
+                        <p class="text-sm">En attente du corps</p>
+                        <p class="text-sm">En attente de prise en charge du corps</p>
+                        <p class="text-sm">En cours de traitement du corps</p>
+                        <p class="text-sm">Préparation terminé</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endfor %}
+
+    {# PREPARATIONS CLOSE #}
+
+    {% for preparation in preparationsClose %}
+        <div class="container px-6 mx-auto pb-6 ">
+
+            <div class="flex flex-row  pb-4 justify-start ">
+                <p class="font-bold text-3xl pb-3 text-gray-800">Commande #{{ preparation.id }}</p>
+                <a href="{{ path('company_order', {id: preparation.id}) }}">
+                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir le détail</p>
+                </a>
+                <a href="#">
+                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir la facture</p>
+                </a>
+                <svg class="w-6  xmlns=" http:
+                //www.w3.org/2000/svg" viewBox="0 0 24 24" />
+                <path fill="none" d="M0 0h24v24H0Z"></path>
+                <path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path>
+                </svg>
+            </div>
+
+            <section class="dark:bg-white	 rounded-xl shadow-md bg-red ">
+                <div class="container px-9 py-10 mx-auto rounded-t-lg border border-slate-200">
+                    <div class="flex flex-row">
+                        <div class="md:flex md:items-center ">
+                            <div class="grid pr-4">
+                                <div>
+                                    <div class="bg-gray-200 rounded-lg shadow-xs">
+                                        <img class="w-[8rem] object-cover rounded-xl aspect-square max-w-[8rem]"
+                                             src="{{ asset('images/commandeLogo.svg') }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class=" max-w-lg min-w-64 mx-4 h-full ">
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
+                                    {% if preparation.status == constant('FUNERAL_CANCEL', preparation) %}
+                                        Commande annulée
+                                    {% endif %}
+
+                                </h1>
+
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    {{ preparation.price }}€
+                                </p>
+                            </div>
+
+                            <div class=" w-64 mx-4 h-full ">
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps
+                                    à s'occuper</h1>
+                                {% set corpse = preparation.corpse %}
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    {{ corpse.firstname }} {{ corpse.lastname }}
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {# End of the card #}
+                <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
+                    <div class="flex flex-row">
+
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                        <div class="bg-blue-600 h-2.5 rounded-full"
+                             style="width: 100% ">
+                        </div>
+                    </div>
+                    <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                        {% if preparation.status == 'FUNERAL_CANCEL' %}
+                            <p class="text-sm">Commande annulée</p>
+                        {% elseif preparation.status == 'FUNERAL_CLOSE_PROCESSING' %}
+                            <p class="text-sm">Commande close</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endfor %}
+
+
+    {# IF NO PREPARATIONS #}
+    {% if preparations is empty and preparationsClose is empty %}
+        <section class="block rounded-lg bg-gray-50 stroke shadow-md block w-[40rem] mx-auto">
+            <div class="container flex flex-col items-center px-4 py-12 mx-auto text-center">
+                <h2 class="text-3xl font-semibold tracking-tight text-gray-700  ">
+                    Vous avez aucune <br> commandes en cours.
+                </h2>
+            </div>
+        </section>
+    {% endif %}
+
+{% endblock %}

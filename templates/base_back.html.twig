@@ -2,25 +2,25 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}{% endblock %}</title>
+        <title>{% block title %}Thanathos{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle`
                and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
+            {# {{ encore_entry_link_tags('app') }} #}
             <script src="https://cdn.tailwindcss.com"></script>
-            <link rel="stylesheet" href="https://unpkg.com/flowbite@1.3.4/dist/flowbite.min.css" />
+            <link rel="stylesheet" href="https://unpkg.com/flowbite@1.3.4/dist/flowbite.min.css"/>
         {% endblock %}
 
         {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
+            {# {{ encore_entry_script_tags('app') }} #}
         {% endblock %}
     </head>
     <body class="min-h-screen">
-    {{ include('components/navBar/navBar.html.twig') }}
+        {{ include('components/navBar/navBar.html.twig') }}
 
         {% block body %}
         {% endblock %}
-    <script src="{{ asset("js/toasts.js") }}"></script>
+        <script src="{{ asset("js/toasts.js") }}"></script>
     </body>
 
     <footer>

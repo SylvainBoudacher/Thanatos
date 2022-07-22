@@ -1,0 +1,201 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+
+    <div class="mx-auto text-center pt-8">
+        <h1 class="mb-3 text-3xl lg:text-4xl font-extrabold text-gray-900 ">Commande #{{ preparation.id }}</h1>
+        <p class="mt-4 xl:mt-3 text-blue-700 text-xl">
+            {% if preparation.status == constant('FUNERAL_NEW', preparation) %}
+                Nouvelle commande
+            {% elseif
+                preparation.status == constant('FUNERAL_ACCEPT', preparation) or
+                preparation.status == constant('FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL', preparation) %}
+                En attente qu'un chauffeur s'occupe de vous transmettre le corps
+            {% elseif preparation.status == constant('FUNERAL_DRIVER_BRINGS_TO_FUNERAL', preparation) %}
+                En attente de votre confirmation que le corps soit bien arrivé.
+            {% elseif preparation.status == constant('FUNERAL_CORPSE_ARRIVES_TO_FUNERAL', preparation) %}
+                En attente de la prise en charge du corps de votre part.
+            {% elseif preparation.status == constant('FUNERAL_IN_PROGRESS_PROCESSING', preparation) %}
+                En cours du traitement du corps de votre part.
+            {% elseif preparation.status == constant('FUNERAL_CLOSE_PROCESSING', preparation) %}
+                En attente qu'un chauffeur viennent rechercher le corps.
+            {% elseif preparation.status == constant('FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER', preparation) %}
+                Un chauffeur accepte de récupérer le corps.
+            {% elseif preparation.status == constant('FUNERAL_DRIVER_CLOSE_BRING', preparation) %}
+                Commande close
+            {% endif %} <br>
+            <span class="underline decoration-blue-500">{{ preparation.price }}€</span>
+        </p>
+    </div>
+
+    <section class="bg-white">
+        <div class="container px-6 py-10 mx-auto">
+            <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
+                <div class="p-8 space-y-3 border-2 border-blue-400  rounded-xl">
+                    <span class="inline-block text-blue-500 ">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
+                        </svg>
+                    </span>
+
+                    <h1 class="text-2xl font-semibold text-gray-700 capitalize ">Corps</h1>
+
+                    {% set corpse = preparation.corpse %}
+                    <ul role="list" class="my-7 space-y-5 text-gray-500 ">
+                        <li class="flex space-x-3">
+                            <span class="text-base font-normal leading-tight text-gray-500 "> {{ corpse.firstname }} {{ corpse.lastname }}
+                            </span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="text-base font-normal leading-tight text-gray-500 ">
+                                Année de naissance : {{ corpse.birthdate | date('l d F Y') }}
+                            </span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="text-base font-normal leading-tight text-gray-500 ">
+                                Date de son décès : {{ corpse.dayOfDeath | date('l d F Y') }}
+                            </span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="text-base font-normal leading-tight text-gray-500 ">
+                                Sexe de la personne : {{ corpse.sex }}
+                            </span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <p class="text-base font-normal leading-tight text-gray-500 ">
+                                Cause de la mort :
+                                <span>{{ corpse.causeOfDeath }}</span>
+                            </p>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="text-base font-normal leading-tight text-gray-500">
+                                Taille / Poids : {{ corpse.height }}m / {{ corpse.weight }}kg
+                            </span>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="p-8 space-y-3 border-2 border-blue-400  rounded-xl">
+                    <span class="inline-block text-blue-500 ">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
+                        </svg>
+                    </span>
+                    {% set theme = preparation.theme %}
+
+                    <h1 class="text-2xl font-semibold text-gray-700 capitalize ">Thème : {{ theme.name }}</h1>
+
+                    <ul role="list" class="my-7 space-y-5 text-gray-500 ">
+                        <li class="flex space-x-3">
+                            <span class="text-base font-normal leading-tight text-gray-500 "> Prix
+                                : {{ preparation.theme.price }}
+                            </span>
+                        </li>
+                        <li class="flex space-x-3">
+                            <span class="text-base font-normal leading-tight text-gray-500 ">
+                                Description :
+                                <br> <span>{{ theme.description }}</span>
+                            </span>
+                        </li>
+
+                    </ul>
+                </div>
+
+                {% if preparation.theme.type == constant('TYPE_CLASSIC', preparation.theme ) %}
+
+                    <div class="p-8 space-y-3 border-2 border-blue-400  rounded-xl">
+                        <span class="inline-block text-blue-500 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
+                            </svg>
+                        </span>
+                        {% set extra = preparation.modelExtra.extra %}
+                        {% set material = preparation.modelMaterial.material %}
+                        {% set model = preparation.modelExtra.model %}
+                        {% set painting = preparation.painting %}
+
+                        <h1 class="text-2xl font-semibold text-gray-700 capitalize ">Modèle : {{ model.name }}</h1>
+
+                        <ul role="list" class="my-7 space-y-5 text-gray-500 ">
+                            <li class="flex space-x-3">
+                                <span class="text-base font-normal leading-tight text-gray-500 "> <span
+                                            class="font-bold">Description</span>
+                                    : {{ model.description }}
+                                </span>
+                            </li>
+
+                            <li class="flex space-x-3">
+                                <span class="text-base font-normal leading-tight text-gray-500 "> Matériau
+                                    : {{ material.name }}
+                                </span>
+                            </li>
+
+                            <li class="flex space-x-3">
+                                <span class="text-base font-normal leading-tight text-gray-500 "> Couleur
+                                    : {{ painting.name }}
+                                </span>
+                            </li>
+                            <li class="flex space-x-3">
+                                <span class="text-base font-normal leading-tight text-gray-500 "> Extra
+                                    : {{ extra.name }}
+                                </span>
+                            </li>
+
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    {% if
+        preparation.status == constant('FUNERAL_NEW', preparation) or
+        preparation.status == constant('FUNERAL_DRIVER_BRINGS_TO_FUNERAL', preparation) or
+        preparation.status == constant('FUNERAL_CORPSE_ARRIVES_TO_FUNERAL', preparation) or
+        preparation.status == constant('FUNERAL_IN_PROGRESS_PROCESSING', preparation) %}
+
+        <div class="flex justify-end px-20">
+            {% if preparation.status == constant('FUNERAL_NEW', preparation) %}
+                <a href="{{ path('company_order_change_status', {id: preparation.id, cancel: true}) }}" type="button"
+                   class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                    Annuler
+                </a>
+            {% endif %}
+
+            <a href="{{ path ('company_order_change_status', {id: preparation.id}) }}" type="button"
+               class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                <span>
+                    {% if preparation.status == constant('FUNERAL_NEW', preparation) %}
+                        Accepter la commande
+                    {% elseif preparation.status == constant('FUNERAL_DRIVER_BRINGS_TO_FUNERAL', preparation) %}
+                        Corps bien reçu
+                    {% elseif preparation.status == constant('FUNERAL_CORPSE_ARRIVES_TO_FUNERAL', preparation) %}
+                        Prendre en charge le corps
+                    {% elseif preparation.status == constant('FUNERAL_IN_PROGRESS_PROCESSING', preparation) %}
+                        Commande terminée
+                    {% endif %}
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 inline" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </a>
+        </div>
+
+    {% endif %}
+
+{% endblock %}
