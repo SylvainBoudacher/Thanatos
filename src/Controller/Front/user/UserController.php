@@ -87,7 +87,7 @@ class UserController extends AbstractController
             $entityManager->flush();
             $this->addFlash(
                 'success',
-                'Votre carte à bien été rajouter'
+                'Votre carte a bien été rajoutée'
             );
             return $this->redirectToRoute('app_settings_wallet');
         }
