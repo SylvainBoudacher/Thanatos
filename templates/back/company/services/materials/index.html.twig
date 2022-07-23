@@ -8,7 +8,7 @@
 
             <div>
 
-                <h1 class="text-3xl text-slate-800 mb-6 font-bold ">Gestion de vos Matériaux</h1>
+                <h1 class="text-3xl text-slate-800 mb-6 font-bold ">Gestion de vos matériaux</h1>
 
                 <section class="flex flex-col min-h-[150px] bg-gray-100 p-4 rounded-lg shadow-md mb-6">
                     <p class="text-slate-700 text-lg font-light mb-2">
@@ -132,7 +132,7 @@
                                                     <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
                                                         <a href="{{ path("details_material", {"id" : materialSuscribedByCompany.id}) }}"
                                                            class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a>
-                                                        
+
                                                         {% if materialSuscribedByCompany.canBeSwitched %}
                                                             <a href="{{ path("switch_material", {"id" : materialSuscribedByCompany.id}) }}"
                                                                class="text-red-600 dark:text-red-500 hover:underline">Retirer</a>
