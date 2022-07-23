@@ -80,7 +80,7 @@ class MaterialController extends AbstractController
                 return $p->getModelMaterial()->getId();
         }, $preparations);
 
-        return !in_array($material->getId(), $preparations);
+        return !in_array($material->getId(), $preparations) && empty($material->getModelMaterials()->toArray());
     }
 
     #[Route('/details/{id}', name: 'details_material')]
@@ -137,7 +137,6 @@ class MaterialController extends AbstractController
     public function delete_materials(EntityManagerInterface $em, MaterialRepository $materialRep, Material $material): Response
     {
         $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $material);
-
         if (!$this->canBeDeleted($material)) throw $this->createAccessDeniedException();
 
         if ($material->getMedia() != null) $em->remove($material->getMedia());
@@ -165,7 +164,7 @@ class MaterialController extends AbstractController
 
         if ($companyMaterial) {
             if (!$this->canBeSwitched($material)) {
-                $this->addFlash("error", "Le matériaux " . $material->getName() . " ne peut être retiré car il est utilisé dans une commande");
+                $this->addFlash("error", "Le matériaux " . $material->getName() . " ne peut être retiré car il est utilisé dans une commande ou un modèle");
                 return $this->redirectToRoute("view_materials");
             }
             $em->remove($companyMaterial);

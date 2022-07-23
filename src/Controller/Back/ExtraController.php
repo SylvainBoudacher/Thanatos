@@ -78,7 +78,7 @@ class ExtraController extends AbstractController
                 return $p->getModelMaterial()->getId();
         }, $preparations);
 
-        return !in_array($extra->getId(), $preparations);
+        return !in_array($extra->getId(), $preparations) && empty($extra->getModelExtras()->toArray());
     }
 
     #[Route('/details/{id}', name: 'details_extra')]
@@ -162,7 +162,7 @@ class ExtraController extends AbstractController
 
         if ($companyExtra) {
             if (!$this->canBeSwitched($extra)) {
-                $this->addFlash("error", "L'extra " . $extra->getName() . " ne peut être retiré car il est utilisé dans une commande");
+                $this->addFlash("error", "L'extra " . $extra->getName() . " ne peut être retiré car il est utilisé dans une commande ou un modèle");
                 return $this->redirectToRoute("view_extras");
             }
             $em->remove($companyExtra);
