@@ -81,10 +81,6 @@ class CompanyOrderController extends AbstractController
     {
         $this->denyAccessUnlessGranted(PreparationVoter::EDIT, $preparation);
 
-        /*dump($preparation->getStatus());
-        dump($request->query->all());
-        dd('end');*/
-
         if ($request->query->getBoolean('cancel') && $preparation->getStatus() == Preparation::FUNERAL_NEW) { // preparation cancel
 
             $preparation->setStatus(Preparation::FUNERAL_CANCEL);
