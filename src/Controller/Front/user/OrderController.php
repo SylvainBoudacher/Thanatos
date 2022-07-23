@@ -337,7 +337,7 @@ class OrderController extends AbstractController
     }
 
     #[Route('/supprimer-corps-declaration/{id}', name: 'delete_corpse_declaration')]
-    public function delete_corpse_declaration(Corpse $corpse, OrderRepository $orderRep)
+    public function delete_corpse_declaration(Corpse $corpse, OrderRepository $orderRep): Response
     {
 
         $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);

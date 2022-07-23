@@ -6,6 +6,7 @@ use App\Entity\Media;
 use App\Entity\Theme;
 use App\Form\ThemeType;
 use App\Repository\ThemeRepository;
+use App\Security\Voter\GeneralVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,11 +21,24 @@ class AdminThemeController extends AbstractController
     #[Route('/', name: 'home_theme')]
     public function index(ThemeRepository $themeRep): Response
     {
-        $themes = $themeRep->findAll();
+        $themes = $themeRep->findBy(['deletedAt' => null]);
+
+        foreach ($themes as $theme) {
+            $theme->canBeDeleted = $this->canDelete($theme);
+        }
 
         return $this->render('back/admin/themes/index.html.twig', [
             "themes" => $themes
         ]);
+    }
+
+    private function canDelete(Theme $entity): bool
+    {
+
+        if (!empty($entity->getCompanyThemes())) return false;
+        if (!empty($entity->getPreparations())) return false;
+
+        return true;
     }
 
     #[Route('/créer', name: 'create_theme')]
@@ -48,9 +62,12 @@ class AdminThemeController extends AbstractController
     }
 
     #[Route('/supprimer/{id}', name: 'delete_theme')]
-    public function delete(EntityManagerInterface $em, ThemeRepository $themeRep, int $id,): Response
+    public function delete(EntityManagerInterface $em, ThemeRepository $themeRep, Theme $theme): Response
     {
-        $theme = $themeRep->find($id);
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $theme);
+        $this->denyAccessUnlessGranted(GeneralVoter::PREPARATION_INCLUDED, $theme);
+        $this->denyAccessUnlessGranted(GeneralVoter::DELETE, $theme);
+
         $media = $theme->getMedia();
 
         if ($media instanceof Media) $em->remove($media);
@@ -64,9 +81,10 @@ class AdminThemeController extends AbstractController
     }
 
     #[Route('/modifier/{id}', name: 'modify_theme')]
-    public function modify(EntityManagerInterface $em, Request $request, ThemeRepository $themeRep, int $id): Response
+    public function modify(EntityManagerInterface $em, Request $request, ThemeRepository $themeRep, Theme $theme): Response
     {
-        $theme = $themeRep->find($id);
+        $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $theme);
+
         $form = $this->createForm(ThemeType::class, $theme);
         $form->handleRequest($request);
 

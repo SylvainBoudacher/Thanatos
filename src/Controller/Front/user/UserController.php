@@ -99,7 +99,7 @@ class UserController extends AbstractController
 
 
     #[Route('/portefeuille/supprimer-carte/{id}', name: 'app_settings_wallet_delete')]
-    public function delete(Request $request, CreditCard $creditCardRep)
+    public function delete(Request $request, CreditCard $creditCardRep): Response
     {
         $em = $this->getDoctrine()->getManager();
         $em->remove($creditCardRep);

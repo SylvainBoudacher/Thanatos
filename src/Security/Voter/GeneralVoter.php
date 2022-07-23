@@ -12,6 +12,7 @@ class GeneralVoter extends Voter
     public const EDIT = 'EDIT';
     public const VIEW = 'VIEW';
     public const VIEW_EDIT = 'VIEW_EDIT';
+    public const DELETE = 'DELETE';
     public const OWNED_COMPANY = 'OWNED_COMPANY';
     public const PREPARATION_INCLUDED = 'PREPARATION_INCLUDED';
 
@@ -20,7 +21,7 @@ class GeneralVoter extends Voter
 
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW, self::VIEW_EDIT, self::OWNED_COMPANY, self::PREPARATION_INCLUDED])
+        return in_array($attribute, [self::EDIT, self::VIEW, self::VIEW_EDIT, self::OWNED_COMPANY, self::PREPARATION_INCLUDED, self::DELETE])
             && (
                 $subject instanceof Entity\Model ||
                 $subject instanceof Entity\Burial ||
@@ -56,6 +57,8 @@ class GeneralVoter extends Voter
                 return $this->isOwned($subject, $user);
             case self::PREPARATION_INCLUDED:
                 return $this->isNotUsedInPreparation($subject);
+            case self::DELETE:
+                return $this->canDeleteTheme($subject);
                 break;
         }
 
@@ -83,6 +86,14 @@ class GeneralVoter extends Voter
     {
 
         if (!empty($entity->getPreparations())) return false;
+
+        return true;
+    }
+
+    private function canDeleteTheme(Entity\Theme $entity): bool
+    {
+
+        if (!empty($entity->getCompanyThemes())) return false;
 
         return true;
     }

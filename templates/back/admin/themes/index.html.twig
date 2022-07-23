@@ -50,7 +50,7 @@
                                         {% for theme in themes %}
                                             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                                 <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ theme.name }}</td>
-                                                <td class="min-w-[35rem] max-w-[36rem] truncate py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">{{ theme.description }}</td>
+                                                <td class="min-w-[35rem] max-w-[36rem] py-4 px-6 text-sm font-medium text-gray-500 whitespace-wrap dark:text-white">{{ theme.description }}</td>
                                                 <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
                                                     {% if theme.type == constant('TYPE_CLASSIC', theme) %}
                                                         Classique
@@ -65,8 +65,12 @@
                                                     {#                                                <a href="{{ path("details_theme", {"id" : theme.id}) }}" class="text-slate-600 mr-2 dark:text-slate-500 hover:underline">Détails</a> #}
                                                     <a href="{{ path("modify_theme", {"id" : theme.id}) }}"
                                                        class="text-blue-600 mr-2 dark:text-blue-500 hover:underline">Modifier</a>
-                                                    <a href="{{ path("delete_theme", {"id" : theme.id}) }}"
-                                                       class="text-red-600 dark:text-red-500 hover:underline">Supprimer</a>
+                                                    {% if theme.canBeDeleted %}
+                                                        <a href="{{ path("delete_theme", {"id" : theme.id}) }}"
+                                                           class="text-red-600 dark:text-red-500 hover:underline">Supprimer</a>
+                                                    {% else %}
+                                                        <span class="text-green-600 dark:text-green-500 pr-2">Utilisé</span>
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                         {% endfor %}
