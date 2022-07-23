@@ -132,7 +132,7 @@ class PaintingController extends AbstractController
     public function delete_painting(EntityManagerInterface $em, PaintingRepository $paintingRep, Painting $painting): Response
     {
         $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $painting);
-        if (!$this->canBeDeleted($painting)) dd('page error');
+        if (!$this->canBeDeleted($painting)) throw $this->createAccessDeniedException();
 
         $media = $painting->getMedia();
         $em->remove($media);

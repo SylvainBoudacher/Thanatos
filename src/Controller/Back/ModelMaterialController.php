@@ -38,7 +38,7 @@ class ModelMaterialController extends AbstractController
     public function manage_model_materials(Model $model, GetterService $getterService, ModelRepository $modelRep, CompanyMaterialRepository $companyMaterialRep): Response
     {
         $company = $getterService->getCompanyOfUser();
-        if ($model->getCompany()->getId() !== $company?->getId()) dd('page error');
+        if ($model->getCompany()->getId() !== $company?->getId()) throw $this->createAccessDeniedException();
 
         $companyMaterials = $companyMaterialRep->findBy(["company" => $company]);
 
