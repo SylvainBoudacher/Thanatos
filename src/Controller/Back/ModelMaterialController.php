@@ -7,6 +7,7 @@ use App\Repository\CompanyMaterialRepository;
 use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelRepository;
 use App\Service\GetterService;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +32,7 @@ class ModelMaterialController extends AbstractController
     }
 
     #[Route('/manage/{id}', name: 'manage_model_materials')]
-    public function manage_model_materials(int $id, GetterService $getterService, ModelRepository $modelRep, CompanyMaterialRepository $companyMaterialRep, ModelMaterialRepository $modelMaterialRep): Response
+    public function manage_model_materials(int $id, GetterService $getterService, ModelRepository $modelRep, CompanyMaterialRepository $companyMaterialRep, ModelMaterialRepository $modelMaterialRep, Request $request): Response
     {
         $model = $modelRep->findOneBy(["id" => $id]);
         $company = $getterService->getCompanyOfUser();
@@ -68,13 +69,27 @@ class ModelMaterialController extends AbstractController
             ])
             ->getForm();
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $CompanyMaterialsKeeped = $data["defaultCompanyMaterials"];
+
+            foreach ($exposedCompanyMaterialsByTheCompany as $companyMaterial) {
+                $material = $companyMaterial->getMaterial();
+
+                foreach ($CompanyMaterialsKeeped as $CompanyMaterialKept) {
+                    $materialKept = $CompanyMaterialKept->getMaterial();
+                    if ($material->getId() === $materialKept->getId()) {
+
+                    }
+                }
+            }
+        }
+
         return $this->render("back/company/services/model_materials/manage.html.twig", [
             "model" => $modelRep,
             "form" => $form->createView()
         ]);
     }
-
-
-
 
 }
