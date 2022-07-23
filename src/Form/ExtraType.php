@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Extra;
-use App\Utils\MediaConstraints;
 use App\Utils\StyleClasses;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -45,11 +44,9 @@ class ExtraType extends AbstractType
                 "label_attr" => [
                     "class" => StyleClasses::lABEL_DEFAULT
                 ],
-                'constraints' => MediaConstraints::$IMAGE,
                 "attr" => [
                     "placeholder" => "Entrez le prix du matériaux...",
                     "class" => StyleClasses::TEXT_INPUT_DEFAULT,
-                    'accept' => 'image/*'
                 ]
             ])
             ->add('media', MediaType::class);

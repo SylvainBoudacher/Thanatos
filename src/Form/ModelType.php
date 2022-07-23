@@ -4,8 +4,8 @@ namespace App\Form;
 
 use App\Entity\Burial;
 use App\Entity\Model;
-use App\Utils\StyleClasses;
 use App\Utils\MediaConstraints;
+use App\Utils\StyleClasses;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -22,7 +22,6 @@ class ModelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         MediaConstraints::init();
-//        dd(MediaConstraints::$IMAGE);
         $builder
             ->add('name', TextType::class, [
                 "label" => "Nom",
