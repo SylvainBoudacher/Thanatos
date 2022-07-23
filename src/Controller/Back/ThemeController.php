@@ -28,6 +28,7 @@ class ThemeController extends AbstractController
 
         $themes = $themeRep->findBy([
             'deletedAt' => null,
+            'type' => Theme::TYPE_CLASSIC,
         ], [
             'type' => 'ASC',
             'name' => 'ASC'
@@ -55,7 +56,7 @@ class ThemeController extends AbstractController
         $company = $this->getUser()->getCompany();
 
         $em = $this->getDoctrine()->getManager();
-        $preparations = $em->getRepository(Preparation::class)->getPreparationsByCompany($company);
+        $preparations = $em->getRepository(Preparation::class)->getPreparationsByCompanyAndTheme($company, $theme);
 
         return empty($preparations);
     }
@@ -68,6 +69,8 @@ class ThemeController extends AbstractController
         $company = $user->getCompany();
 
         $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $theme);
+
+        if ($theme->getType() != Theme::TYPE_CLASSIC) throw $this->createAccessDeniedException();
 
         // TODO : Meilleur vérification plus tard (genre theme désactivé par thanatos)
         if (!empty($company)) {

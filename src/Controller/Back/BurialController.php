@@ -78,7 +78,7 @@ class BurialController extends AbstractController
     {
         $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $burial);
 
-        if (!empty($burial->getModels()->toArray())) dd('page error');
+        if (!empty($burial->getModels()->toArray())) throw $this->createAccessDeniedException();
 
         $burial->setDeletedAt(new DateTime());
         $em->flush();

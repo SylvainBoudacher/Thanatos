@@ -6,7 +6,9 @@
         <div class="flex flex-row h-100 w-full">
             <div class="flex flex-col w-64 h-screen py-8 bg-white border-r dark:bg-gray-800 dark:border-gray-600">
                 <div class="flex flex-col items-center mt-6 -mx-2">
-                    <img class="object-cover w-24 h-24 mx-2 rounded-full" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar">
+                    <img class="object-cover w-24 h-24 mx-2 rounded-full"
+                         src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+                         alt="avatar">
                     <h4 class="mx-2 mt-2 font-medium text-gray-800 dark:text-gray-200 hover:underline">John Doe</h4>
                 </div>
 
@@ -16,19 +18,25 @@
                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <g stroke-width="2" fill="none" stroke="#FFF">
                                     <path d="M12 2a5 5 0 1 0 0 10 5 5 0 1 0 0-10Z"></path>
-                                    <path fill="none" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14h.35c1.51 0 2.78 1.12 2.97 2.62l.39 3.12c.14 1.19-.79 2.24-1.99 2.24H5.25c-1.21 0-2.14-1.06-1.99-2.25l.39-3.13c.18-1.51 1.46-2.63 2.97-2.63h.35"></path>
+                                    <path fill="none" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M17 14h.35c1.51 0 2.78 1.12 2.97 2.62l.39 3.12c.14 1.19-.79 2.24-1.99 2.24H5.25c-1.21 0-2.14-1.06-1.99-2.25l.39-3.13c.18-1.51 1.46-2.63 2.97-2.63h.35"></path>
                                 </g>
                             </svg>
                             <span class="mx-4 font-medium">{{ order.possessor.lastname }} {{ order.possessor.firstname }}</span>
                         </div>
 
                         <div class="flex items-center px-4 py-2 mt-5 text-gray-600 dark:text-gray-400  ">
-                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2721 10.2721C16.2721 12.4813 14.4813 14.2721 12.2721 14.2721C10.063 14.2721 8.27214 12.4813 8.27214 10.2721C8.27214 8.063 10.063 6.27214 12.2721 6.27214C14.4813 6.27214 16.2721 8.063 16.2721 10.2721ZM14.2721 10.2721C14.2721 11.3767 13.3767 12.2721 12.2721 12.2721C11.1676 12.2721 10.2721 11.3767 10.2721 10.2721C10.2721 9.16757 11.1676 8.27214 12.2721 8.27214C13.3767 8.27214 14.2721 9.16757 14.2721 10.2721Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.79417 16.5183C2.19424 13.0909 2.05438 7.3941 5.48178 3.79418C8.90918 0.194258 14.6059 0.0543983 18.2059 3.48179C21.8058 6.90919 21.9457 12.606 18.5183 16.2059L12.3124 22.7241L5.79417 16.5183ZM17.0698 14.8268L12.243 19.8965L7.17324 15.0698C4.3733 12.404 4.26452 7.9732 6.93028 5.17326C9.59603 2.37332 14.0268 2.26454 16.8268 4.93029C19.6267 7.59604 19.7355 12.0269 17.0698 14.8268Z"/>
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M16.2721 10.2721C16.2721 12.4813 14.4813 14.2721 12.2721 14.2721C10.063 14.2721 8.27214 12.4813 8.27214 10.2721C8.27214 8.063 10.063 6.27214 12.2721 6.27214C14.4813 6.27214 16.2721 8.063 16.2721 10.2721ZM14.2721 10.2721C14.2721 11.3767 13.3767 12.2721 12.2721 12.2721C11.1676 12.2721 10.2721 11.3767 10.2721 10.2721C10.2721 9.16757 11.1676 8.27214 12.2721 8.27214C13.3767 8.27214 14.2721 9.16757 14.2721 10.2721Z"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M5.79417 16.5183C2.19424 13.0909 2.05438 7.3941 5.48178 3.79418C8.90918 0.194258 14.6059 0.0543983 18.2059 3.48179C21.8058 6.90919 21.9457 12.606 18.5183 16.2059L12.3124 22.7241L5.79417 16.5183ZM17.0698 14.8268L12.243 19.8965L7.17324 15.0698C4.3733 12.404 4.26452 7.9732 6.93028 5.17326C9.59603 2.37332 14.0268 2.26454 16.8268 4.93029C19.6267 7.59604 19.7355 12.0269 17.0698 14.8268Z"/>
                             </svg>
                             {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %}
                                 <p class="px-2 text-sm"> Brie-Comte-Robert</p>
-                            {% else  %}
+                            {% else %}
                                 {% for addressOrder in order.addressOrders %}
                                     {% set address = addressOrder.address %}
                                     <p class="px-2 text-sm">{{ address.number }} {{ address.street }} {{ address.city }} {{ address.postcode }}</p>
@@ -36,27 +44,34 @@
                             {% endif %}
                         </div>
 
-                        <div class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform dark:text-gray-400 " >
-                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.00977 5.83789C3.00977 5.28561 3.45748 4.83789 4.00977 4.83789H20C20.5523 4.83789 21 5.28561 21 5.83789V17.1621C21 18.2667 20.1046 19.1621 19 19.1621H5C3.89543 19.1621 3 18.2667 3 17.1621V6.16211C3 6.11449 3.00333 6.06765 3.00977 6.0218V5.83789ZM5 8.06165V17.1621H19V8.06199L14.1215 12.9405C12.9499 14.1121 11.0504 14.1121 9.87885 12.9405L5 8.06165ZM6.57232 6.80554H17.428L12.7073 11.5263C12.3168 11.9168 11.6836 11.9168 11.2931 11.5263L6.57232 6.80554Z"/>
+                        <div class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform dark:text-gray-400 ">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M3.00977 5.83789C3.00977 5.28561 3.45748 4.83789 4.00977 4.83789H20C20.5523 4.83789 21 5.28561 21 5.83789V17.1621C21 18.2667 20.1046 19.1621 19 19.1621H5C3.89543 19.1621 3 18.2667 3 17.1621V6.16211C3 6.11449 3.00333 6.06765 3.00977 6.0218V5.83789ZM5 8.06165V17.1621H19V8.06199L14.1215 12.9405C12.9499 14.1121 11.0504 14.1121 9.87885 12.9405L5 8.06165ZM6.57232 6.80554H17.428L12.7073 11.5263C12.3168 11.9168 11.6836 11.9168 11.2931 11.5263L6.57232 6.80554Z"/>
                             </svg>
                             <p class="px-2 text-sm">{{ order.possessor.email }}</p>
                         </div>
 
                         <div class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform dark:text-gray-400">
-                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14 11H10V13H14V11Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5V4C7 2.89545 7.89539 2 9 2H15C16.1046 2 17 2.89545 17 4V5H20C21.6569 5 23 6.34314 23 8V18C23 19.6569 21.6569 21 20 21H4C2.34314 21 1 19.6569 1 18V8C1 6.34314 2.34314 5 4 5H7ZM9 4H15V5H9V4ZM4 7C3.44775 7 3 7.44769 3 8V14H21V8C21 7.44769 20.5522 7 20 7H4ZM3 18V16H21V18C21 18.5523 20.5522 19 20 19H4C3.44775 19 3 18.5523 3 18Z"/>
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 11H10V13H14V11Z"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M7 5V4C7 2.89545 7.89539 2 9 2H15C16.1046 2 17 2.89545 17 4V5H20C21.6569 5 23 6.34314 23 8V18C23 19.6569 21.6569 21 20 21H4C2.34314 21 1 19.6569 1 18V8C1 6.34314 2.34314 5 4 5H7ZM9 4H15V5H9V4ZM4 7C3.44775 7 3 7.44769 3 8V14H21V8C21 7.44769 20.5522 7 20 7H4ZM3 18V16H21V18C21 18.5523 20.5522 19 20 19H4C3.44775 19 3 18.5523 3 18Z"/>
                             </svg>
                             <h1 class="px-2 text-sm">Nombre corps : {{ order.corpses.count() }}</h1>
                         </div>
 
                         <div class="inline-flex w-full mt-6 sm:w-auto sm:mx-2 sm:mt-0 pt-4">
                             {% if order.status == 'DRIVER_ACCEPT' %}
-                                <a href="{{ path('order_processing_corps' , {'order_id' : order.id}) }}" class="inline-flex items-center mx-auto  w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
-                                    Arriver
+                                <a href="{{ path('order_processing_corps' , {'id' : order.id}) }}"
+                                   class="inline-flex items-center mx-auto  w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
+                                    Arriver chez le client
                                 </a>
                             {% else %}
-                                <a href="{{ path('order_stocked' , {'order_id' : order.id}) }}" class="inline-flex items-center mx-auto  w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
+                                <a href="{{ path('order_stocked' , {'order_id' : order.id}) }}"
+                                   class="inline-flex items-center mx-auto  w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
                                     Arriver à l'entrepôt
                                 </a>
                             {% endif %}
@@ -78,45 +93,52 @@
 
     </section>
 
-<div class="example-wrapper">
-    <section class="w-full max-w-2xl px-6 py-4 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
-        <h2 class="text-3xl font-semibold text-center text-gray-800 dark:text-white">Commande de : {{ order.possessor.lastname }} {{ order.possessor.firstname }}</h2>
-        <p class="mt-3 text-center text-gray-600 dark:text-gray-400">Nombre corps : {{ order.corpses.count() }}</p>
-        
-        <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
-            <a href="#" class="flex flex-col items-center px-4 py-3 text-gray-700 transition-colors duration-200 transform rounded-md dark:text-gray-200 hover:bg-blue-200 dark:hover:bg-blue-500">
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                </svg>
+    <div class="example-wrapper">
+        <section class="w-full max-w-2xl px-6 py-4 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
+            <h2 class="text-3xl font-semibold text-center text-gray-800 dark:text-white">Commande de
+                : {{ order.possessor.lastname }} {{ order.possessor.firstname }}</h2>
+            <p class="mt-3 text-center text-gray-600 dark:text-gray-400">Nombre corps : {{ order.corpses.count() }}</p>
+
+            <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
+                <a href="#"
+                   class="flex flex-col items-center px-4 py-3 text-gray-700 transition-colors duration-200 transform rounded-md dark:text-gray-200 hover:bg-blue-200 dark:hover:bg-blue-500">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                              d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                              clip-rule="evenodd"/>
+                    </svg>
                     {% for addressOrder in order.addressOrders %}
                         {% set address = addressOrder.address %}
-                        <span class="mt-2">{{ address.number }} {{ address.street }} {{ address.city }}, {{ address.postcode }}</span>
+                        <span class="mt-2">{{ address.number }} {{ address.street }} {{ address.city }}
+                            , {{ address.postcode }}</span>
                     {% endfor %}
-            </a>
+                </a>
 
-            <a href="#" class="flex flex-col items-center px-4 py-3 text-gray-700 transition-colors duration-200 transform rounded-md dark:text-gray-200 hover:bg-blue-200 dark:hover:bg-blue-500">
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                </svg>
+                <a href="#"
+                   class="flex flex-col items-center px-4 py-3 text-gray-700 transition-colors duration-200 transform rounded-md dark:text-gray-200 hover:bg-blue-200 dark:hover:bg-blue-500">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                    </svg>
 
-                <span class="mt-2">{{ order.status }}</span>
-            </a>
+                    <span class="mt-2">{{ order.status }}</span>
+                </a>
 
-            <a href="#" class="flex flex-col items-center px-4 py-3 text-gray-700 transition-colors duration-200 transform rounded-md dark:text-gray-200 hover:bg-blue-200 dark:hover:bg-blue-500">
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>
+                <a href="#"
+                   class="flex flex-col items-center px-4 py-3 text-gray-700 transition-colors duration-200 transform rounded-md dark:text-gray-200 hover:bg-blue-200 dark:hover:bg-blue-500">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                    </svg>
 
-                <span class="mt-2">{{ order.possessor.email }}</span>
-            </a>
-        </div>
+                    <span class="mt-2">{{ order.possessor.email }}</span>
+                </a>
+            </div>
 
-        <div class="mt-6 ">
-            <h3>My Google Maps Demo</h3>
-        </div>
+            <div class="mt-6 ">
+                <h3>My Google Maps Demo</h3>
+            </div>
 
-        {#{% if order.status == 'DRIVER_ASCERTAINMENT' %}
+            {# {% if order.status == 'DRIVER_ASCERTAINMENT' %}
             <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
                 <a href="{{ path('order_invalid', {order_id: order.id} ) }}">
                     <button type="button"
@@ -124,36 +146,36 @@
                         Invalide
                     </button>
                 </a>
-                <a href="{{ path('order_valid', {order_id: order.id} ) }}">
+                <a href="{{ path('order_valid', {id: order.id} ) }}">
                     <button type="button"
                             class="text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-green-900">
                         Go to storage
                     </button>
                 </a>
             </div>
-        {% endif %}#}
+        {% endif %} #}
 
-        {% if order.status == 'DRIVER_ACCEPT' %}
-            <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
-                <a href="{{ path('order_processing_corps', {order_id: order.id} ) }}">
-                    <button type="button"
-                            class="text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-green-900">
-                        Go to storage
-                    </button>
-                </a>
+            {% if order.status == 'DRIVER_ACCEPT' %}
+                <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
+                    <a href="{{ path('order_processing_corps', {id: order.id} ) }}">
+                        <button type="button"
+                                class="text-white bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-green-900">
+                            Arriver chez le client
+                        </button>
+                    </a>
 
-            </div>
-        {% else %}
-            <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
-                <a href="{{ path('order_stocked', {order_id: order.id} ) }}">
-                    <button type="button"
-                            class="text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-blue-900">
-                        Arrivée à l'entrepot
-                    </button>
-                </a>
-            </div>
-        {% endif %}
-        
-    </section>
-</div>
+                </div>
+            {% else %}
+                <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
+                    <a href="{{ path('order_stocked', {order_id: order.id} ) }}">
+                        <button type="button"
+                                class="text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-blue-900">
+                            Arrivée à l'entrepot
+                        </button>
+                    </a>
+                </div>
+            {% endif %}
+
+        </section>
+    </div>
 {% endblock %}

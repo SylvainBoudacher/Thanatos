@@ -34,6 +34,23 @@ class PreparationRepository extends ServiceEntityRepository
         return $query;
     }
 
+    public function getPreparationsByCompanyAndTheme($company, $theme)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->innerJoin('App\Entity\ModelMaterial', 'mm', 'WITH', 'mm = p.modelMaterial')
+            ->innerJoin('App\Entity\ModelExtra', 'me', 'WITH', 'me = p.modelExtra')
+            ->innerJoin('App\Entity\Model', 'model', 'WITH', 'model = mm.model and model = me.model')
+            ->join('App\Entity\Company', 'c', 'WITH', 'c = model.company')
+            ->where('c = :company')
+            ->andWhere('p.theme = :theme')
+            ->setParameter('company', $company)
+            ->setParameter('theme', $theme)
+            ->getQuery()
+            ->execute();
+
+        return $query;
+    }
+
     public function getPreparationsByCompanyByStatus($company, $status)
     {
         $query = $this->createQueryBuilder('p')

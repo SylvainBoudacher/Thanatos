@@ -61,7 +61,7 @@ class CompanyOrderController extends AbstractController
         $user = $this->userRep->find($this->getUser());
         $company = $user->getCompany();
 
-        if ($company == null) dd('page error');
+        if ($company == null) throw $this->createAccessDeniedException();
 
         return $company;
     }
