@@ -8,6 +8,7 @@ use App\Repository\CompanyMaterialRepository;
 use App\Repository\ModelMaterialRepository;
 use App\Repository\ModelRepository;
 use App\Service\GetterService;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,6 +72,23 @@ class ModelMaterialController extends AbstractController
                 'expanded' => true,
             ])
             ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $CompanyMaterialsKeeped = $data["defaultCompanyMaterials"];
+
+            foreach ($exposedCompanyMaterialsByTheCompany as $companyMaterial) {
+                $material = $companyMaterial->getMaterial();
+
+                foreach ($CompanyMaterialsKeeped as $CompanyMaterialKept) {
+                    $materialKept = $CompanyMaterialKept->getMaterial();
+                    if ($material->getId() === $materialKept->getId()) {
+
+                    }
+                }
+            }
+        }
 
         return $this->render("back/company/services/model_materials/manage.html.twig", [
             "model" => $modelRep,
