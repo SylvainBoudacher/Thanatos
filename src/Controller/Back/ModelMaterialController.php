@@ -30,7 +30,7 @@ class ModelMaterialController extends AbstractController
     public function view_model_materials(GetterService $getterService, ModelRepository $modelRep): Response
     {
         $company = $getterService->getCompanyOfUser();
-        if ($company == null) $this->redirectToRoute("home_company");
+        if ($company == null) return $this->redirectToRoute("home_company");
         // TODO : prévoir le cas ou la company est pas celle de l'user, un servive à utiliser partout
 
         $models = $modelRep->findBy(["company" => $company, 'deletedAt' => null]);
@@ -82,7 +82,6 @@ class ModelMaterialController extends AbstractController
             ])
             ->getForm();
 
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $isAlreadyUsed = false;
@@ -91,7 +90,7 @@ class ModelMaterialController extends AbstractController
 
             foreach ($companyMaterialsKeeped as $companyMaterialKept) {
                 // Make sure the return data are CompanyMaterial entity
-                if (!($companyMaterialKept instanceof CompanyMaterial)) dd('error');
+                if (!($companyMaterialKept instanceof CompanyMaterial)) throw $this->createAccessDeniedException();
             }
 
             // get materials ids that the company send from thr form
@@ -99,14 +98,16 @@ class ModelMaterialController extends AbstractController
                 return $m->getMaterial()->getId();
             }, $companyMaterialsKeeped);
 
-
             // get materials ids that the company have in resources
             $exposedCompanyMaterialsByTheCompanyId = array_map(function (CompanyMaterial $m) {
                 return $m->getMaterial()->getId();
             }, $exposedCompanyMaterialsByTheCompany);
 
             foreach ($companyMaterialsKeeped as $companyMaterialKept) {
-                if (!in_array($companyMaterialKept->getMaterial()->getId(), $exposedCompanyMaterialsByTheCompanyId)) dd('error');
+                if (!in_array($companyMaterialKept->getMaterial()->getId(), $exposedCompanyMaterialsByTheCompanyId)) {
+                    $this->addFlash('error', 'Un soucis avec votre formulaire est apparu');
+                    return $this->redirectToRoute('view_model_materials');
+                }
             }
 
             $currentModelMaterials = $model->getModelMaterials()->toArray();
@@ -114,8 +115,6 @@ class ModelMaterialController extends AbstractController
             $materialsToAdd = array_diff($companyMaterialsKeepedId, $currentModelMaterialsId);
             $materialsToRemove = array_diff($currentModelMaterialsId, $companyMaterialsKeepedId);
 
-            dump($materialsToAdd);
-            dump($materialsToRemove);
             // Add new materials relation
             foreach ($materialsToAdd as $materialToAdd) {
                 $modelMaterial = new ModelMaterial();
@@ -132,8 +131,6 @@ class ModelMaterialController extends AbstractController
 
                     if ($isUsed == null) {
                         $em->remove($modelMaterial);
-                        dump('remove');
-                        dump($modelMaterial);
                     } else {
                         $isAlreadyUsed = true;
                     }
@@ -144,8 +141,6 @@ class ModelMaterialController extends AbstractController
 
             if ($isAlreadyUsed) $this->addFlash('error', "Certains matériaux n'ont pas pu être retiré car ils sont actuellement utilisé dans une commande.");
             $this->addFlash('success', "Les changements ont bien été effectué.");
-
-
         }
 
         return $this->render("back/company/services/model_materials/manage.html.twig", [

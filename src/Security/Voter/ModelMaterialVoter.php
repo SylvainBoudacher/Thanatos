@@ -48,7 +48,7 @@ class ModelMaterialVoter extends Voter
     private function canEdit(Model $entity, User $user): bool
     {
 
-        if ($entity->getDeletedAt() ||
+        if ($entity->getDeletedAt() != null ||
             $entity->getCompany()->getId() !== $user->getCompany()->getId()) return false;
 
         return true;
