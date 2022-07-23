@@ -100,16 +100,6 @@
             </div>
         </div>
 
-
-        <div class="absolute bottom-[0%] mb-4">
-            {% for message in app.flashes("success") %}
-                {% include 'components/toasts/success.html.twig' with {'message' : message} %}
-            {% endfor %}
-            {% for message in app.flashes("error") %}
-                {% include 'components/toasts/error.html.twig' with {'message' : message} %}
-            {% endfor %}
-        </div>
-
     </div>
 {% endblock %}
 
