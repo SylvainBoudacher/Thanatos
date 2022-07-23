@@ -70,7 +70,7 @@ class ThemeController extends AbstractController
 
         $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $theme);
 
-        if ($theme->getType() != Theme::TYPE_CLASSIC) dd('error page');
+        if ($theme->getType() != Theme::TYPE_CLASSIC) throw $this->createAccessDeniedException();
 
         // TODO : Meilleur vérification plus tard (genre theme désactivé par thanatos)
         if (!empty($company)) {

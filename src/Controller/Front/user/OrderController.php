@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted("ROLE_USER")]
+#[Route("/client")] // TODO : Peut-être faire /company/{nomDeLaCompagnie} dans le futur
 class OrderController extends AbstractController
 {
 
@@ -124,7 +125,7 @@ class OrderController extends AbstractController
             $this->denyAccessUnlessGranted(CorpseVoter::EDIT, $corpse);
 
             $corpseIsOwned = $order->getId() === $corpse->getCommand()->getId();
-            if (!$corpseIsOwned) dd('crash error : no corpse exist without order');
+            if (!$corpseIsOwned) throw $this->createAccessDeniedException();
         }
 
         // create form
@@ -393,7 +394,7 @@ class OrderController extends AbstractController
         $preparation = $corpse->getPreparation() !== null ? $corpse->getPreparation() : new Preparation();
 
         if (!is_null($theme)) {
-            if ($theme->getDeletedAt()) dd('error : theme deleted');
+            if ($theme->getDeletedAt()) throw $this->createAccessDeniedException();
 
             $preparation->setTheme($theme);
             $preparation->setStatus(Preparation::FUNERAL_DRAFT);
@@ -460,7 +461,7 @@ class OrderController extends AbstractController
 
         $hasTheme = array_filter($company->getCompanyThemes()->toArray(), fn(CompanyTheme $i) => $i->getTheme()->getId() == $corpse->getPreparation()->getTheme()->getId());
 
-        if (empty($hasTheme)) dd('error page');
+        if (empty($hasTheme)) throw $this->createAccessDeniedException();
 
         // get ressources funeral
         $data = $modelRepository->getCompleteProductsRelatedToCompany($company);
@@ -487,7 +488,7 @@ class OrderController extends AbstractController
 
             // Verification if ressources consistent
             $entities = [$burial, $model, $modelMaterial, $modelExtra, $color];
-            if (in_array(null, $entities) || in_array([], $entities)) dd('ressources hacked');
+            if (in_array(null, $entities) || in_array([], $entities)) throw $this->createAccessDeniedException();
 
             if (!($model->getBurial()->getId() == $burial->getId() &&
                 $modelMaterial->getModel()->getId() == $model->getId() &&
@@ -496,7 +497,7 @@ class OrderController extends AbstractController
                     'company' => $model->getCompany()->getId(),
                     'painting' => $color
 
-                ]))) dd('ressources hacked');
+                ]))) throw $this->createAccessDeniedException();
 
 
             // set preparation
@@ -537,7 +538,7 @@ class OrderController extends AbstractController
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
 
         if (($corpse->getPreparation() == null)) {
-            dd('page error');
+            throw $this->createAccessDeniedException();
         } else {
             switch ($corpse->getPreparation()->getTheme()->getType()) {
 
@@ -545,15 +546,14 @@ class OrderController extends AbstractController
                     if ($corpse->getPreparation()->getModelExtra() == null ||
                         $corpse->getPreparation()->getModelMaterial() == null ||
                         $corpse->getPreparation()->getPainting() == null
-                    )
-                        dd('page error');
+                    ) throw $this->createAccessDeniedException();
 
                     break;
                 case Theme::TYPE_SPECIAL:
 
                     break;
                 default:
-                    dd('page error');
+                    throw $this->createAccessDeniedException();
             }
         }
 

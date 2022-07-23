@@ -137,7 +137,7 @@ class MaterialController extends AbstractController
     {
         $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $material);
 
-        if (!$this->canBeDeleted($material)) dd('page error');
+        if (!$this->canBeDeleted($material)) throw $this->createAccessDeniedException();
 
         if ($material->getMedia() != null) $em->remove($material->getMedia());
         $em->remove($material);

@@ -2,58 +2,49 @@
 
 namespace App\Controller\Front\driver;
 
+use App\Entity\Order;
 use App\Form\ProcessingValidationType;
 use App\Entity\DriverOrder;
-use App\Entity\Corpse;
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Repository\CompanyRepository;
-use App\Repository\CorpseRepository;
 use App\Repository\DriverOrderRepository;
-use Google\Service\Forms\Form;
+use App\Security\Voter\OrderVoter;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted("ROLE_DRIVER")]
-#[Route("/driver/orders")]
+#[Route("/conducteur/commandes")]
 class DriverController extends AbstractController
 {
     /**
      * @IsGranted("ROLE_DRIVER")
-    */
-    
+     */
+
     #[Route('/', name: 'driver_orders')]
-    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository , DriverOrderRepository $driverOrderRepository , AddressRepository $addressRepository): Response
+    public function index(OrderRepository $orderRepository, CompanyRepository $companyRepository, DriverOrderRepository $driverOrderRepository, AddressRepository $addressRepository): Response
     {
         // get the driver id
         $company = $companyRepository->find($this->getUser()->getCompany());
         $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'DRIVER_NEW');
 
         //if driver have orders
-        if ( empty($currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])) )
-        {
+        if (empty($currentOrder = $driverOrderRepository->findOneBy(['driver' => $company]))) {
             $address = null;
-        }
-        else
-        {
+        } else {
             //find the order that the driver is working on
             $currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])->getCommand();
 
 
-
-            if ($currentOrder->getStatus() != 'DRIVER_CLOSE')
-            {
+            if ($currentOrder->getStatus() != 'DRIVER_CLOSE') {
                 //get the addressOrder of the order
                 $addressOrder = $currentOrder->getAddressOrders();
                 //get the address of the addressOrder
                 $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
-            }
-            else
-            {
+            } else {
                 $currentOrder = null;
                 $address = null;
             }
@@ -69,10 +60,12 @@ class DriverController extends AbstractController
 
     }
 
-    #[Route('/take-order/{order_id}', name: 'take_order')]
-    public function takeOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository,  $order_id): Response
+    #[Route('/prendre-commande/{id}', name: 'take_order')]
+    public function takeOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository, Order $order): Response
     {
-        $order = $orderRepository->find($order_id);
+
+        $this->denyAccessUnlessGranted(OrderVoter::TAKE_ORDER, $order);
+
         $company = $companyRepository->find($this->getUser()->getCompany());
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -89,10 +82,13 @@ class DriverController extends AbstractController
         return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
     }
 
-    #[Route('/processing-order/{order_id}', name: 'order_processing_corps')]
-    public function processingOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository,  $order_id): Response
+    #[Route('/traiter-commande/{id}', name: 'order_processing_corps')]
+    public function processingOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository, Order $order): Response
     {
-        $order = $orderRepository->find($order_id);
+        $this->denyAccessUnlessGranted(OrderVoter::EDIT, $order);
+        if ($order->getStatus() != Order::DRIVER_ACCEPT) {
+            throw $this->createAccessDeniedException();
+        }
 
         return $this->render('front/driver/orders/processing.html.twig', [
             'controller_name' => 'DriverController',
@@ -101,9 +97,8 @@ class DriverController extends AbstractController
     }
 
 
-
-    #[Route('/order_arrive_to_client/{order_id}', name: 'order_arrive_to_client')]
-    public function arriveDriverOrder(OrderRepository $orderRepository,  $order_id): Response
+    #[Route('/commande-arrive-au-client/{order_id}', name: 'order_arrive_to_client')]
+    public function arriveDriverOrder(OrderRepository $orderRepository, $order_id): Response
     {
 
         $order = $orderRepository->find($order_id);
@@ -118,11 +113,14 @@ class DriverController extends AbstractController
         return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
     }
 
-    #[Route('/order_valid/{order_id}', name: 'order_valid')]
-    public function validOrder(OrderRepository $orderRepository,  $order_id): Response
+    #[Route('/commande-valide/{id}', name: 'order_valid')]
+    public function validOrder(OrderRepository $orderRepository, Order $order): Response
     {
 
-        $order = $orderRepository->find($order_id);
+        $this->denyAccessUnlessGranted(OrderVoter::EDIT, $order);
+        if ($order->getStatus() != Order::DRIVER_ACCEPT) {
+            throw $this->createAccessDeniedException();
+        }
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -134,15 +132,15 @@ class DriverController extends AbstractController
         return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
     }
 
-    #[Route('/order_invalid/{order_id}', name: 'order_invalid')]
-    public function deleteInvalid(OrderRepository $orderRepository,  $order_id): Response
+    #[Route('/commande-invalide/{order_id}', name: 'order_invalid')]
+    public function deleteInvalid(OrderRepository $orderRepository, $order_id): Response
     {
 
         $order = $orderRepository->find($order_id);
         $entityManager = $this->getDoctrine()->getManager();
 
         $order->setStatus('DRIVER_PROCESSING_REFUSED');
-        $order->setDeletedAt(new \DateTime());
+        $order->setDeletedAt(new DateTime());
 
         $entityManager->persist($order);
         $entityManager->flush();
@@ -150,11 +148,11 @@ class DriverController extends AbstractController
         return $this->redirectToRoute('driver_orders');
     }
 
-    #[Route('/order_stocked/{order_id}', name: 'order_stocked')]
-    public function orderStocked(OrderRepository $orderRepository,  $order_id): Response
+    #[Route('/commande-stocke/{id}', name: 'order_stocked')]
+    public function orderStocked(OrderRepository $orderRepository, Order $order): Response
     {
 
-        $order = $orderRepository->find($order_id);
+        $this->denyAccessUnlessGranted(OrderVoter::EDIT, $order);
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -166,11 +164,11 @@ class DriverController extends AbstractController
         return $this->redirectToRoute('driver_orders');
     }
 
-    #[Route('/order/{id}', name: 'my_order')]
-    public function myOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository,  $id): Response
+    #[Route('/commande/{id}', name: 'my_order')]
+    public function myOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository, Order $order): Response
     {
 
-        $order = $orderRepository->find($id);
+        $this->denyAccessUnlessGranted(OrderVoter::EDIT, $order);
 
         return $this->render('front/driver/orders/show.html.twig', [
             'order' => $order,

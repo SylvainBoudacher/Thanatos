@@ -135,7 +135,7 @@ class ExtraController extends AbstractController
     public function delete_extra(EntityManagerInterface $em, ExtraRepository $extraRep, Extra $extra): Response
     {
         $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $extra);
-        if (!$this->canBeDeleted($extra)) dd('page error');
+        if (!$this->canBeDeleted($extra)) throw $this->createAccessDeniedException();
 
         if ($extra->getMedia() != null) $em->remove($extra->getMedia());
         $em->remove($extra);

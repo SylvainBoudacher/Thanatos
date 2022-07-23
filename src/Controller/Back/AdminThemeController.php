@@ -27,7 +27,7 @@ class AdminThemeController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'create_theme')]
+    #[Route('/créer', name: 'create_theme')]
     public function create(Request $request): Response
     {
         $theme = new Theme();
@@ -47,7 +47,7 @@ class AdminThemeController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'delete_theme')]
+    #[Route('/supprimer/{id}', name: 'delete_theme')]
     public function delete(EntityManagerInterface $em, ThemeRepository $themeRep, int $id,): Response
     {
         $theme = $themeRep->find($id);
@@ -63,7 +63,7 @@ class AdminThemeController extends AbstractController
         return $this->redirectToRoute("home_theme");
     }
 
-    #[Route('/modify/{id}', name: 'modify_theme')]
+    #[Route('/modifier/{id}', name: 'modify_theme')]
     public function modify(EntityManagerInterface $em, Request $request, ThemeRepository $themeRep, int $id): Response
     {
         $theme = $themeRep->find($id);

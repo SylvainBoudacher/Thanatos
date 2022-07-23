@@ -137,7 +137,7 @@ class ModelController extends AbstractController
         $this->denyAccessUnlessGranted(GeneralVoter::VIEW_EDIT, $model);
         $this->denyAccessUnlessGranted(GeneralVoter::OWNED_COMPANY, $model);
 
-        if (!$model->canBeDeleted()) dd('page error');
+        if (!$model->canBeDeleted()) throw $this->createAccessDeniedException();
 
         $model->setDeletedAt(new DateTime());
 
