@@ -33,5 +33,5 @@ cache:
 fixture:
 	docker-compose exec php bin/console doctrine:fixtures:load --no-interaction
 
-test:
-	make stop && make start && make fixture
+resetAndSetBdd:
+	make stop && make start && make bdd && make fixture
