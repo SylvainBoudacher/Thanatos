@@ -28,7 +28,8 @@ class GeneralVoter extends Voter
                 $subject instanceof Entity\Material ||
                 $subject instanceof Entity\Extra ||
                 $subject instanceof Entity\Painting ||
-                $subject instanceof Entity\Theme
+                $subject instanceof Entity\Theme ||
+                $subject instanceof Entity\User
             );
     }
 

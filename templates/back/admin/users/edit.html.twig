@@ -8,54 +8,57 @@
             <h1 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Edition de l'utilisateur</h1>
 
             {{ form_start(AdminUserUpdateForm) }}
-                <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-                    <div>
-                        <label class="text-gray-700 dark:text-gray-200" for="username">Nom</label>
-                        {{ form_widget(AdminUserUpdateForm.lastname ,
-                            {'attr':
-                                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring' ,
-                                    'value' :  user.lastname
-                                }
-                            })
-                        }}
-                    </div>
+            <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="username">Nom</label>
+                    {{ form_widget(AdminUserUpdateForm.lastname ,
+                        {'attr':
+                            {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring' ,
+                                'value' :  user.lastname
+                            }
+                        }) }}
+                    <span class="text-gray-700 dark:text-gray-200">{{ form_errors(AdminUserUpdateForm.lastname) }}</span>
 
-                    <div>
-                        <label class="text-gray-700 dark:text-gray-200" for="username">Prénom</label>
-                        {{ form_widget(AdminUserUpdateForm.firstname ,
-                            {'attr':
-                                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring' ,
-                                    'value' :  user.firstname
-                                }
-                            })
-                        }}
-                    </div>
+                </div>
 
-                    <div>
-                        <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Adresse Email</label>
-                        {{ form_widget(AdminUserUpdateForm.email ,
-                            {'attr':
-                                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring' ,
-                                    'value' :  user.email
-                                }
-                            })
-                        }}
-                    </div>
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="username">Prénom</label>
+                    {{ form_widget(AdminUserUpdateForm.firstname ,
+                        {'attr':
+                            {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring' ,
+                                'value' :  user.firstname
+                            }
+                        }) }}
+                    <span class="text-gray-700 dark:text-gray-200"> {{ form_errors(AdminUserUpdateForm.firstname) }}</span>
+
+                </div>
+
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Adresse Email</label>
+                    {{ form_widget(AdminUserUpdateForm.email ,
+                        {'attr':
+                            {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring' ,
+                                'value' :  user.email
+                            }
+                        }) }}
+                    <span class="text-gray-700 dark:text-gray-200">{{ form_errors(AdminUserUpdateForm.email) }}</span>
+
+                </div>
 
 
-                    <div>
-                        <label class="text-gray-700 dark:text-gray-200" for="password">Date de naissance</label>
-                        {{ form_widget(AdminUserUpdateForm.birthdate ,
-                            {'attr':
-                                {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring' ,
-                                }
-                            })
-                        }}
-                    </div>
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="password">Date de naissance</label>
+                    {{ form_widget(AdminUserUpdateForm.birthdate ,
+                        {'attr':
+                            {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring' ,
+                            }
+                        }) }}
+                    <span class="text-gray-700 dark:text-gray-200">{{ form_errors(AdminUserUpdateForm.birthdate) }}</span>
+                </div>
 
-                   {#TODO: Add a select for the role#}
+                {# TODO: Add a select for the role #}
 
-                    {#<div>
+                {# <div>
                         <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Rôle</label>
                         <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option selected="">
@@ -91,32 +94,35 @@
                         </select>
                     </div>
 
-                    {#TODO: Add a select for the isVerified#}
+                    {#TODO: Add a select for the isVerified #}
 
-                    {#
-                    <div>
-                        <label for="compteVerifier" class="text-gray-700 dark:text-gray-200" for="userIsVerified">Compte vérifier</label>
-                        <select id="compteVerifier" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected="">
-                                {% if user.isVerified == true %}
-                                    Vérifier
-                                {% else %}
-                                    Non vérifier
-                                {% endif %}
-                            </option>
+                {#
+                <div>
+                    <label for="compteVerifier" class="text-gray-700 dark:text-gray-200" for="userIsVerified">Compte vérifier</label>
+                    <select id="compteVerifier" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option selected="">
+                            {% if user.isVerified == true %}
+                                Vérifier
+                            {% else %}
+                                Non vérifier
+                            {% endif %}
+                        </option>
 
-                        {% if user.isVerified %}
-                            <option value="false">Non vérifier</option>
-                        {% else %}
-                            <option value="true">Vérifier</option>s
-                        {% endif %}
-                    </div>
-                </div>#}
+                    {% if user.isVerified %}
+                        <option value="false">Non vérifier</option>
+                    {% else %}
+                        <option value="true">Vérifier</option>s
+                    {% endif %}
+                </div>
+            </div> #}
 
 
-            <button type="submit" class="mt-3 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Enregistrer les modifications</button>
+                <button type="submit"
+                        class="mt-3 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Enregistrer les modifications
+                </button>
 
-            {{ form_end(AdminUserUpdateForm) }}
+                {{ form_end(AdminUserUpdateForm) }}
         </section>
     </div>
 {% endblock %}
