@@ -13,11 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 #[IsGranted("ROLE_ADMIN")]
 #[Route("/admin")]
-
 class AdminDriverController extends AbstractController
 {
-    #[Route('/users/driver', name: 'admin_driver_list')]
-    public function driversList(CompanyRepository $companyRepository , UserRepository $userRepository): Response
+    #[Route('/utilisateurs/conducteurs', name: 'admin_driver_list')]
+    public function driversList(CompanyRepository $companyRepository, UserRepository $userRepository): Response
     {
         $companies = $companyRepository->findByType('DRIVER');
 

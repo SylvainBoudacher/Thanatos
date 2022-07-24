@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/morgue/services/sépultures")]
+#[Route("/morgue/services/sepultures")]
 #[IsGranted("ROLE_COMPANY")]
 class BurialController extends AbstractController
 {

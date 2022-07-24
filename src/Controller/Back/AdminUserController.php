@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route("/admin")]
 class AdminUserController extends AbstractController
 {
-    #[Route('/users/list', name: 'admin_users_list')]
+    #[Route('/utilisateurs/list', name: 'admin_users_list')]
     public function users(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();
@@ -25,7 +25,7 @@ class AdminUserController extends AbstractController
         ]);
     }
 
-    #[Route('/users/edit/{id}', name: 'admin_user_edit', methods: ['POST', 'GET'])]
+    #[Route('/utilisateurs/modifier/{id}', name: 'admin_user_edit', methods: ['POST', 'GET'])]
     public function edit(Request $request, UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
@@ -49,7 +49,7 @@ class AdminUserController extends AbstractController
         ]);
     }
 
-    #[Route('/users/delete/{id}', name: 'admin_user_delete')]
+    #[Route('/utilisateurs/supprimer/{id}', name: 'admin_user_delete')]
     public function delete(UserRepository $userRepository, $id): Response
     {
         $user = $userRepository->find($id);

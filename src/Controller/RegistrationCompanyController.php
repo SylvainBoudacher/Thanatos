@@ -25,7 +25,7 @@ class RegistrationCompanyController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
-    #[Route('/register-user-company/{slug}', name: 'app_register_user_company')]
+    #[Route('/inscription-morgue/{slug}', name: 'app_register_user_company')]
     public function registerDriver(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, $slug): Response
     {
         $user = new User();
@@ -39,7 +39,7 @@ class RegistrationCompanyController extends AbstractController
             // encode the plain password
             $user->setRoles([$role == 'a7#ddd8' ? 'ROLE_DRIVER' : 'ROLE_COMPANY']);
             $user->setPassword(
-            $userPasswordHasherInterface->hashPassword(
+                $userPasswordHasherInterface->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -60,17 +60,15 @@ class RegistrationCompanyController extends AbstractController
         ]);
     }
 
-    #[Route('/register-company/{user}/{role}', name: 'app_register_compagny')]
+    #[Route('/inscription-morgue/{user}/{role}', name: 'app_register_compagny')]
     public function registerDriverCompangy(Request $request, $user, $role): Response
     {
         $company = new Company();
         $user = $this->getDoctrine()->getRepository(User::class)->find($user);
 
-        if($role == 'a7#ddd8')
-        {
+        if ($role == 'a7#ddd8') {
             $form = $this->createForm(DriverType::class, $company);
-        }else
-        {
+        } else {
             $form = $this->createForm(CompanyType::class, $company);
         }
 
@@ -94,7 +92,7 @@ class RegistrationCompanyController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
+    #[Route('/verification/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
