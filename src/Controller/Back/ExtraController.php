@@ -61,8 +61,8 @@ class ExtraController extends AbstractController
         $preparations = $em->getRepository(Preparation::class)->findAll();
 
         if (!empty($preparations)) $preparations = array_map(function ($p) {
-            if ($p->getModelMaterial() !== null)
-                return $p->getModelMaterial()->getId();
+            if ($p->getModelExtra() !== null)
+                return $p->getModelExtra()->getId();
         }, $preparations);
 
         return empty($extra->getModelExtras()->toArray()) && empty($extra->getCompanyExtras()->toArray()) && !in_array($extra->getId(), $preparations);
@@ -74,8 +74,8 @@ class ExtraController extends AbstractController
         $preparations = $em->getRepository(Preparation::class)->findAll();
 
         if (!empty($preparations)) $preparations = array_map(function ($p) {
-            if ($p->getModelMaterial() !== null)
-                return $p->getModelMaterial()->getId();
+            if ($p->getModelExtra() !== null)
+                return $p->getModelExtra()->getId();
         }, $preparations);
 
         return !in_array($extra->getId(), $preparations) && empty($extra->getModelExtras()->toArray());

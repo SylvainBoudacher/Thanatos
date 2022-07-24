@@ -57,6 +57,7 @@ class OrderController extends AbstractController
             $addressOrders = array_filter($orderDraft->getAddressOrders()->toArray(), function ($i) {
                 return $i->getStatus() === AddressOrder::DECLARATION_CORPSES;
             });
+            $orderDraft->address = null;
             if (!empty($addressOrders)) $orderDraft->address = $addressOrders[0]->getAddress();
         }
 
@@ -65,6 +66,7 @@ class OrderController extends AbstractController
             $addressOrders = array_filter($order->getAddressOrders()->toArray(), function ($i) {
                 return $i->getStatus() === AddressOrder::DECLARATION_CORPSES;
             });
+            $order->address = null;
             if (!empty($addressOrders)) $order->address = $addressOrders[0]->getAddress();
         }
 
@@ -73,6 +75,7 @@ class OrderController extends AbstractController
             $addressOrders = array_filter($order->getAddressOrders()->toArray(), function ($i) {
                 return $i->getStatus() === AddressOrder::DECLARATION_CORPSES;
             });
+            $order->address = null;
             if (!empty($addressOrders)) $order->address = $addressOrders[0]->getAddress();
         }
 
@@ -291,7 +294,7 @@ class OrderController extends AbstractController
         $order = $orderRep->findOneBy(['status' => Order::DRAFT]);
         $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
 
-        if ($order && $addressOrder) {
+        if ($order != null && $addressOrder != null) {
 
             $address = $addressOrder->getAddress();
             $em = $doctrine->getManager();
@@ -342,18 +345,20 @@ class OrderController extends AbstractController
 
         $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
 
-        if (array_filter($order->getCorpses()->toArray(), fn($c) => $c->getId() == $corpse->getId())) {
+        if ($order != null && !empty($order->getCorpses())) {
+            if (array_filter($order->getCorpses()->toArray(), fn($c) => $c->getId() == $corpse->getId())) {
 
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($corpse);
-            $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($corpse);
+                $em->flush();
+            }
         }
 
         return $this->redirectToRoute('declare_corpse_confirmation');
     }
 
     #[Route('/modifier-corps-declaration/{id}', name: 'edit_corpse_declaration')]
-    public function edit_corpse_declaration(Request $request, Corpse $corpse, OrderRepository $orderRep)
+    public function edit_corpse_declaration(Request $request, Corpse $corpse, OrderRepository $orderRep, AddressOrderRepository $addressOrderRep): Response
     {
         $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
 
@@ -371,12 +376,24 @@ class OrderController extends AbstractController
                 return $this->redirectToRoute('declare_corpse_confirmation');
             }
 
+            $TVA = 20 / 100;
+            $address = null;
+
+            $priceOrder = count($order->getCorpses()->toArray()) * 15.00;
+            $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
+            if ($addressOrder instanceof AddressOrder) $address = $addressOrder->getAddress();
+            $priceOrderTVA = $priceOrder * (1 + $TVA);
+
             return $this->renderForm('front/user/declareCorpse/index.html.twig', [
                 'form' => $form,
                 'order' => $order,
                 'corpse' => $corpse,
                 'nextCorpse' => false,
-                'editVersion' => true
+                'editVersion' => true,
+                'priceOrder' => $priceOrder,
+                'priceOrderTVA' => $priceOrderTVA,
+                'TVA' => $TVA,
+                'address' => $address
             ]);
 
         }
@@ -537,15 +554,16 @@ class OrderController extends AbstractController
     {
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
 
-        if (($corpse->getPreparation() == null)) {
+        if (($corpse->getPreparation() == null || $corpse->getPreparation()->getTheme() == null)) {
             throw $this->createAccessDeniedException();
         } else {
-            switch ($corpse->getPreparation()->getTheme()->getType()) {
+            switch ($corpse->getPreparation()->getTheme()?->getType()) {
 
                 case Theme::TYPE_CLASSIC:
                     if ($corpse->getPreparation()->getModelExtra() == null ||
                         $corpse->getPreparation()->getModelMaterial() == null ||
-                        $corpse->getPreparation()->getPainting() == null
+                        $corpse->getPreparation()->getPainting() == null ||
+                        $corpse->getPreparation()->getPrice() == null
                     ) throw $this->createAccessDeniedException();
 
                     break;
@@ -559,15 +577,8 @@ class OrderController extends AbstractController
 
         if ($request->query->getBoolean('confirm')) {
 
-            $em = $this->getDoctrine()->getManager();
-            $preparation = $corpse->getPreparation();
-            $preparation->setStatus(Preparation::FUNERAL_NEW);
-            $em->flush();
+            return $this->redirectToRoute('user_order_corpse_payment', ['id' => $corpse->getId()]);
 
-            if ($preparation->getTheme()->getType() === Theme::TYPE_SPECIAL) $this->addFlash('success', 'La commande a été envoyée à Thanatos');
-            else $this->addFlash('success', 'La commande a été envoyée à la pompe funèbre');
-
-            return $this->redirectToRoute('user_order');
         }
 
         if ($request->query->getBoolean('cancel')) {
@@ -643,5 +654,82 @@ class OrderController extends AbstractController
     {
         return $this->render('front/user/payment/cancel.html.twig');
     }
+
+    /**
+     * @throws ApiErrorException
+     */
+    #[Route('/commander-un-service-corps/payement/{id}', name: 'user_order_corpse_payment', methods: ['POST', 'GET'])]
+    public function orderServicePayementCorps($id): Response
+    {
+
+        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+
+        $stripe = new StripeClient($_ENV['STRIPE_SECRET_KEY']);
+
+        $stripe->products->create([
+            'name' => 'Gold Special',
+        ]);
+
+        $checkout_session = Session::create([
+            'customer_email' => $this->getUser()->getEmail(),
+            'submit_type' => 'pay',
+            'line_items' => [[
+                # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
+                'price' => 'price_1LH328GgCa17kbBH3P8ybu94',
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => 'http://localhost' . $this->generateUrl('user_order_corpse_success', ['id' => $id]),
+            'cancel_url' => 'http://localhost' . $this->generateUrl('user_order_cancel'),
+        ]);
+
+        header("Location: " . $checkout_session->url);
+
+        return $this->render('front/user/payment/payment.html.twig', [
+            'checkout_session' => $checkout_session,
+        ]);
+
+    }
+
+    #[Route('/commander-un-service-corps/payement/confirmation/{id}', name: 'user_order_corpse_success', methods: ['POST', 'GET'])]
+    public function orderServiceCorpseSuccess(int $id, CorpseRepository $corpseRepository): Response
+    {
+
+        $corpse = $corpseRepository->find($id);
+        if ($corpse == null) throw $this->createAccessDeniedException();
+
+        $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
+
+        if (($corpse->getPreparation() == null || $corpse->getPreparation()->getTheme() == null)) {
+            throw $this->createAccessDeniedException();
+        } else {
+            switch ($corpse->getPreparation()->getTheme()?->getType()) {
+
+                case Theme::TYPE_CLASSIC:
+                    if ($corpse->getPreparation()->getModelExtra() == null ||
+                        $corpse->getPreparation()->getModelMaterial() == null ||
+                        $corpse->getPreparation()->getPainting() == null ||
+                        $corpse->getPreparation()->getPrice() == null
+                    ) throw $this->createAccessDeniedException();
+
+                    break;
+                case Theme::TYPE_SPECIAL:
+
+                    break;
+                default:
+                    throw $this->createAccessDeniedException();
+            }
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $preparation = $corpse->getPreparation();
+        $preparation->setStatus(Preparation::FUNERAL_NEW);
+        $em->flush();
+
+        $this->addFlash('success', 'La commande a été envoyée à la pompe funèbre');
+
+        return $this->render('front/user/payment/success.html.twig');
+    }
+
 
 }

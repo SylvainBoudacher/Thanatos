@@ -59,8 +59,8 @@ class PaintingController extends AbstractController
         $preparations = $em->getRepository(Preparation::class)->findAll();
 
         if (!empty($preparations)) $preparations = array_map(function ($p) {
-            if ($p->getModelMaterial() !== null)
-                return $p->getModelMaterial()->getId();
+            if ($p->getPainting() !== null)
+                return $p->getPainting()->getId();
         }, $preparations);
 
         return empty($painting->getCompanyPaintings()->toArray()) && !in_array($painting->getId(), $preparations);
@@ -72,8 +72,8 @@ class PaintingController extends AbstractController
         $preparations = $em->getRepository(Preparation::class)->findAll();
 
         if (!empty($preparations)) $preparations = array_map(function ($p) {
-            if ($p->getModelMaterial() !== null)
-                return $p->getModelMaterial()->getId();
+            if ($p->getPainting() !== null)
+                return $p->getPainting()->getId();
         }, $preparations);
 
         return !in_array($painting->getId(), $preparations);

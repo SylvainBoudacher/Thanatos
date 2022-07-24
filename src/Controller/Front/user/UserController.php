@@ -18,16 +18,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
-#[Route('/paramètres')]
+#[Route('/parametres')]
 class UserController extends AbstractController
 {
-    /**
-     * @IsGranted("ROLE_USER")
-     */
-
     #[Route('/compte', name: 'app_settings_account')]
     public function account(Request $request, UserRepository $userRep): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $user = $userRep->find($this->getUser());
         $form = $this->createForm(UserAccountUpdateFormType::class, $user);
         $form->handleRequest($request);
@@ -46,13 +44,12 @@ class UserController extends AbstractController
             'user' => $user,
         ]);
     }
-    /**  ********************* */
-    /**
-     * @IsGranted("ROLE_USER")
-     */
+
     #[Route('/portefeuille', name: 'app_settings_wallet')]
     public function wallet(CreditCardRepository $creditCardRep): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $user = $this->getUser();
         $wallets = $creditCardRep->findBy(['possessor' => $user]);
 
@@ -76,6 +73,8 @@ class UserController extends AbstractController
     #[Route('/portefeuille/nouvelle-carte', name: 'app_settings_wallet_new')]
     public function newCard(Request $request, CreditCardRepository $creditCardRep): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $card = new CreditCard();
         $form = $this->createForm(NewCreditCardFormType::class, $card);
         $form->handleRequest($request);
@@ -101,6 +100,8 @@ class UserController extends AbstractController
     #[Route('/portefeuille/supprimer-carte/{id}', name: 'app_settings_wallet_delete')]
     public function delete(Request $request, CreditCard $creditCardRep): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($creditCardRep);
         $em->flush();
@@ -114,6 +115,8 @@ class UserController extends AbstractController
     #[Route('/mot-de-passe', name: 'app_settings_password')]
     public function password(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $user = $this->getUser();
         $form = $this->createForm(UserAccountUpdateFormType::class, $user);
         $form->handleRequest($request);
