@@ -20,18 +20,21 @@
 
                 {# BURIAL #}
                 <div id="burial" class="burial flex flex-col justify-center">
-                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
-                        Choisir un
-                        contenant</h1>
+                    <h1 class="text-center border-b text-gray-800 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un contenant
+                    </h1>
 
-                    <div class="burials flex flex-wrap justify-center gap-9">
+                    <div class="burials flex flex-wrap justify-center gap-9 ">
                         {% for burial in burials %}
                             <input id="burial-{{ burial.id }}" type="radio" value="{{ burial.id }}" name="burial"
-                                   class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioBurial"
-                                   data-burial-version="{{ burial.id }}"
-                            />
-                            <label for="burial-{{ burial.id }}" class="inline-block cursor-pointer itemContent"><span
-                                        class="bg-purple-600 p-9 block w-auto h-auto itemContent rounded">{{ burial.name }}</span></label>
+                                   class="min-h-full w-60   radioOrderService radioBurial "
+                                   data-burial-version="{{ burial.id }}"/>
+
+                            <label for="burial-{{ burial.id }}" class="inline-block cursor-pointer itemContent">
+                                <span class="bg-gray-800 text-gray-100 p-9 block w-auto h-auto itemContent rounded-lg ">
+                                    {{ burial.name }}
+                                </span>
+                            </label>
                         {% endfor %}
                     </div>
                 </div>

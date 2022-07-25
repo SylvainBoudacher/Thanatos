@@ -14,7 +14,7 @@
                 {% for theme in themesClassic %}
                     {# CARD #}
 
-                    <div class="relative flex flex-col justify-between h-[400px] w-[325px] bg-gradient-to-b from-[#4031B3] to-indigo-500 p-4 pt-8 px-6 m-2 my-4 rounded-xl shadow-lg">
+                    <div class="relative flex flex-col h-[400px] w-[325px] bg-gradient-to-b from-[#4031B3] to-indigo-500 p-4 pt-8 px-6 m-2 my-4 rounded-xl shadow-lg">
                         <div>
                             {% if loop.last %}
                                 <div class="absolute px-4 py-2 -top-5 left-[50%] -translate-x-[50%] bg-red-200 rounded-xl">
@@ -32,12 +32,10 @@
                             </div>
                             <h3 class="text-slate-50 font-bold text-2xl mb-2">{{ theme.name }}</h3>
                             <span class="text-slate-50 font-bold text-sm mt-1 bg-blue-500 px-3 py-1 rounded-full">Classique</span>
-                            <p class="text-slate-50 text-md mt-3">{{ theme.description }}</p>
+                            <p class="text-slate-50 text-md mt-3 min-h-[100px] max-h-[101px] w-full break-all ">{{ theme.description }}</p>
 
-                            <div>
-                                <div class="flex justify-center mb-8">
-
-                                    <a class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl mt-10"
+                                <div class="flex flex-row justify-center relative mt-12">
+                                    <a class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl mt-10 mx-2"
                                        href="{{ path('user_order_theme', {corpse: corpse.id, theme: theme.id}) }}">
                                         Selectionner
                                         <svg class="ml-2 -mr-1 w-4 h-4 inline" fill="currentColor" viewBox="0 0 20 20"
@@ -47,11 +45,8 @@
                                                   clip-rule="evenodd"></path>
                                         </svg>
                                     </a>
-
                                 </div>
                             </div>
-                        </div>
-
                     </div>
 
                 {% endfor %}
@@ -68,7 +63,7 @@
                 {% for theme in themesSpecial %}
                     {# CARD #}
 
-                    <div class="relative flex flex-col justify-between h-[400px] w-[325px] bg-gradient-to-b from-[#4031B3] to-indigo-500 p-4 pt-8 px-6 m-2 my-4 rounded-xl shadow-lg">
+                    <div class="relative flex flex-col h-[400px] w-[325px] bg-gradient-to-b from-[#4031B3] to-indigo-500 p-4 pt-8 px-6 m-2 my-4 rounded-xl shadow-lg">
                         <div>
                             {% if loop.last %}
                                 <div class="absolute px-4 py-2 -top-5 left-[50%] -translate-x-[50%] bg-red-200 rounded-xl">
@@ -86,24 +81,22 @@
                             </div>
                             <h3 class="text-slate-50 font-bold text-2xl mb-2">{{ theme.name }}</h3>
                             <span class="text-slate-50 font-bold text-sm mt-1 bg-orange-600 px-3 py-1 rounded-full">Spécial</span>
-                            <p class="text-slate-50 text-md mt-3">{{ theme.description }}</p>
+                            <p class="text-slate-50 text-md mt-3 min-h-[100px] max-h-[101px] ">{{ theme.description }}</p>
 
-                            <div>
-                                <div class="flex justify-center mb-8">
 
-                                    <a class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl mt-10"
-                                       href="{{ path('user_order_theme', {corpse: corpse.id, theme: theme.id}) }}">
-                                        Selectionner
-                                        <svg class="ml-2 -mr-1 w-4 h-4 inline" fill="currentColor" viewBox="0 0 20 20"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                                                  clip-rule="evenodd"></path>
-                                        </svg>
-                                    </a>
-
-                                </div>
+                            <div class="flex flex-row justify-center relative mt-12">
+                                <a class="py-2 px-6 bg-[#F6DFEE] text-[#4031B3] rounded-2xl mt-10 mx-2"
+                                   href="{{ path('user_order_theme', {corpse: corpse.id, theme: theme.id}) }}">
+                                    Selectionner
+                                    <svg class="ml-2 -mr-1 w-4 h-4 inline" fill="currentColor" viewBox="0 0 20 20"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </a>
                             </div>
+
                         </div>
 
                     </div>
