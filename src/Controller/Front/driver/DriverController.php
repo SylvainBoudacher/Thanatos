@@ -125,11 +125,15 @@ class DriverController extends AbstractController
         return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
     }
 
-    #[Route('/commande-invalide/{order_id}', name: 'order_invalid')]
-    public function deleteInvalid(OrderRepository $orderRepository, $order_id): Response
+    #[Route('/commande-invalide/{id}', name: 'order_invalid')]
+    public function deleteInvalid(OrderRepository $orderRepository, Order $order): Response
     {
 
-        $order = $orderRepository->find($order_id);
+        $this->denyAccessUnlessGranted(OrderVoter::EDIT, $order);
+        if ($order->getStatus() != Order::DRIVER_ACCEPT) {
+            throw $this->createAccessDeniedException();
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
 
         $order->setStatus('DRIVER_PROCESSING_REFUSED');

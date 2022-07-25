@@ -63,6 +63,7 @@ class OrderController extends AbstractController
         $ordersInProgress = $orderRepository->findAllOwnedOrderInProgress();
         $ordersClose = $orderRepository->findAllOwnedOrderClosed();
         $orderDraft = $orderRepository->findOneOwnedOrderByStatus(Order::DRAFT);
+        $ordersRefused = $orderRepository->findAllOwnedOrderByStatus(Order::DRIVER_PROCESSING_REFUSED);
 
         // Get address form order draft
         if ($orderDraft !== null) {
@@ -91,11 +92,20 @@ class OrderController extends AbstractController
             if (!empty($addressOrders)) $order->address = $addressOrders[0]->getAddress();
         }
 
+        foreach ($ordersRefused as $order) {
+
+            $addressOrders = array_filter($order->getAddressOrders()->toArray(), function ($i) {
+                return $i->getStatus() === AddressOrder::DECLARATION_CORPSES;
+            });
+            $order->address = null;
+            if (!empty($addressOrders)) $order->address = $addressOrders[0]->getAddress();
+        }
 
         return $this->render('front/user/myCommand/index.html.twig', [
             'orderDraft' => $orderDraft,
             'orderInProgress' => $ordersInProgress,
             'orderClose' => $ordersClose,
+            'ordersRefused' => $ordersRefused
         ]);
     }
 

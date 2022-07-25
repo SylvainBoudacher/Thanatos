@@ -90,6 +90,12 @@
                         Valider le processus
                     </button>
                 </a>
+                <a href="{{ path('order_invalid' , {'id' : order.id}) }}">
+                    <button type="button" id="submitCancel"
+                            class="hidden text-white bg-blue-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
+                        Annuler le processus
+                    </button>
+                </a>
             </div>
         </div>
     </section>
@@ -98,8 +104,10 @@
         function isValidate() {
             if (document.getElementById('link-checkbox').checked && document.getElementById('link-checkbox2').checked) {
                 document.getElementById('submit').classList.remove('hidden');
+                document.getElementById('submitCancel').classList.remove('hidden');
             } else {
                 document.getElementById('submit').classList.add('hidden');
+                document.getElementById('submitCancel').classList.add('hidden');
             }
         }
     </script>

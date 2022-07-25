@@ -171,6 +171,17 @@ class OrderRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllOwnedOrderByStatus($status)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->andWhere('o.status = :status')
+            ->andWhere('o.possessor = :possessor')
+            ->setParameter('status', $status)
+            ->setParameter('possessor', $this->security->getUser());
+
+        return $qb->getQuery()->execute();
+    }
+
     public function findAllOwnedOrderInProgress()
     {
         $status = [Order::DRAFT, Order::DRIVER_CLOSE, Order::DRIVER_USER_CANCEL_ORDER, Order::DRIVER_PROCESSING_REFUSED];
