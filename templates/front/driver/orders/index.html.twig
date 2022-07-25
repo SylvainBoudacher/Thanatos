@@ -4,14 +4,14 @@
 
 
     {# Affichage si le conducteur à pris un order #}
-    {% if currentOrder == true %}
+    {% if currentDriverOrder == true %}
         <section class="block rounded-lg bg-red-100 stroke shadow-md block w-[40rem] mx-auto mt-32">
             <div class="container flex flex-col items-center px-4 py-12 mx-auto text-center">
                 <h2 class="text-3xl font-semibold tracking-tight text-gray-700  ">
                     Vous avez une commande en cours de traitement !
                 </h2>
 
-                <a href="{{ path('my_order' , {'id' : currentOrder.id}) }}" class="pt-6">
+                <a href="{{ path('my_order' , {'id' : currentDriverOrder.command.id}) }}" class="pt-6">
                     <button type="button"
                             class="text-white bg-gray-700 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
                         Retourner a ma commande
@@ -20,10 +20,10 @@
             </div>
         </section>
     {% else %}
-        {% if orders is not empty %}
+        {% if ordersCorpseNew is not empty %}
             <section>
                 <div class="flex flex-row">
-                    {% for order in orders %}
+                    {% for order in ordersCorpseNew %}
                         <div class=" stroke  py-12 mt-12 mx-12">
                             <div class="max-w-sm mx-12 overflow-hidden bg-white rounded-lg shadow-lg bg-gray-800 shadow-md">
                                 <div class="flex items-center px-6 py-3 bg-gray-900">

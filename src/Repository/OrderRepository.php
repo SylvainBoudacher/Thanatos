@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
 
@@ -163,12 +164,16 @@ class OrderRepository extends ServiceEntityRepository
             ->setParameter('possessor', $this->security->getUser());
 
         $query = $qb->getQuery();
-        return $query->getOneOrNullResult();
+        try {
+            return $query->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 
     public function findAllOwnedOrderInProgress()
     {
-        $status = [Order::DRAFT];
+        $status = [Order::DRAFT, Order::DRIVER_CLOSE, Order::DRIVER_USER_CANCEL_ORDER, Order::DRIVER_PROCESSING_REFUSED];
 
         $qb = $this->createQueryBuilder('o')
             ->where("o.status NOT IN(:status)")

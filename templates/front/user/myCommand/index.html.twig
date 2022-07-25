@@ -9,7 +9,6 @@
     {# ORDER DRAFT #}
     {% if orderDraft is not null %}
         {% set order = orderDraft %}
-
         <div class="container px-6 mx-auto pb-6 ">
 
             <div class="flex flex-row  pb-4 justify-start ">
@@ -217,7 +216,7 @@
         <section class="block rounded-lg bg-gray-50 stroke shadow-md block w-[40rem] mx-auto">
             <div class="container flex flex-col items-center px-4 py-12 mx-auto text-center">
                 <h2 class="text-3xl font-semibold tracking-tight text-gray-700  ">
-                    Vous n'avez pas encore <br> de commande.
+                    Vous n'avez pas <br> de commande en cours.
                 </h2>
 
                 <div class="mt-6 sm:-mx-2">
@@ -238,5 +237,151 @@
             </div>
         </section>
     {% endif %}
+
+    {# ORDERS CLOSE #}
+    {% for order in orderClose %}
+        <div class="container px-6 mx-auto pb-6 ">
+
+            <div class="flex flex-row  pb-4 justify-start ">
+                <p class="font-bold text-3xl pb-3 text-gray-800">Commande #{{ order.number }}</p>
+                <a href="#">
+                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir la facture</p>
+                </a>
+                <svg class="w-6  xmlns=" http:
+                //www.w3.org/2000/svg" viewBox="0 0 24 24" />
+                <path fill="none" d="M0 0h24v24H0Z"></path>
+                <path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path>
+                </svg>
+            </div>
+
+            <section class="dark:bg-white rounded-xl shadow-md ">
+                <div class="container px-9 py-10 mx-auto rounded-t-lg border border-slate-200">
+                    <div class="flex flex-row">
+                        <div class="md:flex md:items-center ">
+                            <div class="grid pr-4">
+                                <div>
+                                    <div class="bg-gray-200 rounded-lg shadow-xs">
+
+                                        {% if order.types == constant('DRIVER', order) %}
+                                            <img class="w-[10rem] object-fit rounded-xl aspect-square max-w-[10rem]"
+                                                 src="{{ asset('images/LivraisonLogo.svg') }}">
+                                        {% elseif order.types == constant('FUNERAL', order) %}
+                                            <img class="w-[8rem] object-cover rounded-xl aspect-square max-w-[8rem]"
+                                                 src="{{ asset('images/commandeLogo.svg') }}">
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class=" max-w-lg min-w-64 mx-4 h-full ">
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
+                                    {% if order.types == constant('DRIVER', order) %}
+                                        Prise en charge / Livraison
+                                    {% elseif order.types == constant('FUNERAL', order) %}
+                                        Commande d'une préparation
+                                    {% endif %}
+
+                                </h1>
+
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    {% if order.types == constant('DRIVER', order) %}
+                                        15.00€
+                                    {% elseif order.types == constant('FUNERAL', order) %}
+                                        FAUT LE RECUPE
+                                    {% endif %}
+                                </p>
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                    {% if order.types ==  constant('DRIVER', order) %}
+                                        Prise en charge d'un corps par l'un de notre chauffeur agrée par Thanatos
+                                    {% elseif order.types == constant('FUNERAL', order) %}
+                                        Commande d'une préparation chez 'order.company.name'
+                                    {% endif %}
+
+                                </p>
+                            </div>
+
+                            <div class=" w-64 mx-4 h-full ">
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps
+                                    déclaré<span class="lowercase">(s)</span></h1>
+                                {% for corpse in order.corpses %}
+                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                        {{ corpse.firstname }} {{ corpse.lastname }}
+                                    </p>
+
+                                    {% if order.status == constant('DRIVER_CLOSE', order) %}
+                                        {% if corpse.preparation == null or (corpse.preparation.status == constant('FUNERAL_DRAFT', corpse.preparation) ) %}
+                                            <button class="mt-4">
+                                                <a href="{{ path('user_order_theme', {corpse: corpse.id}) }}"
+                                                   class="whitespace-nowrap px-4 py-2 font-medium tracking-wide text-white transition-colors duration-200 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                                    Commander un service
+                                                </a>
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <div class="w-64 mx-4 h-full">
+                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
+                                    Adresse de livraison
+                                </h1>
+                                {% set address = order.address %}
+                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">{{ address.number }} {{ address.street }} {{ address.city }} {{ address.postcode }}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {# End of the card #}
+                <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
+                    <div class="flex flex-row">
+
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                        <div class="bg-blue-600 h-2.5 rounded-full"
+                                {% if order.types == 'DRIVER' %}
+                                {% if order.status == 'DRIVER_NEW' %} style="width: 5% ">{% endif %}
+                            {% if order.status == 'DRIVER_ACCEPT' %} style="width: 23% ">{% endif %}
+                            {% if order.status == 'DRIVER_ARRIVES' %} style="width: 40% ">{% endif %}
+                            {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %} style="width: 58% ">{% endif %}
+                            {% if order.status == 'DRIVER_BRINGS_TO_WAREHOUSE' %} style="width: 78% ">{% endif %}
+                            {% if order.status == 'DRIVER_CLOSE' %} style="width: 100% ">{% endif %}
+                            {% endif %}
+
+                            {% if order.types == 'FUNERAL' %}
+                                {% if order.status == 'FUNERAL_NEW' %} style="width: 5% ">{% endif %}
+                                {% if order.status == 'FUNERAL_ACCEPT' %} style="width: 23% ">{% endif %}
+                                {% if order.status == 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' %} style="width: 32% ">{% endif %}
+                                {% if order.status == 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' %} style="width: 41% ">{% endif %}
+                                {% if order.status == 'FUNERAL_IN_PROGRESS_PROCESSING' %} style="width: 58% ">{% endif %}
+                                {% if order.status == 'FUNERAL_CLOSE_PROCESSING' %} style="width: 70% ">{% endif %}
+                                {% if order.status == 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' %} style="width: 82% ">{% endif %}
+                                {% if order.status == 'FUNERAL_DRIVER_CLOSE_BRING' %} style="width: 100% ">{% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                        {% if order.types == 'DRIVER' %}
+                            <p class="text-sm">Recherche de livreur</p>
+                            <p class="text-sm">Conducteur accepter</p>
+                            <p class="text-sm">Conducteur arriver</p>
+                            <p class="text-sm">Validation de la commande</p>
+                            <p class="text-sm">Corps en acheminement</p>
+                            <p class="text-sm">Commande arriver</p>
+                        {% elseif order.types == 'FUNERAL' %}
+                            <p class="text-sm">En attente de validation</p>
+                            <p class="text-sm">Commande accepté</p>
+                            <p class="text-sm">Corps en transit</p>
+                            <p class="text-sm">En préparation</p>
+                            <p class="text-sm">Préparation terminé</p>
+                            <p class="text-sm">En livraison</p>
+                            <p class="text-sm">Commande arriver</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endfor %}
 
 {% endblock %}

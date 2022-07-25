@@ -31,10 +31,9 @@
                             {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %}
                                 <p class="px-2 text-sm"> Brie-Comte-Robert</p>
                             {% else %}
-                                {% for addressOrder in order.addressOrders %}
-                                    {% set address = addressOrder.address %}
+                                {% if address is not null %}
                                     <p class="px-2 text-sm">{{ address.number }} {{ address.street }} {{ address.city }} {{ address.postcode }}</p>
-                                {% endfor %}
+                                {% endif %}
                             {% endif %}
                         </div>
 

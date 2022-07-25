@@ -8,6 +8,7 @@ use App\Entity\CompanyPainting;
 use App\Entity\Extra;
 use App\Entity\Painting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,7 +24,8 @@ class CompanyExtraRepository extends ServiceEntityRepository
         parent::__construct($registry, CompanyExtra::class);
     }
 
-    public function getOneByCompanyAndExtra(Company $company, Extra $extra) : ?CompanyExtra {
+    public function getOneByCompanyAndExtra(Company $company, Extra $extra): ?CompanyExtra
+    {
 
         $query = $this->createQueryBuilder('ce')
             ->select('ce, c')
@@ -33,10 +35,13 @@ class CompanyExtraRepository extends ServiceEntityRepository
             ->setParameter('company', $company)
             ->setParameter('extra', $extra)
             ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+            ->getQuery();
 
-        return $query;
+        try {
+            return $query->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 
 }

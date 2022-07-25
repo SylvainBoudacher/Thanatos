@@ -6,9 +6,8 @@ use App\Entity\Company;
 use App\Entity\CompanyTheme;
 use App\Entity\Theme;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
-use PhpParser\Node\Expr\Array_;
 use function Doctrine\ORM\QueryBuilder;
 
 /**
@@ -36,7 +35,7 @@ class CompanyThemeRepository extends ServiceEntityRepository
             'SELECT IDENTITY(ct.company) FROM App\Entity\CompanyTheme ct WHERE ct.theme = :theme'
         )->setParameter('theme', $theme);
 
-        $result =  $query->getArrayResult();
+        $result = $query->getArrayResult();
 
         $companyRepository = new CompanyRepository($this->registry);
         $result = array_merge(...$result);
@@ -45,7 +44,8 @@ class CompanyThemeRepository extends ServiceEntityRepository
 
     }
 
-    public function getOneByCompanyAndTheme(Company $company, Theme $theme) : ?CompanyTheme {
+    public function getOneByCompanyAndTheme(Company $company, Theme $theme): ?CompanyTheme
+    {
 
         $query = $this->createQueryBuilder('ct')
             ->select('ct, c')
@@ -55,13 +55,17 @@ class CompanyThemeRepository extends ServiceEntityRepository
             ->setParameter('company', $company)
             ->setParameter('theme', $theme)
             ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+            ->getQuery();
 
-        return $query;
+        try {
+            return $query->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 
-    public function getAllByCompany(Company $company) : Array {
+    public function getAllByCompany(Company $company): array
+    {
 
         $query = $this->createQueryBuilder('ct')
             ->select('ct, t')

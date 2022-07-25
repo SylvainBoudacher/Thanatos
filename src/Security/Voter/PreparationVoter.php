@@ -18,6 +18,7 @@ class PreparationVoter extends Voter
     public const VIEW = 'VIEW';
     public const ORDER = 'ORDER';
     public const ORDER_CLASSIC = 'ORDER_CLASSIC';
+    public const CONFIRM_ORDER = 'CONFIRM_ORDER';
 
     private EntityManagerInterface $em;
 
@@ -31,7 +32,7 @@ class PreparationVoter extends Voter
 
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW, self::ORDER, self::ORDER_CLASSIC])
+        return in_array($attribute, [self::EDIT, self::VIEW, self::ORDER, self::ORDER_CLASSIC, self::CONFIRM_ORDER])
             && ($subject instanceof Corpse ||
                 $subject instanceof Preparation);
 
@@ -56,6 +57,8 @@ class PreparationVoter extends Voter
                 break;
             case self::ORDER:
                 return $this->canOrder($subject, $user);
+            case self::CONFIRM_ORDER:
+                return $this->canConfirm($subject);
             case self::ORDER_CLASSIC:
 
                 return $this->canOrderTypeClassic($subject);
@@ -88,6 +91,7 @@ class PreparationVoter extends Voter
     {
 
         if ($corpse->getDeletedAt()) return false;
+        if ($corpse->getCommand() == null) return false;
 
         // Get current order and check if order is owned by the user
         $order = $this->em->getRepository(Order::class)->findOneBy([
@@ -105,6 +109,32 @@ class PreparationVoter extends Voter
             if (!($corpse->getPreparation()->getStatus() === Preparation::FUNERAL_DRAFT && $corpse->getPreparation()->getDeletedAt() === null)) return false;
         }
 
+        return true;
+    }
+
+    private function canConfirm(Corpse $corpse): bool
+    {
+        if (($corpse->getPreparation() == null || $corpse->getPreparation()->getTheme() == null)) {
+            return false;
+        } else {
+            switch ($corpse->getPreparation()->getTheme()?->getType()) {
+
+                case Theme::TYPE_CLASSIC:
+                    if ($corpse->getPreparation()->getModelExtra() == null ||
+                        $corpse->getPreparation()->getModelMaterial() == null ||
+                        $corpse->getPreparation()->getPainting() == null ||
+                        $corpse->getPreparation()->getPrice() == null
+                    ) return false;
+
+                    break;
+                case Theme::TYPE_SPECIAL:
+
+                    break;
+                default:
+                    return false;
+            }
+
+        }
         return true;
     }
 

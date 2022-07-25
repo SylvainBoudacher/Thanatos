@@ -24,9 +24,13 @@ use App\Repository\ModelRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PreparationRepository;
 use App\Repository\ThemeRepository;
+use App\Repository\UserRepository;
+use App\Security\EmailVerifier;
 use App\Security\Voter\CorpseVoter;
+use App\Security\Voter\OrderVoter;
 use App\Security\Voter\PreparationVoter;
 use Carbon\Carbon;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -34,6 +38,7 @@ use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\StripeClient;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +48,13 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route("/client")] // TODO : Peut-être faire /company/{nomDeLaCompagnie} dans le futur
 class OrderController extends AbstractController
 {
+
+    private EmailVerifier $emailVerifier;
+
+    public function __construct(EmailVerifier $emailVerifier)
+    {
+        $this->emailVerifier = $emailVerifier;
+    }
 
     #[Route('/commande', name: 'user_order', methods: ['GET'])]
     public function dashboard(OrderRepository $orderRepository): Response
@@ -79,6 +91,7 @@ class OrderController extends AbstractController
             if (!empty($addressOrders)) $order->address = $addressOrders[0]->getAddress();
         }
 
+
         return $this->render('front/user/myCommand/index.html.twig', [
             'orderDraft' => $orderDraft,
             'orderInProgress' => $ordersInProgress,
@@ -86,29 +99,29 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/commande/{id}', name: 'user_order_id', methods: ['GET'])]
-    public function show(Order $order, int $id, PreparationRepository $preparationRepository): Response
-    {
+    /*   #[Route('/commande/{id}', name: 'user_order_id', methods: ['GET'])]
+       public function show(Order $order, int $id, PreparationRepository $preparationRepository): Response
+       {
 
-        if ($order->getPossessor() != $this->getUser()) {
-            throw $this->createNotFoundException(
-                'Aucune commande pour l\'id: ' . $id . ' vous appartient'
-            );
-        }
+           if ($order->getPossessor() != $this->getUser()) {
+               throw $this->createNotFoundException(
+                   'Aucune commande pour l\'id: ' . $id . ' vous appartient'
+               );
+           }
 
-        $corpses = $order->getCorpses();
-        foreach ($corpses as $corpse) {
-            $corpse->setPreparation($preparationRepository->findOneBy(['corpse' => $corpse]));
-        }
+           $corpses = $order->getCorpses();
+           foreach ($corpses as $corpse) {
+               $corpse->setPreparation($preparationRepository->findOneBy(['corpse' => $corpse]));
+           }
 
-        return $this->render(
-            'front/user/order.html.twig', [
-                'order' => $order,
-                'corpses' => $corpses
-            ]
-        );
+           return $this->render(
+               'front/user/order.html.twig', [
+                   'order' => $order,
+                   'corpses' => $corpses
+               ]
+           );
 
-    }
+       }*/
 
     /* DECLARE CORPSE */
 
@@ -218,7 +231,7 @@ class OrderController extends AbstractController
 
         if ($order !== null) {
             $priceOrder = count($order->getCorpses()->toArray()) * 15.00;
-            $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
+            $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT, $order);
             if ($addressOrder instanceof AddressOrder) $address = $addressOrder->getAddress();
             $priceOrderTVA = $priceOrder * (1 + $TVA);
         }
@@ -242,7 +255,7 @@ class OrderController extends AbstractController
         $address = new Address();
 
         // get address if already exist
-        $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
+        $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT, $order);
         if ($addressOrder instanceof AddressOrder) $address = $addressOrder->getAddress();
         else $addressOrder = new AddressOrder();
 
@@ -291,50 +304,50 @@ class OrderController extends AbstractController
         AddressOrderRepository $addressOrderRep,
     ): Response
     {
-        $order = $orderRep->findOneBy(['status' => Order::DRAFT]);
-        $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
+        $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
+        $this->denyAccessUnlessGranted(OrderVoter::CONFIRM, $order);
 
-        if ($order != null && $addressOrder != null) {
+        $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT, $order);
 
-            $address = $addressOrder->getAddress();
-            $em = $doctrine->getManager();
-            $priceOrder = 0.00;
+        $address = $addressOrder->getAddress();
+        $em = $doctrine->getManager();
+        $priceOrder = 0.00;
 
-            foreach ($order->getCorpses() as $corpse) {
-                $priceOrder += 15.00;
-            }
-
-            $TVA = 20 / 100;
-
-            $priceOrderTVA = $priceOrder * (1 + $TVA);
-
-            if ($request->query->getBoolean('confirm')
-                || $request->query->getBoolean('cancel')) {
-
-                if ($request->query->getBoolean('confirm')) {
-                    return $this->redirectToRoute('user_order_payment');
-                } else if ($request->query->getBoolean('cancel')) {
-                    $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
-                    $this->addFlash('error', "Votre déclaration de corps s'est bien annulée");
-                } else {
-                    return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
-                        'order' => $order,
-                        'address' => $address
-                    ]);
-                }
-                $em->persist($order);
-                $em->flush();
-
-                return $this->redirectToRoute('user_order');
-            }
-
-            return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
-                'order' => $order,
-                'address' => $address,
-                'price' => $priceOrder,
-                'priceWithTva' => $priceOrderTVA
-            ]);
+        foreach ($order->getCorpses() as $corpse) {
+            $priceOrder += 15.00;
         }
+
+        $TVA = 20 / 100;
+
+        $priceOrderTVA = $priceOrder * (1 + $TVA);
+
+        if ($request->query->getBoolean('confirm')
+            || $request->query->getBoolean('cancel')) {
+
+            if ($request->query->getBoolean('confirm')) {
+
+                return $this->redirectToRoute('user_order_payment');
+            } else if ($request->query->getBoolean('cancel')) {
+                $order->setStatus(Order::DRIVER_USER_CANCEL_ORDER);
+                $this->addFlash('error', "Votre déclaration de corps s'est bien annulée");
+            } else {
+                return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
+                    'order' => $order,
+                    'address' => $address
+                ]);
+            }
+            $em->persist($order);
+            $em->flush();
+
+            return $this->redirectToRoute('user_order');
+        }
+
+        return $this->renderForm('front/user/declareCorpse/confirmation.html.twig', [
+            'order' => $order,
+            'address' => $address,
+            'price' => $priceOrder,
+            'priceWithTva' => $priceOrderTVA
+        ]);
 
         return $this->redirectToRoute('user_order');
     }
@@ -345,7 +358,7 @@ class OrderController extends AbstractController
 
         $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
 
-        if ($order != null && !empty($order->getCorpses())) {
+        if ($order != null && !empty($order->getCorpses()->toArray()) && count($order->getCorpses()->toArray()) > 1) {
             if (array_filter($order->getCorpses()->toArray(), fn($c) => $c->getId() == $corpse->getId())) {
 
                 $em = $this->getDoctrine()->getManager();
@@ -362,42 +375,43 @@ class OrderController extends AbstractController
     {
         $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
 
-        if (array_filter($order->getCorpses()->toArray(), fn($c) => $c->getId() == $corpse->getId())) {
+        if ($order != null && !empty($order->getCorpses())) {
+            if (array_filter($order->getCorpses()->toArray(), fn($c) => $c->getId() == $corpse->getId())) {
 
-            $form = $this->createForm(CorpseType::class, $corpse);
-            $form->handleRequest($request);
+                $form = $this->createForm(CorpseType::class, $corpse);
+                $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
+                if ($form->isSubmitted() && $form->isValid()) {
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($corpse);
-                $em->flush();
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($corpse);
+                    $em->flush();
 
-                return $this->redirectToRoute('declare_corpse_confirmation');
+                    return $this->redirectToRoute('declare_corpse_confirmation');
+                }
+
+                $TVA = 20 / 100;
+                $address = null;
+
+                $priceOrder = count($order->getCorpses()->toArray()) * 15.00;
+                $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT, $order);
+                if ($addressOrder instanceof AddressOrder) $address = $addressOrder->getAddress();
+                $priceOrderTVA = $priceOrder * (1 + $TVA);
+
+                return $this->renderForm('front/user/declareCorpse/index.html.twig', [
+                    'form' => $form,
+                    'order' => $order,
+                    'corpse' => $corpse,
+                    'nextCorpse' => false,
+                    'editVersion' => true,
+                    'priceOrder' => $priceOrder,
+                    'priceOrderTVA' => $priceOrderTVA,
+                    'TVA' => $TVA,
+                    'address' => $address
+                ]);
+
             }
-
-            $TVA = 20 / 100;
-            $address = null;
-
-            $priceOrder = count($order->getCorpses()->toArray()) * 15.00;
-            $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT);
-            if ($addressOrder instanceof AddressOrder) $address = $addressOrder->getAddress();
-            $priceOrderTVA = $priceOrder * (1 + $TVA);
-
-            return $this->renderForm('front/user/declareCorpse/index.html.twig', [
-                'form' => $form,
-                'order' => $order,
-                'corpse' => $corpse,
-                'nextCorpse' => false,
-                'editVersion' => true,
-                'priceOrder' => $priceOrder,
-                'priceOrderTVA' => $priceOrderTVA,
-                'TVA' => $TVA,
-                'address' => $address
-            ]);
-
         }
-
         return $this->redirectToRoute('declare_corpse_confirmation');
     }
 
@@ -553,27 +567,7 @@ class OrderController extends AbstractController
     public function orderServiceRecap(Request $request, Corpse $corpse): Response
     {
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
-
-        if (($corpse->getPreparation() == null || $corpse->getPreparation()->getTheme() == null)) {
-            throw $this->createAccessDeniedException();
-        } else {
-            switch ($corpse->getPreparation()->getTheme()?->getType()) {
-
-                case Theme::TYPE_CLASSIC:
-                    if ($corpse->getPreparation()->getModelExtra() == null ||
-                        $corpse->getPreparation()->getModelMaterial() == null ||
-                        $corpse->getPreparation()->getPainting() == null ||
-                        $corpse->getPreparation()->getPrice() == null
-                    ) throw $this->createAccessDeniedException();
-
-                    break;
-                case Theme::TYPE_SPECIAL:
-
-                    break;
-                default:
-                    throw $this->createAccessDeniedException();
-            }
-        }
+        $this->denyAccessUnlessGranted(PreparationVoter::CONFIRM_ORDER, $corpse);
 
         if ($request->query->getBoolean('confirm')) {
 
@@ -605,8 +599,11 @@ class OrderController extends AbstractController
      * @throws ApiErrorException
      */
     #[Route('/commander-un-service/payement', name: 'user_order_payment', methods: ['POST', 'GET'])]
-    public function orderServicePayement(): Response
+    public function orderServicePayement(EntityManagerInterface $em): Response
     {
+
+        $order = $em->getRepository(Order::class)->findOneOwnedOrderByStatus(Order::DRAFT);
+        $this->denyAccessUnlessGranted(OrderVoter::CONFIRM, $order);
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
@@ -638,13 +635,50 @@ class OrderController extends AbstractController
     }
 
     #[Route('/commander-un-service/payement/confirmation', name: 'user_order_success', methods: ['POST', 'GET'])]
-    public function orderServiceSuccess(OrderRepository $orderRep): Response
+    public function orderServiceSuccess(EntityManagerInterface $em, OrderRepository $orderRep, UserRepository $userRep, AddressOrderRepository $addressOrderRep): Response
     {
+
+        $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
+        $this->denyAccessUnlessGranted(OrderVoter::CONFIRM, $order);
+
         $em = $this->getDoctrine()->getManager();
-        $order = $orderRep->findOneBy(['status' => Order::DRAFT]);
+        $order = $em->getRepository(Order::class)->findOneOwnedOrderByStatus(Order::DRAFT);
         $order->setStatus(Order::DRIVER_NEW);
         $em->persist($order);
         $em->flush();
+
+        $user = $userRep->find($this->getUser());
+
+        $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT, $order);
+
+        $address = $addressOrder->getAddress();
+        $priceOrder = 0.00;
+
+        foreach ($order->getCorpses() as $corpse) {
+            $priceOrder += 15.00;
+        }
+
+        $TVA = 20 / 100;
+
+        $priceOrderTVA = $priceOrder * (1 + $TVA);
+
+        // generate a signed url and email it to the user
+        $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            (new TemplatedEmail())
+                ->from(new \Symfony\Component\Mime\Address('thanatos.super.mailer@gmail.com', 'Thanatos'))
+                ->to("esedjicoraline@gmail.com")
+                //TODO change email
+//                ->to($user->getEmail())
+                ->subject('Confirmation de votre déclaration de corps')
+                ->context([
+                    'order' => $order,
+                    'address' => $address,
+                    'priceWithTva' => $priceOrderTVA,
+                    'price' => $priceOrder,
+                ])
+                ->htmlTemplate('front/confirmation_declare_corpse.html.twig')
+        );
+
 
         return $this->render('front/user/payment/success.html.twig');
     }
@@ -652,6 +686,7 @@ class OrderController extends AbstractController
     #[Route('/commander-un-service/payement/annulation', name: 'user_order_cancel', methods: ['POST', 'GET'])]
     public function orderServiceCancel(): Response
     {
+        //TODO warning access page easily
         return $this->render('front/user/payment/cancel.html.twig');
     }
 
@@ -659,8 +694,13 @@ class OrderController extends AbstractController
      * @throws ApiErrorException
      */
     #[Route('/commander-un-service-corps/payement/{id}', name: 'user_order_corpse_payment', methods: ['POST', 'GET'])]
-    public function orderServicePayementCorps($id): Response
+    public function orderServicePayementCorps(EntityManagerInterface $em, int $id): Response
     {
+
+        $corpse = $em->getRepository(Corpse::class)->find($id);
+        if ($corpse == null) throw $this->createAccessDeniedException();
+        $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
+        $this->denyAccessUnlessGranted(PreparationVoter::CONFIRM_ORDER, $corpse);
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
@@ -683,6 +723,7 @@ class OrderController extends AbstractController
             'cancel_url' => 'http://localhost' . $this->generateUrl('user_order_cancel'),
         ]);
 
+
         header("Location: " . $checkout_session->url);
 
         return $this->render('front/user/payment/payment.html.twig', [
@@ -694,32 +735,10 @@ class OrderController extends AbstractController
     #[Route('/commander-un-service-corps/payement/confirmation/{id}', name: 'user_order_corpse_success', methods: ['POST', 'GET'])]
     public function orderServiceCorpseSuccess(int $id, CorpseRepository $corpseRepository): Response
     {
-
         $corpse = $corpseRepository->find($id);
         if ($corpse == null) throw $this->createAccessDeniedException();
-
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
-
-        if (($corpse->getPreparation() == null || $corpse->getPreparation()->getTheme() == null)) {
-            throw $this->createAccessDeniedException();
-        } else {
-            switch ($corpse->getPreparation()->getTheme()?->getType()) {
-
-                case Theme::TYPE_CLASSIC:
-                    if ($corpse->getPreparation()->getModelExtra() == null ||
-                        $corpse->getPreparation()->getModelMaterial() == null ||
-                        $corpse->getPreparation()->getPainting() == null ||
-                        $corpse->getPreparation()->getPrice() == null
-                    ) throw $this->createAccessDeniedException();
-
-                    break;
-                case Theme::TYPE_SPECIAL:
-
-                    break;
-                default:
-                    throw $this->createAccessDeniedException();
-            }
-        }
+        $this->denyAccessUnlessGranted(PreparationVoter::CONFIRM_ORDER, $corpse);
 
         $em = $this->getDoctrine()->getManager();
         $preparation = $corpse->getPreparation();

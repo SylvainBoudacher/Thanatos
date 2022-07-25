@@ -8,17 +8,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\OrderRepository;
 
 
-
 class StaticController extends AbstractController
 {
     #[Route('/', name: 'homepage', methods: ['GET'])]
     public function index(OrderRepository $orderRepository): Response
     {
 
-        if ($this->getUser() )
-        {
-            if ($this->getUser()->getRoles("ROLE_DRIVER")[0] == "ROLE_DRIVER")
-            {
+        if ($this->getUser()) {
+            if ($this->getUser()->getRoles("ROLE_DRIVER")[0] == "ROLE_DRIVER") {
                 return $this->redirectToRoute('dashboard_driver');
 
             } elseif ($this->getUser()->getRoles("ROLE_COMPANY")[0] == "ROLE_COMPANY") {
@@ -26,20 +23,18 @@ class StaticController extends AbstractController
 
             } elseif ($this->getUser()->getRoles("ROLE_ADMIN")[0] == "ROLE_ADMIN") {
                 return $this->redirectToRoute('admin_dashboard');
-            } else
-            {
-                $orderNotClose = $orderRepository->findAllOrderWithoutStatus('CLOSE');
-                $orderNotNew = $orderRepository->findAllOrderWithoutStatus('NEW');
+            } else {
+
+                $orderNotClose = $orderRepository->findAllOwnedOrderInProgress();
+                $ordersClose = $orderRepository->findAllOwnedOrderClosed();
 
                 return $this->render('front/index.html.twig', [
                     'controller_name' => 'StaticController',
                     'orderNotClose' => $orderNotClose,
-                    'orderNotNew' => $orderNotNew,
+                    'ordersClose' => $ordersClose
                 ]);
             }
-        }
-        else
-        {
+        } else {
             return $this->render('front/index.html.twig', [
                 'controller_name' => 'StaticController',
             ]);

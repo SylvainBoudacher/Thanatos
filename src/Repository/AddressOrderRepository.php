@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\AddressOrder;
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
 
@@ -53,19 +54,26 @@ class AddressOrderRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findOneOwnedByStatusAndOrder($statusAddress, $statusOrder): ?AddressOrder
+    public function findOneOwnedByStatusAndOrder($statusAddress, $statusOrder, $order): ?AddressOrder
     {
-        return $this->createQueryBuilder('a')
+        $query = $this->createQueryBuilder('a')
             ->select('a')
             ->innerJoin(Order::class, 'o', 'WITH', 'o.id = a.command')
             ->andWhere('a.status = :statusAddress')
             ->andWhere('o.status= :statusOrder')
             ->andWhere('o.possessor = :possessor')
+            ->andWhere('o = :order')
             ->setParameter('statusAddress', $statusAddress)
             ->setParameter('statusOrder', $statusOrder)
             ->setParameter('possessor', $this->security->getUser())
-            ->getQuery()
-            ->getOneOrNullResult();
+            ->setParameter('order', $order)
+            ->getQuery();
+
+        try {
+            return $query->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 
 }

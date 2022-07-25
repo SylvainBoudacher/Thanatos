@@ -1,77 +1,144 @@
 <section class="bg-white white:bg-gray-900 pb-11">
     <div class="container px-6 mx-auto">
-        {% if orderNotClose is not empty %}
-            {% for order in orderNotClose %}
-                {% if order.status != 'DRAFT' and order.status != 'DRIVER_USER_CANCEL_ORDER' %}
-                    <div class="py-2">
-                        <div class="container px-9 py-3 mx-auto rounded-b-lg border border-slate-200 rounded-lg shadow-sm">
-                            <div class="flex flex-row justify-between mt-2">
-                                <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Commande
-                                    #{{ order.number }}
-                                </p>
-                                {% if order.status == 'DRIVER_CLOSE' %}
-                                    {% for corpse in order.corpses %}
-                                        {% if is_granted('ORDER', corpse) %}
-                                            <a href="{{ path('user_order_theme', {corpse: corpse.id}) }}">
-                                                <button class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2">
-                                                    Commander un service
-                                                    pour {{ corpse.lastname }} {{ corpse.firstname }}
-                                                </button>
-                                            </a>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class=" py-3 mx-auto rounded-b-lg w-full">
-                                <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
-                                    <div class="bg-blue-600 h-2.5 rounded-full"
-                                            {% if order.types == 'DRIVER' %}
-                                            {% if order.status == 'DRIVER_NEW' %} style="width: 5% ">{% endif %}
-                                        {% if order.status == 'DRIVER_ACCEPT' %} style="width: 23% ">{% endif %}
-                                        {% if order.status == 'DRIVER_ARRIVES' %} style="width: 40% ">{% endif %}
-                                        {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %} style="width: 58% ">{% endif %}
-                                        {% if order.status == 'DRIVER_BRINGS_TO_WAREHOUSE' %} style="width: 78% ">{% endif %}
-                                        {% if order.status == 'DRIVER_CLOSE' %} style="width: 100% ">{% endif %}
-                                        {% endif %}
 
-                                        {% if order.types == 'FUNERAL' %}
-                                            {% if order.status == 'FUNERAL_NEW' %} style="width: 5% ">{% endif %}
-                                            {% if order.status == 'FUNERAL_ACCEPT' %} style="width: 23% ">{% endif %}
-                                            {% if order.status == 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' %} style="width: 32% ">{% endif %}
-                                            {% if order.status == 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' %} style="width: 41% ">{% endif %}
-                                            {% if order.status == 'FUNERAL_IN_PROGRESS_PROCESSING' %} style="width: 58% ">{% endif %}
-                                            {% if order.status == 'FUNERAL_CLOSE_PROCESSING' %} style="width: 70% ">{% endif %}
-                                            {% if order.status == 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' %} style="width: 82% ">{% endif %}
-                                            {% if order.status == 'FUNERAL_DRIVER_CLOSE_BRING' %} style="width: 100% ">{% endif %}
+        {% if ordersClose is not empty %}
+            {% for order in ordersClose %}
+                <div class="py-2">
+                    <div class="container px-9 py-3 mx-auto rounded-b-lg border border-slate-200 rounded-lg shadow-sm">
+                        <div class="flex flex-row justify-between mt-2">
+                            <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Commande
+                                #{{ order.number }}
+                            </p>
+                            {% if order.status == 'DRIVER_CLOSE' %}
+                                {% for corpse in order.corpses %}
+                                    {% if is_granted('ORDER', corpse) %}
+                                        <a href="{{ path('user_order_theme', {corpse: corpse.id}) }}">
+                                            <button class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2">
+                                                Commander un service
+                                                pour {{ corpse.lastname }} {{ corpse.firstname }}
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class=" py-3 mx-auto rounded-b-lg w-full">
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                                <div class="bg-blue-600 h-2.5 rounded-full"
+                                        {% if order.types == 'DRIVER' %}
+                                        {% if order.status == 'DRIVER_NEW' %} style="width: 5% ">{% endif %}
+                                    {% if order.status == 'DRIVER_ACCEPT' %} style="width: 23% ">{% endif %}
+                                    {% if order.status == 'DRIVER_ARRIVES' %} style="width: 40% ">{% endif %}
+                                    {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %} style="width: 58% ">{% endif %}
+                                    {% if order.status == 'DRIVER_BRINGS_TO_WAREHOUSE' %} style="width: 78% ">{% endif %}
+                                    {% if order.status == 'DRIVER_CLOSE' %} style="width: 100% ">{% endif %}
+                                    {% endif %}
 
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
-                                    {% if order.types == 'DRIVER' %}
-                                        <p class="text-sm">Recherche de livreur</p>
-                                        <p class="text-sm">Conducteur accepter</p>
-                                        <p class="text-sm">Conducteur arriver</p>
-                                        <p class="text-sm">Validation de la commande</p>
-                                        <p class="text-sm">Corps en acheminement</p>
-                                        <p class="text-sm">Commande arriver</p>
-                                    {% elseif order.types == 'FUNERAL' %}
-                                        <p class="text-sm">En attente de validation</p>
-                                        <p class="text-sm">Commande accepté</p>
-                                        <p class="text-sm">Corps en transit</p>
-                                        <p class="text-sm">En préparation</p>
-                                        <p class="text-sm">Préparation terminé</p>
-                                        <p class="text-sm">En livraison</p>
-                                        <p class="text-sm">Commande arriver</p>
+                                    {% if order.types == 'FUNERAL' %}
+                                        {% if order.status == 'FUNERAL_NEW' %} style="width: 5% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_ACCEPT' %} style="width: 23% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' %} style="width: 32% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' %} style="width: 41% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_IN_PROGRESS_PROCESSING' %} style="width: 58% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_CLOSE_PROCESSING' %} style="width: 70% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' %} style="width: 82% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_DRIVER_CLOSE_BRING' %} style="width: 100% ">{% endif %}
+
                                     {% endif %}
                                 </div>
                             </div>
+                            <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                                {% if order.types == 'DRIVER' %}
+                                    <p class="text-sm">Recherche de livreur</p>
+                                    <p class="text-sm">Conducteur accepter</p>
+                                    <p class="text-sm">Conducteur arriver</p>
+                                    <p class="text-sm">Validation de la commande</p>
+                                    <p class="text-sm">Corps en acheminement</p>
+                                    <p class="text-sm">Commande arriver</p>
+                                {% elseif order.types == 'FUNERAL' %}
+                                    <p class="text-sm">En attente de validation</p>
+                                    <p class="text-sm">Commande accepté</p>
+                                    <p class="text-sm">Corps en transit</p>
+                                    <p class="text-sm">En préparation</p>
+                                    <p class="text-sm">Préparation terminé</p>
+                                    <p class="text-sm">En livraison</p>
+                                    <p class="text-sm">Commande arriver</p>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                {% endif %}
+                </div>
             {% endfor %}
         {% endif %}
+        {% if orderNotClose is not empty %}
+            {% for order in orderNotClose %}
+                <div class="py-2">
+                    <div class="container px-9 py-3 mx-auto rounded-b-lg border border-slate-200 rounded-lg shadow-sm">
+                        <div class="flex flex-row justify-between mt-2">
+                            <p class="text-lg font-semibold text-gray-900 capitalize white:text-white">Commande
+                                #{{ order.number }}
+                            </p>
+                            {% if order.status == 'DRIVER_CLOSE' %}
+                                {% for corpse in order.corpses %}
+                                    {% if is_granted('ORDER', corpse) %}
+                                        <a href="{{ path('user_order_theme', {corpse: corpse.id}) }}">
+                                            <button class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs px-5 py-2.5 text-center mr-2 mb-2">
+                                                Commander un service
+                                                pour {{ corpse.lastname }} {{ corpse.firstname }}
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class=" py-3 mx-auto rounded-b-lg w-full">
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 white:bg-gray-700 mt-4 flex flex-row">
+                                <div class="bg-blue-600 h-2.5 rounded-full"
+                                        {% if order.types == 'DRIVER' %}
+                                        {% if order.status == 'DRIVER_NEW' %} style="width: 5% ">{% endif %}
+                                    {% if order.status == 'DRIVER_ACCEPT' %} style="width: 23% ">{% endif %}
+                                    {% if order.status == 'DRIVER_ARRIVES' %} style="width: 40% ">{% endif %}
+                                    {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %} style="width: 58% ">{% endif %}
+                                    {% if order.status == 'DRIVER_BRINGS_TO_WAREHOUSE' %} style="width: 78% ">{% endif %}
+                                    {% if order.status == 'DRIVER_CLOSE' %} style="width: 100% ">{% endif %}
+                                    {% endif %}
 
+                                    {% if order.types == 'FUNERAL' %}
+                                        {% if order.status == 'FUNERAL_NEW' %} style="width: 5% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_ACCEPT' %} style="width: 23% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' %} style="width: 32% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' %} style="width: 41% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_IN_PROGRESS_PROCESSING' %} style="width: 58% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_CLOSE_PROCESSING' %} style="width: 70% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' %} style="width: 82% ">{% endif %}
+                                        {% if order.status == 'FUNERAL_DRIVER_CLOSE_BRING' %} style="width: 100% ">{% endif %}
+
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
+                                {% if order.types == 'DRIVER' %}
+                                    <p class="text-sm">Recherche de livreur</p>
+                                    <p class="text-sm">Conducteur accepter</p>
+                                    <p class="text-sm">Conducteur arriver</p>
+                                    <p class="text-sm">Validation de la commande</p>
+                                    <p class="text-sm">Corps en acheminement</p>
+                                    <p class="text-sm">Commande arriver</p>
+                                {% elseif order.types == 'FUNERAL' %}
+                                    <p class="text-sm">En attente de validation</p>
+                                    <p class="text-sm">Commande accepté</p>
+                                    <p class="text-sm">Corps en transit</p>
+                                    <p class="text-sm">En préparation</p>
+                                    <p class="text-sm">Préparation terminé</p>
+                                    <p class="text-sm">En livraison</p>
+                                    <p class="text-sm">Commande arriver</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
         <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
             <div class="p-8 space-y-3 border-2 border-dark-400 white:border-dark-300 rounded-xl">
                 <span class="inline-block text-dark-500 white:text-dark-400">

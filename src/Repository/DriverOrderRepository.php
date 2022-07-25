@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\DriverOrder;
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,19 +24,54 @@ class DriverOrderRepository extends ServiceEntityRepository
     // /**
     //  * @return DriverOrder[] Returns an array of DriverOrder objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findCurrentOrderDriverInProgress($company)
     {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $status = [Order::DRIVER_ACCEPT,
+            Order::DRIVER_ARRIVES,
+            Order::DRIVER_PROCESSING_ACCEPT,
+            Order::DRIVER_BRINGS_TO_WAREHOUSE];
+
+        $query = $this->createQueryBuilder('do')
+            ->join("do.driver", "d")
+            ->join("do.command", "o")
+            ->where("d = :driver")
+            ->andWhere("o.status IN (:status)")
+            ->setParameter('driver', $company)
+            ->setParameter('status', $status)
+            ->getQuery();
+
+        try {
+            return $query->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
-    */
+
+    public function findCurrentOrderDriverInProgressByCompanyAndOrder($company, $order)
+    {
+        $status = [Order::DRIVER_ACCEPT,
+            Order::DRIVER_ARRIVES,
+            Order::DRIVER_PROCESSING_ACCEPT,
+            Order::DRIVER_BRINGS_TO_WAREHOUSE];
+
+        $query = $this->createQueryBuilder('do')
+            ->join("do.driver", "d")
+            ->join("do.command", "o")
+            ->where("d = :driver")
+            ->andWhere("o.status IN (:status)")
+            ->andWhere("o = :order")
+            ->setParameter('driver', $company)
+            ->setParameter('status', $status)
+            ->setParameter('order', $order)
+            ->getQuery();
+
+        try {
+            return $query->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
+    }
 
     /*
     public function findOneBySomeField($value): ?DriverOrder

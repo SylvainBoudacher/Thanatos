@@ -2,6 +2,7 @@
 
 namespace App\Controller\Front\driver;
 
+use App\Entity\AddressOrder;
 use App\Entity\Order;
 use App\Form\ProcessingValidationType;
 use App\Entity\DriverOrder;
@@ -29,32 +30,25 @@ class DriverController extends AbstractController
     {
         // get the driver id
         $company = $companyRepository->find($this->getUser()->getCompany());
-        $orders = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'DRIVER_NEW');
+        $ordersCorpseNew = $orderRepository->findAllOrderWhenTypeWhitStatus('DRIVER', 'DRIVER_NEW');
+        $currentDriverOrder = $driverOrderRepository->findCurrentOrderDriverInProgress($company);
+        $address = null;
 
         //if driver have orders
-        if (empty($currentOrder = $driverOrderRepository->findOneBy(['driver' => $company]))) {
-            $address = null;
-        } else {
-            //find the order that the driver is working on
-            $currentOrder = $driverOrderRepository->findOneBy(['driver' => $company])->getCommand();
+        if ($currentDriverOrder != null) {
 
+            //get the addressOrder of the order
+            $addressOrder = array_filter($currentDriverOrder->getCommand()->getAddressOrders()->toArray(),
+                fn(AddressOrder $a) => $a->getStatus() === AddressOrder::DECLARATION_CORPSES);
 
-            if ($currentOrder->getStatus() != 'DRIVER_CLOSE') {
-                //get the addressOrder of the order
-                $addressOrder = $currentOrder->getAddressOrders();
-                //get the address of the addressOrder
-                $address = $addressRepository->findOneBy(['id' => $addressOrder[0]->getAddress()]);
-            } else {
-                $currentOrder = null;
-                $address = null;
-            }
+            if (!empty($addressOrder)) $address = $addressOrder[0]->getAddress();
+
         }
-
 
         return $this->render('front/driver/orders/index.html.twig', [
             'controller_name' => 'DriverController',
-            'orders' => $orders,
-            'currentOrder' => $currentOrder,
+            'ordersCorpseNew' => $ordersCorpseNew,
+            'currentDriverOrder' => $currentDriverOrder,
             'address' => $address,
         ]);
 
@@ -63,7 +57,6 @@ class DriverController extends AbstractController
     #[Route('/prendre-commande/{id}', name: 'take_order')]
     public function takeOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository, Order $order): Response
     {
-
         $this->denyAccessUnlessGranted(OrderVoter::TAKE_ORDER, $order);
 
         $company = $companyRepository->find($this->getUser()->getCompany());
@@ -167,11 +160,17 @@ class DriverController extends AbstractController
     #[Route('/commande/{id}', name: 'my_order')]
     public function myOrder(OrderRepository $orderRepository, CompanyRepository $companyRepository, Order $order): Response
     {
-
         $this->denyAccessUnlessGranted(OrderVoter::EDIT, $order);
+
+        $address = null;
+        $addressOrder = array_filter($order->getAddressOrders()->toArray(),
+            fn(AddressOrder $a) => $a->getStatus() === AddressOrder::DECLARATION_CORPSES);
+
+        if (!empty($addressOrder)) $address = $addressOrder[0]->getAddress();
 
         return $this->render('front/driver/orders/show.html.twig', [
             'order' => $order,
+            'address' => $address
         ]);
     }
 }
