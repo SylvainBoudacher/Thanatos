@@ -27,7 +27,7 @@ class Address
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotNull
-     * @Assert\Regex("/^[a-z ][a-z- ][a-z ]+/i")
+     * @Assert\Regex("/^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/i")
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
@@ -50,13 +50,21 @@ class Address
      * @ORM\Column(type="string", length=4, nullable=true)
      * @Assert\NotNull
      * @Assert\Regex("/^\d+$/")
+     *  * @Assert\Length(
+     *      min = 1,
+     *      max = 4,
+     * )
      */
     private $number;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotNull
-     * @Assert\Regex("/^[a-z ][a-z-, ]*[a-z ]+$/i")
+     * @Assert\Regex("/^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$/i")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     * )
      */
     private $street;
 

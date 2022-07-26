@@ -32,6 +32,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Length(
+     *      max = 180,
+     * )
      * @Assert\Email(
      *     message = "Le mail n'est pas valide"
      * )
