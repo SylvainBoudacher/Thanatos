@@ -50,7 +50,7 @@ class Address
      * @ORM\Column(type="string", length=4, nullable=true)
      * @Assert\NotNull
      * @Assert\Regex("/^\d+$/")
-     *  * @Assert\Length(
+     * @Assert\Length(
      *      min = 1,
      *      max = 4,
      * )
