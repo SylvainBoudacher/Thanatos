@@ -34,4 +34,4 @@ fixture:
 	docker-compose exec php bin/console doctrine:fixtures:load --no-interaction
 
 resetAndSetBdd:
-	make stop && make start && make bdd && make fixture
+	make down && make start && make bdd && make fixture
