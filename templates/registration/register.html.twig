@@ -21,24 +21,33 @@
                     <label class="text-gray-700 dark:text-gray-200" for="username">Prénom</label>
                     {{ form_widget(registrationForm.firstName , {'attr':
                         {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                    {#                    {{ form_errors(registrationForm.firstName) }} #}
+                    <span class="text-gray-700 dark:text-gray-200">{{ form_errors(registrationForm.firstName) }}</span>
+
                 </div>
 
                 <div>
                     <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Nom</label>
                     {{ form_widget(registrationForm.lastName , {'attr':
                         {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                    {{ form_errors(registrationForm.lastName) }}
+
                 </div>
 
                 <div>
                     <label class="text-gray-700 dark:text-gray-200" for="password">Date de naissance</label>
                     {{ form_widget(registrationForm.birthDate , {'attr':
                         {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                    {{ form_errors(registrationForm.birthDate) }}
+
                 </div>
 
                 <div>
                     <label class="text-gray-700 dark:text-gray-200" for="passwordConfirmation">Adresse</label>
                     {{ form_widget(registrationForm.address , {'attr':
                         {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                    {{ form_errors(registrationForm.address) }}
+
                 </div>
             </div>
 
@@ -46,16 +55,22 @@
                 <label class="text-gray-700 dark:text-gray-200" for="username">Email</label>
                 {{ form_widget(registrationForm.email , {'attr':
                     {'class': 'block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring'}} ) }}
+                {{ form_errors(registrationForm.email) }}
+
             </div>
 
             <div class="mt-4">
                 {{ form_widget(registrationForm.plainPassword ) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+
             </div>
 
             <div class="mt-4">
                 <label class="text-gray-700 dark:text-gray-200 pr-3" for="username">J'accepte les termes</label>
                 {{ form_widget(registrationForm.agreeTerms , {'attr':
                     {'class': ''}} ) }}
+                {{ form_errors(registrationForm.agreeTerms) }}
+
             </div>
 
             {# Submit button #}
@@ -67,7 +82,9 @@
                 <span class="w-full border-b dark:border-gray-500"></span>
             </div>
 
-            <p class="mt-8 text-xs font-light text-center text-gray-400"> Vous avez déjà un compte?<a href="{{ path('app_login') }}"  class="font-medium text-gray-700 dark:text-gray-200 hover:underline"> Conectez-vous ici</a></p>
+            <p class="mt-8 text-xs font-light text-center text-gray-400"> Vous avez déjà un compte?<a
+                        href="{{ path('app_login') }}"
+                        class="font-medium text-gray-700 dark:text-gray-200 hover:underline"> Connectez-vous ici</a></p>
         </div>
 
 
