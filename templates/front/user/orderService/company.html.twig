@@ -57,7 +57,7 @@
 
                                     <img src="{{ model.modelMedia.toArray ? vich_uploader_asset(model.modelMedia.toArray | first.media) : asset('images/model-default.png') }}"
                                          alt="modele"
-                                         class="w-52 h-52 itemContent"/>
+                                         class="w-52 h-52 itemContent object-cover"/>
 
                                 </label>
                                 <span class="w-full h-full"> {{ model.name }}<br>{{ model.price }}€</span>
@@ -89,7 +89,7 @@
 
                                     <img src="{{ modelMaterial.material.media ? vich_uploader_asset(modelMaterial.material.media) : asset('images/material-default.png') }}"
                                          alt="Materiau {{ modelMaterial.material.name }}"
-                                         class="w-52 h-52 itemContent"/>
+                                         class="w-52 h-52 itemContent object-cover"/>
 
                                 </label>
                                 <span class="w-full h-full">{{ modelMaterial.material.name }}
@@ -145,7 +145,7 @@
 
                                     <img src="{{ modelExtra.extra.media ? vich_uploader_asset(modelExtra.extra.media) : asset('images/extra-default.png') }}"
                                          alt="Extra {{ modelExtra.extra.name }}"
-                                         class="w-52 h-52 itemContent"/>
+                                         class="w-52 h-52 itemContent object-cover"/>
 
                                 </label>
                                 <span class="w-full h-full">{{ modelExtra.extra.name }}<br>{{ modelExtra.extra.price }}
