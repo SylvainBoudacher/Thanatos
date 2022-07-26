@@ -23,6 +23,8 @@
                 Un chauffeur accepte de récupérer le corps.
             {% elseif preparation.status == constant('FUNERAL_DRIVER_CLOSE_BRING', preparation) %}
                 Commande close
+            {% elseif preparation.status == constant('FUNERAL_CANCEL', preparation) %}
+                Commande annulée
             {% endif %} <br>
             <span class="underline decoration-blue-500">{{ preparation.price }}€</span>
         </p>
