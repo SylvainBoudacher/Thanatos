@@ -272,7 +272,7 @@
                                 </div>
                             </div>
 
-                            <div class=" max-w-lg min-w-64 mx-4 h-full ">
+                            <div class=" min-w-64 mx-4 h-full ">
                                 <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
                                     {% if order.types == constant('DRIVER', order) %}
                                         Prise en charge / Livraison
@@ -299,7 +299,7 @@
                                 </p>
                             </div>
 
-                            <div class=" w-64 mx-4 h-full ">
+                            <div class=" w-64 w-3/4 mx-4 h-full ">
                                 <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps
                                     déclaré<span class="lowercase">(s)</span></h1>
                                 {% for corpse in order.corpses %}
@@ -308,6 +308,7 @@
                                     </p>
 
                                     {% if order.status == constant('DRIVER_CLOSE', order) %}
+                                        {#                                        {{ dump(corpse.preparation) }} #}
                                         {% if corpse.preparation == null or (corpse.preparation.status == constant('FUNERAL_DRAFT', corpse.preparation) ) %}
                                             <button class="mt-4">
                                                 <a href="{{ path('user_order_theme', {corpse: corpse.id}) }}"
@@ -315,6 +316,24 @@
                                                     Commander un service
                                                 </a>
                                             </button>
+                                        {% elseif corpse.preparation is not null %}
+                                            {% set status = corpse.preparation.status %}
+                                            {% if status == constant( 'FUNERAL_ACCEPT' ,corpse.preparation) %}
+                                                <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Commande
+                                                    acceptée, en attente qu'un conducteur l'emmène à la morgue</span>
+                                            {% elseif status == constant( 'FUNERAL_CORPSE_ARRIVES_TO_FUNERAL' ,corpse.preparation) %}
+                                                <span class="bg-yellow-800 text-yellow-100 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-200">En
+                                                    attente de prise en charge par la morgue</span>
+                                            {% elseif status == constant( 'FUNERAL_IN_PROGRESS_PROCESSING' ,corpse.preparation) %}
+                                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">En
+                                                    cours de prise en charge par la morgue</span>
+                                            {% elseif status == constant( 'FUNERAL_CLOSE_PROCESSING' ,corpse.preparation) %}
+                                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">Traitement
+                                                    fini, en attente qu'un conducteur vous livre le corps</span>
+                                            {% elseif status == constant( 'FUNERAL_CANCEL' ,corpse.preparation) %}
+                                                <span class="bg-pink-100 text-pink-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-pink-200 dark:text-pink-900">Commande
+                                                    annulée</span>
+                                            {% endif %}
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}
