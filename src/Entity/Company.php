@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Company
 {
     use TimestampableTrait;
-    
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -34,6 +34,10 @@ class Company
      * @Assert\NotNull
      * @Assert\NotBlank
      * @Assert\Regex("/^[a-z-]+$/i")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     * )
      */
     private $name;
 

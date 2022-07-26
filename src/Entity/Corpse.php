@@ -43,6 +43,7 @@ class  Corpse
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotNull
+     * @Assert\NotBlank
      * @Assert\Length(
      *      min = 2,
      *      max = 255,

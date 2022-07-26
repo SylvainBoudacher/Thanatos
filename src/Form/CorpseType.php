@@ -32,7 +32,9 @@ class CorpseType extends AbstractType
             ->add('birthdate', DateType::class, [
                 'label' => "Année de naissance",
                 'required' => true,
-                'widget' => 'single_text'
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd'
+
             ])
             ->add('dayOfDeath', DateTimeType::class, [
                 'label' => "Date de mort",

@@ -67,6 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotNull
+     * @Assert\NotBlank
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
@@ -77,6 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotNull
      * @AcmeAssert\LessThanOrEqual(message="Vous devez être majeur", comparison="major")
      */
     private $birthdate;

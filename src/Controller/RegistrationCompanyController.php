@@ -45,7 +45,6 @@ class RegistrationCompanyController extends AbstractController
                 )
             );
 
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -66,7 +65,9 @@ class RegistrationCompanyController extends AbstractController
         $company = new Company();
         $user = $this->getDoctrine()->getRepository(User::class)->find($user);
 
-        if ($role == 'a7#ddd8') {
+        if ($user == null) throw $this->createAccessDeniedException();
+
+        if ($user->getRoles()[0] == 'ROLE_DRIVER') {
             $form = $this->createForm(DriverType::class, $company);
         } else {
             $form = $this->createForm(CompanyType::class, $company);
@@ -88,7 +89,7 @@ class RegistrationCompanyController extends AbstractController
 
         return $this->render('registration/register-compagny.html.twig', [
             'registrationForm' => $form->createView(),
-            'role' => $role
+            'role' => $user->getRoles()[0]
         ]);
     }
 
