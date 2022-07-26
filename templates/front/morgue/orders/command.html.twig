@@ -52,12 +52,12 @@
                         </li>
                         <li class="flex space-x-3">
                             <span class="text-base font-normal leading-tight text-gray-500 ">
-                                Année de naissance : {{ corpse.birthdate | date('l d F Y') }}
+                                Année de naissance : {{ corpse.birthdate | date('d/m/Y') }}
                             </span>
                         </li>
                         <li class="flex space-x-3">
                             <span class="text-base font-normal leading-tight text-gray-500 ">
-                                Date de son décès : {{ corpse.dayOfDeath | date('l d F Y') }}
+                                Date de son décès : {{ corpse.dayOfDeath | date('d/m/Y H:i') }}
                             </span>
                         </li>
                         <li class="flex space-x-3">

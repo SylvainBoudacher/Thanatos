@@ -44,21 +44,21 @@
                             <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
                                 <ul class="list-disc dark:text-gray-400">
                                     <li>Date d'anniversaire : {{ corpse.birthdate | date('l d F Y') }} </li>
-                                    <li>Date de mort : {{ corpse.dayOfDeath | date('l d F Y H:i:s') }} </li>
+                                    <li>Date de mort : {{ corpse.dayOfDeath | date('l d F Y H:i') }} </li>
                                     <li>Taille : {{ corpse.height }}m</li>
                                     <li>Poids : {{ corpse.weight }}Kg</li>
                                     <li>Sexe de la personne : {{ corpse.sex }}</li>
                                     <li>Cause de la mort : {{ corpse.causeOfDeath }} </li>
                                 </ul>
                                 {% if corpse.preparation is null %}
-                                <div class="grid grid-cols-2 pt-2">
-                                    <a href="{{ path('user_order_theme', {corpse: corpse.id}) }}">
-                                        <button type="button"
-                                                class="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-                                            Commander un cercueil
-                                        </button>
-                                    </a>
-                                </div>
+                                    <div class="grid grid-cols-2 pt-2">
+                                        <a href="{{ path('user_order_theme', {corpse: corpse.id}) }}">
+                                            <button type="button"
+                                                    class="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                                                Commander un cercueil
+                                            </button>
+                                        </a>
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>
