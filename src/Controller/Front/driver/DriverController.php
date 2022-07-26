@@ -106,6 +106,7 @@ class DriverController extends AbstractController
     public function takePreparation(PreparationRepository $preparationRepository, EntityManagerInterface $em, Preparation $preparation): Response
     {
 
+
         $company = $em->getRepository(Company::class)->find($this->getUser()->getCompany());
         $currentDriverOrder = $em->getRepository(DriverOrder::class)->findCurrentOrderDriverInProgress($company);
         $currentPreparation = $preparationRepository->findCurrentOrderDriverInProgress($company);

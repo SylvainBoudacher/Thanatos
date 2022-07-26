@@ -7,8 +7,8 @@ const radiosModel = document.getElementsByClassName('radioModel');
 const radiosColor = document.getElementsByClassName('radioColor');
 const radiosMaterial = document.getElementsByClassName('radioMaterial');
 const radiosExtra = document.getElementsByClassName('radioExtra');
-const models = document.formOrderService.model;
-const burials = document.formOrderService.burial;
+const burials = Symbol.iterator in Object(document.formOrderService.burial) ? document.formOrderService.burial : new Array(document.formOrderService.burial);
+const models = Symbol.iterator in Object(document.formOrderService.model) ? document.formOrderService.model : new Array(document.formOrderService.model);
 const inputNames = ['material', 'color', 'model', 'extra', 'burial'];
 
 const dependanceCharacteristics = {

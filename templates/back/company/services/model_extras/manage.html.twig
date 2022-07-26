@@ -3,27 +3,37 @@
 {% block body %}
     <div class=" flex flex-row h-100">
         {{ include('components/sideBarPro.html.twig') }}
-        <div class="h-screen px-10 py-4 flex flex-col justify-between w-full">
-            <div>
-                <h1 class="text-3xl text-slate-800 mb-4 font-bold py-6">Gestion des extras pour {{ model.name }}</h1>
+        {% if  form.defaultCompanyExtras is not empty %}
 
-                {{ form_start(form) }}
-                <div class="mb-5">
-                    {{ form_row(form.defaultCompanyExtras) }}
+            <div class="h-screen px-10 py-4 flex flex-col justify-between w-full">
+                <div>
+                    <h1 class="text-3xl text-slate-800 mb-4 font-bold py-6">Gestion des extras
+                        pour {{ model.name }}</h1>
+
+                    {{ form_start(form) }}
+                    <div class="mb-5">
+                        {{ form_row(form.defaultCompanyExtras) }}
+                    </div>
+                    <button type="submit"
+                            class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 ">
+                        Valider
+                    </button>
+                    {{ form_end(form) }}
+
                 </div>
-                <button type="submit"
-                        class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 ">
-                    Valider
-                </button>
-                {{ form_end(form) }}
 
+                <div class="flex flex-row-reverse">
+                    <a href="{{ path("home_services") }}"
+                       class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="h-screen px-10 py-4 flex flex-col justify-between w-full">
+                <p>Vous ne possédez aucuns extras dans vos ressources</p>
             </div>
 
-            <div class="flex flex-row-reverse">
-                <a href="{{ path("home_services") }}"
-                   class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Retour</a>
-            </div>
-        </div>
+        {% endif %}
+
     </div>
 
 {% endblock %}
