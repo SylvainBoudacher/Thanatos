@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Preparation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -49,6 +50,41 @@ class PreparationRepository extends ServiceEntityRepository
             ->execute();
 
         return $query;
+    }
+
+    public function getPreparationsNewNotOccupied()
+    {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.status IN (:status)')
+            ->andWhere('p.driver is NULL')
+            ->setParameter('status', [Preparation::FUNERAL_ACCEPT, Preparation::FUNERAL_CLOSE_PROCESSING])
+            ->getQuery()
+            ->execute();
+
+        return $query;
+    }
+
+    public function findCurrentOrderDriverInProgress($company)
+    {
+        $status = [
+            Preparation::FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL,
+//            Preparation::FUNERAL_DRIVER_BRINGS_TO_FUNERAL,
+//            Preparation::FUNERAL_CORPSE_ARRIVES_TO_FUNERAL,
+            Preparation::FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER,
+        ];
+
+        $query = $this->createQueryBuilder('p')
+            ->where('p.status IN (:status)')
+            ->andWhere('p.driver = :company')
+            ->setParameter('status', $status)
+            ->setParameter('company', $company)
+            ->getQuery();
+
+        try {
+            return $query->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 
     public function getPreparationsByCompanyByStatus($company, $status)

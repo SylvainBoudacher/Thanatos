@@ -19,6 +19,8 @@ class PreparationVoter extends Voter
     public const ORDER = 'ORDER';
     public const ORDER_CLASSIC = 'ORDER_CLASSIC';
     public const CONFIRM_ORDER = 'CONFIRM_ORDER';
+    public const TAKE_ORDER = 'TAKE_ORDER';
+
 
     private EntityManagerInterface $em;
 
@@ -32,7 +34,7 @@ class PreparationVoter extends Voter
 
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW, self::ORDER, self::ORDER_CLASSIC, self::CONFIRM_ORDER])
+        return in_array($attribute, [self::EDIT, self::VIEW, self::ORDER, self::ORDER_CLASSIC, self::CONFIRM_ORDER, self::TAKE_ORDER])
             && ($subject instanceof Corpse ||
                 $subject instanceof Preparation);
 
@@ -60,8 +62,9 @@ class PreparationVoter extends Voter
             case self::CONFIRM_ORDER:
                 return $this->canConfirm($subject);
             case self::ORDER_CLASSIC:
-
                 return $this->canOrderTypeClassic($subject);
+            case self::TAKE_ORDER:
+                return $this->canTakeOrder($subject);
         }
 
         return false;
@@ -144,6 +147,28 @@ class PreparationVoter extends Voter
         if ($corpse->getPreparation() == null || $corpse->getPreparation()->getTheme() == null) return false;
 
         if ($corpse->getPreparation()->getTheme()->getType() !== Theme::TYPE_CLASSIC) return false;
+
+        return true;
+    }
+
+    private function canTakeOrder(Preparation $preparation): bool
+    {
+
+        if ($preparation->getDriver() != null ||
+            !in_array($preparation->getStatus(), [Preparation::FUNERAL_ACCEPT, Preparation::FUNERAL_CLOSE_PROCESSING]) ||
+            $preparation->getDeletedAt() != null
+        ) return false;
+
+        return true;
+    }
+
+    private function canBringToWarehouse(Preparation $preparation): bool
+    {
+
+        if ($preparation->getDriver() != null ||
+            !in_array($preparation->getStatus(), [Preparation::FUNERAL_ACCEPT, Preparation::FUNERAL_CLOSE_PROCESSING]) ||
+            $preparation->getDeletedAt() != null
+        ) return false;
 
         return true;
     }
