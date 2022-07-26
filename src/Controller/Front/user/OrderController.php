@@ -659,7 +659,7 @@ class OrderController extends AbstractController
 
         $user = $userRep->find($this->getUser());
 
-        $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRAFT, $order);
+        $addressOrder = $addressOrderRep->findOneOwnedByStatusAndOrder(AddressOrder::DECLARATION_CORPSES, Order::DRIVER_NEW, $order);
 
         $address = $addressOrder->getAddress();
         $priceOrder = 0.00;
