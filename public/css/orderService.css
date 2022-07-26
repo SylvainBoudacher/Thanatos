@@ -3,9 +3,8 @@
 }
 
 #formBurialOrderProduct input[type=radio].radioOrderService:checked + label .itemContent {
-    border: 3px #facc15 solid;
+    border: 3px #818cf8 solid;
     border-radius: 10px;
-    transition: transform 0.2s ease-in-out;
 
 }
 
