@@ -12,73 +12,71 @@
 
             <div class="flex flex-row  pb-4 justify-start ">
                 <p class="font-bold text-3xl pb-3 text-gray-800">Commande #{{ preparation.id }}</p>
-                <a href="{{ path('company_order', {id: preparation.id}) }}">
-                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir le détail</p>
-                </a>
-                <a href="#">
-                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir la facture</p>
-                </a>
-                <svg class="w-6  xmlns=" http:
-                //www.w3.org/2000/svg" viewBox="0 0 24 24" />
+
+
+
+                <svg class="w-6  xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 24 24" />
                 <path fill="none" d="M0 0h24v24H0Z"></path>
                 <path fill="#1E40AF" d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8Z"></path>
                 </svg>
             </div>
 
             <section class="dark:bg-white rounded-xl shadow-md ">
-                <div class="container px-9 py-10 mx-auto rounded-t-lg border border-slate-200">
-                    <div class="flex flex-row">
-                        <div class="md:flex md:items-center ">
-                            <div class="grid pr-4">
-                                <div>
-                                    <div class="bg-gray-200 rounded-lg shadow-xs">
-                                        <img class="w-[8rem] object-cover rounded-xl aspect-square max-w-[8rem]"
-                                             src="{{ asset('images/commandeLogo.svg') }}">
+                <a href="{{ path('company_order', {id: preparation.id}) }}">
+                    <div class="container px-9 py-10 mx-auto rounded-t-lg border border-slate-200 hover:bg-blue-100">
+                        <div class="flex flex-row">
+                            <div class="md:flex md:items-center ">
+                                <div class="grid pr-4">
+                                    <div>
+                                        <div class="bg-gray-200 rounded-lg shadow-xs">
+                                            <img class="w-[8rem] object-cover rounded-xl aspect-square max-w-[8rem]"
+                                                 src="{{ asset('images/commandeLogo.svg') }}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class=" max-w-lg min-w-64 mx-4 h-full ">
-                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
+                                <div class=" max-w-lg min-w-64 mx-4 h-full ">
+                                    <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">
                                     {% if preparation.status == constant('FUNERAL_NEW', preparation) %}
-                                    Nouvelle commande
-                                {% elseif
-                                    preparation.status == constant('FUNERAL_ACCEPT', preparation) or
-                                    preparation.status == constant('FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL', preparation) %}
-                                    En attente qu'un chauffeur s'occupe de vous transmettre le corps
-                                {% elseif preparation.status == constant('FUNERAL_DRIVER_BRINGS_TO_FUNERAL', preparation) %}
-                                    En attente de votre confirmation que le corps soit bien arrivé.
-                                {% elseif preparation.status == constant('FUNERAL_CORPSE_ARRIVES_TO_FUNERAL', preparation) %}
-                                    En attente de la prise en charge du corps de votre part.
-                                {% elseif preparation.status == constant('FUNERAL_IN_PROGRESS_PROCESSING', preparation) %}
-                                    En cours du traitement du corps de votre part.
-                                {% elseif preparation.status == constant('FUNERAL_CLOSE_PROCESSING', preparation) %}
-                                    En attente qu'un chauffeur prend le corps.
-                                {% elseif preparation.status == constant('FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER', preparation) %}
-                                    Un chauffeur accepte de récupérer le corps.
-                                {% elseif preparation.status == constant('FUNERAL_DRIVER_CLOSE_BRING', preparation) %}
-                                    Commande close
-                                    {% endif %}<br>
+                                        Nouvelle commande
+                                    {% elseif
+                                        preparation.status == constant('FUNERAL_ACCEPT', preparation) or
+                                        preparation.status == constant('FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL', preparation) %}
+                                        En attente qu'un chauffeur s'occupe de vous transmettre le corps
+                                    {% elseif preparation.status == constant('FUNERAL_DRIVER_BRINGS_TO_FUNERAL', preparation) %}
+                                        En attente de votre confirmation que le corps soit bien arrivé.
+                                    {% elseif preparation.status == constant('FUNERAL_CORPSE_ARRIVES_TO_FUNERAL', preparation) %}
+                                        En attente de la prise en charge du corps de votre part.
+                                    {% elseif preparation.status == constant('FUNERAL_IN_PROGRESS_PROCESSING', preparation) %}
+                                        En cours du traitement du corps de votre part.
+                                    {% elseif preparation.status == constant('FUNERAL_CLOSE_PROCESSING', preparation) %}
+                                        En attente qu'un chauffeur prend le corps.
+                                    {% elseif preparation.status == constant('FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER', preparation) %}
+                                        Un chauffeur accepte de récupérer le corps.
+                                    {% elseif preparation.status == constant('FUNERAL_DRIVER_CLOSE_BRING', preparation) %}
+                                        Commande close
+                                        {% endif %}<br>
 
-                                </h1>
+                                    </h1>
 
-                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                    {{ preparation.price }}€
-                                </p>
+                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                        {{ preparation.price }}€
+                                    </p>
+                                </div>
+
+                                <div class=" w-64 mx-4 h-full ">
+                                    <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps
+                                        à s'occuper</h1>
+                                    {% set corpse = preparation.corpse %}
+                                    <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
+                                        {{ corpse.firstname }} {{ corpse.lastname }}
+                                    </p>
+                                </div>
+
                             </div>
-
-                            <div class=" w-64 mx-4 h-full ">
-                                <h1 class="text-xl font-semibold text-gray-800 capitalize white:text-white">Corps
-                                    à s'occuper</h1>
-                                {% set corpse = preparation.corpse %}
-                                <p class="max-w-xl mt-4 text-gray-500 white:text-gray-300">
-                                    {{ corpse.firstname }} {{ corpse.lastname }}
-                                </p>
-                            </div>
-
                         </div>
                     </div>
-                </div>
+                </a>
                 {# End of the card #}
                 <div class="container px-9 py-10 mx-auto rounded-b-lg border border-slate-200">
                     <div class="flex flex-row">
@@ -118,9 +116,6 @@
                 <p class="font-bold text-3xl pb-3 text-gray-800">Commande #{{ preparation.id }}</p>
                 <a href="{{ path('company_order', {id: preparation.id}) }}">
                     <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir le détail</p>
-                </a>
-                <a href="#">
-                    <p class="text-sm text-blue-800 pt-3 pl-10 text-gray-800">Voir la facture</p>
                 </a>
                 <svg class="w-6  xmlns=" http:
                 //www.w3.org/2000/svg" viewBox="0 0 24 24" />
