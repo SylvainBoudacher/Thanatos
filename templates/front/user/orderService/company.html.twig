@@ -55,7 +55,7 @@
                                 />
                                 <label for="model-{{ model.id }}" class="inline-block cursor-pointer">
 
-                                    <img src="{{ company.media ? vich_uploader_asset(company.media) : asset('images/model-default.png') }}"
+                                    <img src="{{ model.modelMedia.toArray ? vich_uploader_asset(model.modelMedia.toArray | first.media) : asset('images/model-default.png') }}"
                                          alt="modele"
                                          class="w-52 h-52 itemContent"/>
 
