@@ -47,7 +47,6 @@ class DriverController extends AbstractController
         //if driver have orders
         if ($currentDriverOrder != null) {
 
-
             //get the addressOrder of the order
             $addressOrder = array_filter($currentDriverOrder->getCommand()->getAddressOrders()->toArray(),
                 fn(AddressOrder $a) => $a->getStatus() === AddressOrder::DECLARATION_CORPSES);
@@ -116,7 +115,10 @@ class DriverController extends AbstractController
 
         $this->denyAccessUnlessGranted(PreparationVoter::TAKE_ORDER, $preparation);
 
-        $preparation->setStatus('FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL');
+        if ($preparation->getStatus() == Preparation::FUNERAL_ACCEPT) $preparation->setStatus('FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL');
+        elseif ($preparation->getStatus() == Preparation::FUNERAL_CLOSE_PROCESSING) $preparation->setStatus('FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER');
+        else throw $this->createAccessDeniedException();
+
         $preparation->setDriver($company);
         $em->flush();
 
@@ -137,23 +139,6 @@ class DriverController extends AbstractController
         ]);
     }
 
-
-    #[Route('/commande-arrive-au-client/{order_id}', name: 'order_arrive_to_client')]
-    public function arriveDriverOrder(OrderRepository $orderRepository, $order_id): Response
-    {
-
-        $order = $orderRepository->find($order_id);
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $order->setStatus('DRIVER_ARRIVES');
-
-        $entityManager->persist($order);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('my_order', ['id' => $order->getId()]);
-    }
-
     #[Route('/commande-arrive-a-la-morgue/{id}', name: 'order_arrive_to_company')]
     public function arriveToCompany(EntityManagerInterface $em, OrderRepository $orderRepository, Preparation $preparation): Response
     {
@@ -168,9 +153,30 @@ class DriverController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
         $preparation->setStatus('FUNERAL_DRIVER_BRINGS_TO_FUNERAL');
+        $preparation->setDriver(null);
         $entityManager->flush();
 
-        return $this->redirectToRoute('my_order', ['id' => $preparation->getId()]);
+        return $this->redirectToRoute('driver_orders');
+    }
+
+    #[Route('/commande-arrive-chez-le-client/{id}', name: 'order_arrive_to_client')]
+    public function arriveToClient(EntityManagerInterface $em, OrderRepository $orderRepository, Preparation $preparation): Response
+    {
+        $company = $em->getRepository(Company::class)->find($this->getUser()->getCompany());
+
+        if (
+            $preparation->getStatus() != Preparation::FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER ||
+            $preparation->getDriver() != $company
+        ) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $preparation->setStatus('FUNERAL_DRIVER_CLOSE_BRING');
+        $preparation->setDriver(null);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('driver_orders');
     }
 
     #[Route('/commande-valide/{id}', name: 'order_valid')]

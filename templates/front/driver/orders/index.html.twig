@@ -110,10 +110,20 @@
                             {% for preparation in ordersServiceNew %}
 
                                 {% set order = preparation.command %}
-                                {% set address = preparation.modelExtra.model.company.address %}
+                                {% set status = preparation.status %}
                                 {% set company = preparation.modelExtra.model.company %}
                                 {% set corpse = preparation.corpse %}
                                 {% set user = preparation.command.possessor %}
+
+                                {% if status == constant('FUNERAL_ACCEPT', preparation) %}
+                                    {% set address = preparation.modelExtra.model.company.address %}
+                                {% elseif status == constant('FUNERAL_CLOSE_PROCESSING', preparation) %}
+                                    {% for addressOrder in order.addressOrders %}
+                                        {% if addressOrder.status == constant('DECLARATION_CORPSES', addressOrder) %}
+                                            {% set address = addressOrder.address %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
 
                                 <div class=" stroke  py-12 mt-12 mx-12">
                                     <div class="max-w-sm mx-12 overflow-hidden bg-white rounded-lg shadow-lg bg-gray-800 shadow-md">
@@ -127,11 +137,19 @@
                                                 </g>
                                             </svg>
 
-                                            <p class="mx-3 text-lg font-semibold text-white">Morgue</p>
+                                            {% if status == constant('FUNERAL_ACCEPT', preparation) %}
+                                                <p class="mx-3 text-lg font-semibold text-white">Morgue</p>
+                                            {% elseif status == constant('FUNERAL_CLOSE_PROCESSING', preparation) %}
+                                                <p class="mx-3 text-lg font-semibold text-white">Client</p>
+                                            {% endif %}
                                         </div>
 
                                         <div class="px-6 py-4">
-                                            <h1 class="text-xl font-semibold text-gray-800 dark:text-white">{{ company.name }}</h1>
+                                            {% if status == constant('FUNERAL_ACCEPT', preparation) %}
+                                                <h1 class="text-xl font-semibold text-gray-800 dark:text-white">{{ company.name }}</h1>
+                                            {% elseif status == constant('FUNERAL_CLOSE_PROCESSING', preparation) %}
+                                                <h1 class="text-xl font-semibold text-gray-800 dark:text-white">{{ user.firstname }} {{ user.lastname }}</h1>
+                                            {% endif %}
 
                                             <div class="flex items-center mt-4 text-gray-700 dark:text-gray-200">
                                                 <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none"

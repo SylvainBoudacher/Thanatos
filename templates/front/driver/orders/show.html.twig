@@ -144,6 +144,11 @@
                                        class="inline-flex items-center mx-auto  w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
                                         Arriver à la morgue
                                     </a>
+                                {% elseif order.status == 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' %}
+                                    <a href="{{ path('order_arrive_to_client' , {'id' : order.id}) }}"
+                                       class="inline-flex items-center mx-auto  w-full px-5 py-2 text-white transition-colors duration-150 transform bg-green-700 rounded-lg  focus:ring focus:ring-gray-200 focus:ring-opacity-80">
+                                        Arriver chez le client
+                                    </a>
                                 {% endif %}
                             </div>
                         </nav>

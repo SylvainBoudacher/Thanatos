@@ -64,6 +64,7 @@ class PreparationRepository extends ServiceEntityRepository
         return $query;
     }
 
+
     public function findCurrentOrderDriverInProgress($company)
     {
         $status = [
