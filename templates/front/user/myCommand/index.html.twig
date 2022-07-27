@@ -316,33 +316,39 @@
                                             </button>
                                         {% elseif corpse.preparation is not null %}
                                             {% set status = corpse.preparation.status %}
-                                            {% if
-                                                status == constant( 'FUNERAL_ACCEPT' ,corpse.preparation) or
-                                                status == constant( 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' ,corpse.preparation) or
-                                                status == constant( 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' ,corpse.preparation) %}
-                                                <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Commande
-                                                    acceptée, en attente qu'un conducteur l'emmène à la morgue</span>
-                                            {% elseif status == constant( 'FUNERAL_NEW' ,corpse.preparation) %}
-                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-200 dark:text-yellow-900">En
-                                                    attente de la validation de la morgue</span>
-                                            {% elseif status == constant( 'FUNERAL_CORPSE_ARRIVES_TO_FUNERAL' ,corpse.preparation) %}
-                                                <span class="bg-yellow-800 text-yellow-100 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-200">En
-                                                    attente de prise en charge par la morgue</span>
-                                            {% elseif status == constant( 'FUNERAL_IN_PROGRESS_PROCESSING' ,corpse.preparation) %}
-                                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">En
-                                                    cours de traitement</span>
-                                            {% elseif status == constant( 'FUNERAL_CLOSE_PROCESSING' ,corpse.preparation) %}
-                                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">Traitement
-                                                    fini, en attente qu'un conducteur vous livre le corps</span>
-                                            {% elseif status == constant( 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' ,corpse.preparation) %}
-                                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">En
-                                                    route pour vous rendre le corps</span>
-                                            {% elseif status == constant( 'FUNERAL_DRIVER_CLOSE_BRING' ,corpse.preparation) %}
-                                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">Vous
-                                                    avez reçu votre corps</span>
-                                            {% elseif status == constant( 'FUNERAL_CANCEL' ,corpse.preparation) %}
-                                                <span class="bg-pink-100 text-pink-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-pink-200 dark:text-pink-900">Commande
-                                                    annulée</span>
+                                            {% if corpse.preparation.theme.type == constant('TYPE_SPECIAL', corpse.preparation.theme ) %}
+                                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">{{ corpse.preparation.theme.name }}</span>
+                                            {% else %}
+                                                {% if
+                                                    status == constant( 'FUNERAL_ACCEPT' ,corpse.preparation) or
+                                                    status == constant( 'FUNERAL_DRIVER_ACCEPT_TO_BRINGS_TO_FUNERAL' ,corpse.preparation) or
+                                                    status == constant( 'FUNERAL_DRIVER_BRINGS_TO_FUNERAL' ,corpse.preparation) %}
+                                                    <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Commande
+                                                        acceptée, en attente qu'un conducteur l'emmène à la
+                                                        morgue</span>
+                                                {% elseif status == constant( 'FUNERAL_NEW' ,corpse.preparation) %}
+                                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-200 dark:text-yellow-900">En
+                                                        attente de la validation de la morgue</span>
+                                                {% elseif status == constant( 'FUNERAL_CORPSE_ARRIVES_TO_FUNERAL' ,corpse.preparation) %}
+                                                    <span class="bg-yellow-800 text-yellow-100 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-200">En
+                                                        attente de prise en charge par la morgue</span>
+                                                {% elseif status == constant( 'FUNERAL_IN_PROGRESS_PROCESSING' ,corpse.preparation) %}
+                                                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">En
+                                                        cours de traitement</span>
+                                                {% elseif status == constant( 'FUNERAL_CLOSE_PROCESSING' ,corpse.preparation) %}
+                                                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">Traitement
+                                                        fini, en attente qu'un conducteur vous livre le corps</span>
+                                                {% elseif status == constant( 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' ,corpse.preparation) %}
+                                                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">En
+                                                        route pour vous rendre le corps</span>
+                                                {% elseif status == constant( 'FUNERAL_DRIVER_CLOSE_BRING' ,corpse.preparation) %}
+                                                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">Vous
+                                                        avez reçu votre corps</span>
+                                                {% elseif status == constant( 'FUNERAL_CANCEL' ,corpse.preparation) %}
+                                                    <span class="bg-pink-100 text-pink-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-pink-200 dark:text-pink-900">Commande
+                                                        annulée</span>
+                                                {% endif %}
+
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
