@@ -676,9 +676,7 @@ class OrderController extends AbstractController
         $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
             (new TemplatedEmail())
                 ->from(new \Symfony\Component\Mime\Address('thanatos.super.mailer@gmail.com', 'Thanatos'))
-                ->to("esedjicoraline@gmail.com")
-                //TODO change email
-//                ->to($user->getEmail())
+                ->to($user->getEmail())
                 ->subject('Confirmation de votre déclaration de corps')
                 ->context([
                     'order' => $order,
