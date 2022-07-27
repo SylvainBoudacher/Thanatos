@@ -632,8 +632,8 @@ class OrderController extends AbstractController
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => 'http://localhost' . $this->generateUrl('user_order_success'),
-            'cancel_url' => 'http://localhost' . $this->generateUrl('user_order_cancel'),
+            'success_url' => $_ENV['APP_URL'] . $this->generateUrl('user_order_success'),
+            'cancel_url' => $_ENV['APP_URL'] . $this->generateUrl('user_order_cancel'),
         ]);
 
         header("Location: " . $checkout_session->url);
@@ -729,8 +729,8 @@ class OrderController extends AbstractController
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => 'http://localhost' . $this->generateUrl('user_order_corpse_success', ['id' => $id]),
-            'cancel_url' => 'http://localhost' . $this->generateUrl('user_order_cancel'),
+            'success_url' => $_ENV['APP_URL'] . $this->generateUrl('user_order_corpse_success', ['id' => $id]),
+            'cancel_url' => $_ENV['APP_URL'] . $this->generateUrl('user_order_cancel'),
         ]);
 
 
@@ -739,7 +739,6 @@ class OrderController extends AbstractController
         return $this->render('front/user/payment/payment.html.twig', [
             'checkout_session' => $checkout_session,
         ]);
-
     }
 
     #[Route('/commander-un-service-corps/payement/confirmation/{id}', name: 'user_order_corpse_success', methods: ['POST', 'GET'])]
