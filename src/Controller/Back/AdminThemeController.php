@@ -35,8 +35,8 @@ class AdminThemeController extends AbstractController
     private function canDelete(Theme $entity): bool
     {
 
-        if (!empty($entity->getCompanyThemes())) return false;
-        if (!empty($entity->getPreparations())) return false;
+        if (!empty($entity->getCompanyThemes()->toArray())) return false;
+        if (!empty($entity->getPreparations()->toArray())) return false;
 
         return true;
     }

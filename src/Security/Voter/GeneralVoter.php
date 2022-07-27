@@ -86,7 +86,7 @@ class GeneralVoter extends Voter
     private function isNotUsedInPreparation($entity): bool
     {
 
-        if (!empty($entity->getPreparations())) return false;
+        if (!empty($entity->getPreparations()->toArray())) return false;
 
         return true;
     }
@@ -94,7 +94,7 @@ class GeneralVoter extends Voter
     private function canDeleteTheme(Entity\Theme $entity): bool
     {
 
-        if (!empty($entity->getCompanyThemes())) return false;
+        if (!empty($entity->getCompanyThemes()->toArray())) return false;
 
         return true;
     }

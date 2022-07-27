@@ -37,9 +37,6 @@
                                     Role
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Valider
-                                </th>
-                                <th scope="col" class="px-6 py-3">
                                     Actions
                                 </th>
                             </tr>
@@ -75,17 +72,6 @@
                                                 Utilisateur
                                             {% endif %}
                                         {% endfor %}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {% if user.isVerified %}
-                                            <span class="text-green-500">
-                                                Vérifié
-                                            </span>
-                                        {% else %}
-                                            <span class="text-red-500">
-                                                Non vérifié
-                                            </span>
-                                        {% endif %}
                                     </td>
                                     <td class="px-6 py-4 text-right">
                                         <a href="{{ path('admin_user_edit' , {"id" : user.id}) }}"
