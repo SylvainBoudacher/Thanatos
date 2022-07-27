@@ -78,14 +78,17 @@
                     </div>
                 </div>
 
-                <div class="w-full bg-red-100" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(251, 146, 60, 0.8) 28px, rgba(251, 146, 60, 0.8) 56px); background-color: rgba(18, 235, 212, 0);">
+                <div class="w-full bg-red-100"
+                     style="background-image: repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(251, 146, 60, 0.8) 28px, rgba(251, 146, 60, 0.8) 56px); background-color: rgba(18, 235, 212, 0);">
                     {% if order.status == 'DRIVER_PROCESSING_ACCEPT' %}
-                        <div class="w-full h-full z-10 absolute" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(251, 146, 60, 0.8) 28px, rgba(251, 146, 60, 0.8) 56px); background-color: rgba(18, 235, 212, 0);"></div>
+                        <div class="w-[73rem] h-full z-10 absolute"
+                             style="background-image: repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(251, 146, 60, 0.8) 28px, rgba(251, 146, 60, 0.8) 56px); background-color: rgba(18, 235, 212, 0);"></div>
                         <img class="object-cover h-full z-1" src="{{ asset("images/map.png") }} ">
                     {% else %}
-                        <div class="w-full h-full z-10 absolute" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(251, 146, 60, 0.8) 28px, rgba(251, 146, 60, 0.8) 56px); background-color: rgba(18, 235, 212, 0);"></div>
-                        <img    style="background-image: repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(251, 146, 60, 0.8) 28px, rgba(251, 146, 60, 0.8) 56px); background-color: rgba(18, 235, 212, 0);"
-                                class="object-cover h-full z-1" src="{{ asset("images/mapToWarehouse.png") }}">
+                        <div class="w-[73rem] h-full z-10 absolute"
+                             style="background-image: repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(251, 146, 60, 0.8) 28px, rgba(251, 146, 60, 0.8) 56px); background-color: rgba(18, 235, 212, 0);"></div>
+                        <img style="background-image: repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(251, 146, 60, 0.8) 28px, rgba(251, 146, 60, 0.8) 56px); background-color: rgba(18, 235, 212, 0);"
+                             class="object-cover h-full z-1" src="{{ asset("images/mapToWarehouse.png") }}">
                     {% endif %}
                 </div>
 
@@ -159,6 +162,8 @@
                 </div>
 
                 <div class="w-full bg-red-100 ">
+                    <div class="w-[73rem] h-full z-10 absolute"
+                         style="background-image: repeating-linear-gradient(45deg, transparent, transparent 28px, rgba(251, 146, 60, 0.8) 28px, rgba(251, 146, 60, 0.8) 56px); background-color: rgba(18, 235, 212, 0);"></div>
                     <img class="object-cover h-full" src="{{ asset("images/map.png") }}">
                 </div>
 
