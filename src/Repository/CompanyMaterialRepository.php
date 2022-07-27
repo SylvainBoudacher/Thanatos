@@ -7,6 +7,7 @@ use App\Entity\CompanyExtra;
 use App\Entity\CompanyMaterial;
 use App\Entity\Material;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,7 +23,8 @@ class CompanyMaterialRepository extends ServiceEntityRepository
         parent::__construct($registry, CompanyMaterial::class);
     }
 
-    public function getOneByCompanyAndMaterial(Company $company, Material $material) : ?CompanyMaterial {
+    public function getOneByCompanyAndMaterial(Company $company, Material $material): ?CompanyMaterial
+    {
 
         $query = $this->createQueryBuilder('cm')
             ->select('cm, c')
@@ -32,9 +34,12 @@ class CompanyMaterialRepository extends ServiceEntityRepository
             ->setParameter('company', $company)
             ->setParameter('material', $material)
             ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+            ->getQuery();
 
-        return $query;
+        try {
+            return $query->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 }

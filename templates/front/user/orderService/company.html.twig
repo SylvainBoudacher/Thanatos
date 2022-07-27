@@ -1,14 +1,22 @@
 {% extends 'base_front.html.twig' %}
 
 {% block body %}
-    {{ include('components/corpseRecapReference.html.twig') }}
 
-    <div class="p-3 h-full grid place-items-center">
-        <h1 class="text-3xl mb-3">{{ company.name }}</h1>
-        <article class=" p-3 grid grid-rows-2 mb-6">
-            <p class="row-span-2">{{ company.description }}
-            </p>
-        </article>
+    <div class="m-auto w-1/5 rounded-md p-2 shadow-md mt-5 text-center bg-gray-900 text-gray-100 mt-10">
+        <p>
+            <span class="uppercase">{{ corpse.lastname }}</span>
+            <span class="capitalize">{{ corpse.firstname }}</span>
+        </p>
+    </div>
+
+    <div class="p-3 h-full grid place-items-centers">
+        <div class="py-2 px-4 mx-auto max-w-screen-xl) border-b-2 border-gray-200">
+            <div class="max-w-screen-lg text-gray-500 sm:text-lg dark:text-gray-400">
+                <h2 class="mb-4 text-4xl tracking-tight font-bold text-gray-900 dark:text-white mt-10 text-center">{{ company.name }}</h2>
+                <p class="mb-4 font-light">{{ company.description }}</p>
+            </div>
+        </div>
+
 
         {% if burials is not empty or models is not empty or modelsMaterial is not empty or companiesPainting is not empty or modelsExtra is not empty %}
             <form action="{{ path('user_order_product', {corpse: corpse.id, company: company.id}) }}" method="POST"
@@ -16,22 +24,25 @@
                   name="formOrderService"
                   class="flex flex-col items-center">
 
-                <h1 class="text-red-600	mt-7">Veuillez choisir tous les élements pour pouvoir valider</h1>
+                <h1 class="text-red-600	mt-10">Veuillez choisir tous les elements pour pouvoir valider</h1>
 
                 {# BURIAL #}
                 <div id="burial" class="burial flex flex-col justify-center">
-                    <h1 class="text-center border-b border-slate-700 text-center uppercase text-lg font-bold w-64 my-8 self-center">
-                        Choisir un
-                        contenant</h1>
+                    <h1 class="text-center border-b text-gray-800 text-center uppercase text-lg font-bold w-64 my-8 self-center">
+                        Choisir un contenant
+                    </h1>
 
-                    <div class="burials flex flex-wrap justify-center gap-9">
+                    <div class="burials flex flex-wrap justify-center gap-9 ">
                         {% for burial in burials %}
                             <input id="burial-{{ burial.id }}" type="radio" value="{{ burial.id }}" name="burial"
-                                   class="min-h-full w-60 bg-purple-600 rounded p-5 text-center radioOrderService radioBurial"
-                                   data-burial-version="{{ burial.id }}"
-                            />
-                            <label for="burial-{{ burial.id }}" class="inline-block cursor-pointer itemContent"><span
-                                        class="bg-purple-600 p-9 block w-auto h-auto itemContent rounded">{{ burial.name }}</span></label>
+                                   class="min-h-full w-60   radioOrderService radioBurial "
+                                   data-burial-version="{{ burial.id }}"/>
+
+                            <label for="burial-{{ burial.id }}" class="inline-block cursor-pointer itemContent">
+                                <span class="bg-gray-800 text-gray-100 p-9 block w-auto h-auto itemContent rounded-lg ">
+                                    {{ burial.name }}
+                                </span>
+                            </label>
                         {% endfor %}
                     </div>
                 </div>
@@ -55,9 +66,9 @@
                                 />
                                 <label for="model-{{ model.id }}" class="inline-block cursor-pointer">
 
-                                    <img src="{{ company.media ? vich_uploader_asset(company.media) : asset('images/model-default.png') }}"
+                                    <img src="{{ model.modelMedia.toArray ? vich_uploader_asset(model.modelMedia.toArray | first.media) : asset('images/model-default.png') }}"
                                          alt="modele"
-                                         class="w-52 h-52 itemContent"/>
+                                         class="w-52 h-52 itemContent object-cover"/>
 
                                 </label>
                                 <span class="w-full h-full"> {{ model.name }}<br>{{ model.price }}€</span>
@@ -89,7 +100,7 @@
 
                                     <img src="{{ modelMaterial.material.media ? vich_uploader_asset(modelMaterial.material.media) : asset('images/material-default.png') }}"
                                          alt="Materiau {{ modelMaterial.material.name }}"
-                                         class="w-52 h-52 itemContent"/>
+                                         class="w-52 h-52 itemContent object-cover"/>
 
                                 </label>
                                 <span class="w-full h-full">{{ modelMaterial.material.name }}
@@ -145,7 +156,7 @@
 
                                     <img src="{{ modelExtra.extra.media ? vich_uploader_asset(modelExtra.extra.media) : asset('images/extra-default.png') }}"
                                          alt="Extra {{ modelExtra.extra.name }}"
-                                         class="w-52 h-52 itemContent"/>
+                                         class="w-52 h-52 itemContent object-cover"/>
 
                                 </label>
                                 <span class="w-full h-full">{{ modelExtra.extra.name }}<br>{{ modelExtra.extra.price }}

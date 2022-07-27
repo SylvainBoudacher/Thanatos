@@ -46,7 +46,9 @@ class CompanyOrderController extends AbstractController
 
         $preparationsClose = $preparationRepository->getPreparationsByCompanyByStatus($company, [
             Preparation::FUNERAL_CANCEL,
-            Preparation::FUNERAL_CLOSE_PROCESSING
+            Preparation::FUNERAL_CLOSE_PROCESSING,
+            Preparation::FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER,
+            Preparation::FUNERAL_DRIVER_CLOSE_BRING
         ]);
 
         return $this->render('front/morgue/orders/index.html.twig', [

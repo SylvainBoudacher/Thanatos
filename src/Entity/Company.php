@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Company
 {
     use TimestampableTrait;
-    
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -34,6 +34,10 @@ class Company
      * @Assert\NotNull
      * @Assert\NotBlank
      * @Assert\Regex("/^[a-z-]+$/i")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     * )
      */
     private $name;
 
@@ -128,6 +132,11 @@ class Company
      */
     private $driverOrders;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Preparation::class, mappedBy="driver")
+     */
+    private $preparations;
+
     public function __construct()
     {
         $this->companyMaterials = new ArrayCollection();
@@ -136,6 +145,7 @@ class Company
         $this->companyThemes = new ArrayCollection();
         $this->models = new ArrayCollection();
         $this->driverOrders = new ArrayCollection();
+        $this->preparations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -425,6 +435,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($driverOrder->getDriver() === $this) {
                 $driverOrder->setDriver(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Preparation>
+     */
+    public function getPreparations(): Collection
+    {
+        return $this->preparations;
+    }
+
+    public function addPreparation(Preparation $preparation): self
+    {
+        if (!$this->preparations->contains($preparation)) {
+            $this->preparations[] = $preparation;
+            $preparation->setDriver($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreparation(Preparation $preparation): self
+    {
+        if ($this->preparations->removeElement($preparation)) {
+            // set the owning side to null (unless already changed)
+            if ($preparation->getDriver() === $this) {
+                $preparation->setDriver(null);
             }
         }
 

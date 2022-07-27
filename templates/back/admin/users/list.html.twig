@@ -6,6 +6,13 @@
         <div class="flex flex-col mx-auto h-full mt-12 ml-32 pb-12">
             <h1 class="text-3xl text-slate-800 mb-4 font-bold pb-5">Liste des l'utilisateurs</h1>
             {% if users is empty %}
+                <section class="block rounded-lg bg-gray-50 stroke shadow-md block w-[40rem] mx-auto">
+                    <div class="container flex flex-col items-center px-4 py-12 mx-auto text-center">
+                        <h2 class="text-3xl font-semibold tracking-tight text-gray-700  ">
+                            Vous avez aucun utilisateur inscrit sur ce site.
+                        </h2>
+                    </div>
+                </section>
             {% else %}
                 <div class="  overflow-x-auto sm:rounded-lg ">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -28,9 +35,6 @@
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Role
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Valider
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Actions
@@ -69,22 +73,9 @@
                                             {% endif %}
                                         {% endfor %}
                                     </td>
-                                    <td class="px-6 py-4">
-                                        {% if user.isVerified %}
-                                            <span class="text-green-500">
-                                                Vérifié
-                                            </span>
-                                        {% else %}
-                                            <span class="text-red-500">
-                                                Non vérifié
-                                            </span>
-                                        {% endif %}
-                                    </td>
                                     <td class="px-6 py-4 text-right">
                                         <a href="{{ path('admin_user_edit' , {"id" : user.id}) }}"
                                            class="font-medium text-blue-500  hover:underline">Modifier</a>
-                                        <a href="{{ path('admin_user_delete' , {"id" : user.id}) }}"
-                                           class="font-medium text-red-500  hover:underline">Supprimer</a>
                                     </td>
                                 </tr>
                             {% endfor %}

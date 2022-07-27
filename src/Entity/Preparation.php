@@ -77,6 +77,11 @@ class Preparation
      */
     private $modelExtra;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="preparations")
+     */
+    private $driver;
+
 
     public function getId(): ?int
     {
@@ -175,6 +180,18 @@ class Preparation
     public function setModelExtra(?ModelExtra $modelExtra): self
     {
         $this->modelExtra = $modelExtra;
+
+        return $this;
+    }
+
+    public function getDriver(): ?Company
+    {
+        return $this->driver;
+    }
+
+    public function setDriver(?Company $driver): self
+    {
+        $this->driver = $driver;
 
         return $this;
     }

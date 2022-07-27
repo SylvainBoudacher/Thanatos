@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -20,18 +21,18 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('birthDate', DateType::class, [
+            ->add('firstname', TextType::class, [
+                'label' => "Prénom"
+            ])
+            ->add('lastname')
+            ->add('birthdate', DateType::class, [
                 'required' => true,
                 'widget' => 'single_text',
                 // this is actually the default format for single_text
-                'format' => 'yyyy-MM-dd',
+                'format' => 'yyyy-MM-dd'
             ])
             ->add('address', AddressType::class)
-
             ->add('email')
-
             ->add(
                 'plainPassword',
                 RepeatedType::class,
@@ -40,9 +41,9 @@ class RegistrationFormType extends AbstractType
                     'invalid_message' => 'Le mot de passe doit être le même.',
                     'options' => ['attr' => ['class' => 'password-field block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring']],
                     'required' => true,
-                    'first_options'  => ['label' => 'Mot de passe', 'label_attr' => ['class' => 'text-gray-700 dark:text-gray-200 mt-4']],
+                    'first_options' => ['label' => 'Mot de passe', 'label_attr' => ['class' => 'text-gray-700 dark:text-gray-200 mt-4']],
                     // Repeat password -> duplique l'input pour la vérification du password
-                    'second_options' => ['label' => 'Comfirmation mot de passe', 'label_attr' => ['class' => 'text-gray-700 dark:text-gray-200 mt-4']],
+                    'second_options' => ['label' => 'Confirmation mot de passe', 'label_attr' => ['class' => 'text-gray-700 dark:text-gray-200 mt-4']],
                     'mapped' => false,
                     'attr' => ['autocomplete' => 'new-password'],
                     'label_attr' => ['class' => 'test'],
@@ -59,11 +60,9 @@ class RegistrationFormType extends AbstractType
                     ],
                 ]
             )
-
             ->add('save', SubmitType::class, [
                 'attr' => ['class' => 'save w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600 mt-4'],
             ])
-
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
