@@ -176,7 +176,10 @@
                     <div class="w-full mt-4 text-lg font-semibold text-gray-800 capitalize white:text-white flex flex-row justify-between">
                         {% if preparation.status == 'FUNERAL_CANCEL' %}
                             <p class="text-sm">Commande annulée</p>
-                        {% elseif preparation.status == 'FUNERAL_CLOSE_PROCESSING' %}
+                        {% elseif
+                            preparation.status == 'FUNERAL_CLOSE_PROCESSING' or
+                            preparation.status == 'FUNERAL_DRIVER_ACCEPT_BRINGS_TO_USER' or
+                            preparation.status == 'FUNERAL_DRIVER_CLOSE_BRING' %}
                             <p class="text-sm">Commande close</p>
                         {% endif %}
                     </div>
