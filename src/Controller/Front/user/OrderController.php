@@ -385,7 +385,7 @@ class OrderController extends AbstractController
     {
         $order = $orderRep->findOneOwnedOrderByStatus(Order::DRAFT);
 
-        if ($order != null && !empty($order->getCorpses())) {
+        if ($order != null && !empty($order->getCorpses()->toArray())) {
             if (array_filter($order->getCorpses()->toArray(), fn($c) => $c->getId() == $corpse->getId())) {
 
                 $form = $this->createForm(CorpseType::class, $corpse);
