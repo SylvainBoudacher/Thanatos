@@ -45,6 +45,8 @@ class UserFixtures extends Fixture
         $manager->persist($userTest);
 
 
+
+
         $admin = new User();
         $admin->setFirstname('Test');
         $admin->setLastname('Testouille');
@@ -95,6 +97,8 @@ class UserFixtures extends Fixture
 
             $role = $user->getRoles()[0];
 
+
+
             if ($role === self::ROLE_COMPANY) {
                 $user->setCompany($this->getReference(CompanyFixtures::COMPANY_REFERENCE."-".$i));
             } elseif ($role === self::ROLE_DRIVER) {
@@ -105,6 +109,7 @@ class UserFixtures extends Fixture
 
             $this->addReference(self::USER_REFERENCE."-".$i, $user);
         }
+
 
         $manager->flush();
 
