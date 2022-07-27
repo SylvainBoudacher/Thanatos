@@ -43,6 +43,9 @@ class Company
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(
+     *      max = 500,
+     * )
      */
     private $description;
 
