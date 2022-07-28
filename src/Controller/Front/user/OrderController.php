@@ -713,6 +713,8 @@ class OrderController extends AbstractController
         $this->denyAccessUnlessGranted(PreparationVoter::ORDER, $corpse);
         $this->denyAccessUnlessGranted(PreparationVoter::CONFIRM_ORDER, $corpse);
 
+        header('Content-Type: application/json');
+
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
         $stripe = new StripeClient($_ENV['STRIPE_SECRET_KEY']);
@@ -730,16 +732,16 @@ class OrderController extends AbstractController
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => $_ENV['APP_URL'] . $this->generateUrl('user_order_corpse_success', ['id' => $id]),
-            'cancel_url' => $_ENV['APP_URL'] . $this->generateUrl('user_order_cancel'),
+            'success_url' => 'https://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_corpse_success', ['id' => $id]),
+            'cancel_url' => 'https://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_cancel'),
         ]);
 
+        header("HTTP/1.1 303 See Other");
+        return $this->redirect($checkout_session->url, 303);
 
-        header("Location: " . $checkout_session->url);
-
-        return $this->render('front/user/payment/payment.html.twig', [
-            'checkout_session' => $checkout_session,
-        ]);
+        /*     return $this->render('front/user/payment/payment.html.twig', [
+                 'checkout_session' => $checkout_session,
+             ]);*/
     }
 
     #[Route('/commander-un-service-corps/payement/confirmation/{id}', name: 'user_order_corpse_success', methods: ['POST', 'GET'])]
