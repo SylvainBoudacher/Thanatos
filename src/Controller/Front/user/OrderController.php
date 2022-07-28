@@ -615,6 +615,8 @@ class OrderController extends AbstractController
         $order = $em->getRepository(Order::class)->findOneOwnedOrderByStatus(Order::DRAFT);
         $this->denyAccessUnlessGranted(OrderVoter::CONFIRM, $order);
 
+        header('Content-Type: application/json');
+
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
         $stripe = new StripeClient($_ENV['STRIPE_SECRET_KEY']);
@@ -636,11 +638,12 @@ class OrderController extends AbstractController
             'cancel_url' => $_ENV['APP_URL'] . $this->generateUrl('user_order_cancel'),
         ]);
 
+        header("HTTP/1.1 303 See Other");
         header("Location: " . $checkout_session->url);
 
-        return $this->render('front/user/payment/payment.html.twig', [
+        /*return $this->render('front/user/payment/payment.html.twig', [
             'checkout_session' => $checkout_session,
-        ]);
+        ]);*/
 
     }
 
