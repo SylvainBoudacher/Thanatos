@@ -609,11 +609,13 @@ class OrderController extends AbstractController
      * @throws ApiErrorException
      */
     #[Route('/commander-un-service/payement', name: 'user_order_payment', methods: ['POST', 'GET'])]
-    public function orderServicePayement(EntityManagerInterface $em): Response
+    public function orderServicePayement(EntityManagerInterface $em)
     {
 
         $order = $em->getRepository(Order::class)->findOneOwnedOrderByStatus(Order::DRAFT);
         $this->denyAccessUnlessGranted(OrderVoter::CONFIRM, $order);
+
+        header('Content-Type: application/json');
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
@@ -622,6 +624,7 @@ class OrderController extends AbstractController
         $stripe->products->create([
             'name' => 'Gold Special',
         ]);
+
 
         $checkout_session = Session::create([
             'customer_email' => $this->getUser()->getEmail(),
@@ -636,11 +639,12 @@ class OrderController extends AbstractController
             'cancel_url' => 'http://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_cancel'),
         ]);
 
+        header("HTTP/1.1 303 See Other");
         header("Location: " . $checkout_session->url);
 
-        return $this->render('front/user/payment/payment.html.twig', [
-            'checkout_session' => $checkout_session,
-        ]);
+        /* return $this->render('front/user/payment/payment.html.twig', [
+             'checkout_session' => $checkout_session,
+         ]);*/
 
     }
 
