@@ -609,7 +609,7 @@ class OrderController extends AbstractController
      * @throws ApiErrorException
      */
     #[Route('/commander-un-service/payement', name: 'user_order_payment', methods: ['POST', 'GET'])]
-    public function orderServicePayement(EntityManagerInterface $em)
+    public function orderServicePayement(EntityManagerInterface $em): Response
     {
 
         $order = $em->getRepository(Order::class)->findOneOwnedOrderByStatus(Order::DRAFT);
@@ -625,7 +625,6 @@ class OrderController extends AbstractController
             'name' => 'Gold Special',
         ]);
 
-
         $checkout_session = Session::create([
             'customer_email' => $this->getUser()->getEmail(),
             'submit_type' => 'pay',
@@ -635,12 +634,12 @@ class OrderController extends AbstractController
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => 'http://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_success'),
-            'cancel_url' => 'http://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_cancel'),
+            'success_url' => 'https://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_success'),
+            'cancel_url' => 'https://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_cancel'),
         ]);
 
         header("HTTP/1.1 303 See Other");
-        header("Location: " . $checkout_session->url);
+        return $this->redirect($checkout_session->url, 303);
 
         /* return $this->render('front/user/payment/payment.html.twig', [
              'checkout_session' => $checkout_session,
