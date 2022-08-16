@@ -634,8 +634,8 @@ class OrderController extends AbstractController
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => 'https://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_success'),
-            'cancel_url' => 'https://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_cancel'),
+            'success_url' => 'https://thanat0s.herokuapp.com' . $this->generateUrl('user_order_success'),
+            'cancel_url' => 'https://thanat0s.herokuapp.com' . $this->generateUrl('user_order_cancel'),
         ]);
 
         header("HTTP/1.1 303 See Other");
@@ -732,8 +732,8 @@ class OrderController extends AbstractController
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => 'https://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_corpse_success', ['id' => $id]),
-            'cancel_url' => 'https://warm-hollows-11050.herokuapp.com' . $this->generateUrl('user_order_cancel'),
+            'success_url' => 'https://thanat0s.herokuapp.com' . $this->generateUrl('user_order_corpse_success', ['id' => $id]),
+            'cancel_url' => 'https://thanat0s.herokuapp.com' . $this->generateUrl('user_order_cancel'),
         ]);
 
         header("HTTP/1.1 303 See Other");
